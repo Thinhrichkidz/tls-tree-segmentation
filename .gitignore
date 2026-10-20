@@ -1,0 +1,26 @@
+# Large point-cloud and binary data (full data lives outside the repo)
+*.ply
+*.las
+*.laz
+*.bin
+*.npy
+processed_trees.json
+
+# Python / Jupyter / R
+__pycache__/
+.ipynb_checkpoints/
+*.Rhistory
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+
+# Everything under samples/ is tracked (must come last)
+!samples/**

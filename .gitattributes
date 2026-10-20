@@ -1,2 +1,3 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*.ply *.las *.laz *.bin *.npy *.docx *.pdf binary
