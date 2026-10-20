@@ -1,0 +1,4 @@
+# Versions pinned from the Python environment used to build this repo (Anaconda, Python 3.x).
+open3d==0.20.0
+numpy==1.26.4
+laspy[lazrs]==2.7.0
