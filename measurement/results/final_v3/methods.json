@@ -1,0 +1,123 @@
+{
+ "Input data": {
+  "source_clouds": "CloudCompare_review_v2 (163 PLYs, read only); hashes verified against session3_codex_20261023/state/CloudCompare_review_v2_CURRENT.csv",
+  "stable_id_mapping": "tree_NNN = original export NNN-1 (all_tree_preliminary_heights.csv)",
+  "roi": {
+   "roi_id": "WSL_ML2A_crop_55x55",
+   "source": "raw/WSL_ML2A_crop_55x55_3cm.ply",
+   "bbox_xy": [
+    261323.42924995424,
+    6264444.921251831,
+    261389.1350013733,
+    6264512.7582498165
+   ],
+   "assumption": "ROI boundary = axis-aligned XY bounding box of the raw cropped cloud."
+  },
+  "crs": "EPSG:32756 according to project records; global coordinates unchanged (not re-verified here)",
+  "downsampling": "Source clouds are the 3 cm raycloud product (median lower-stem point spacing ~31 mm); no further resampling",
+  "rayextract_parameters": "NA: not found in this batch (see segmentation records)"
+ },
+ "Software": {
+  "R_and_packages": "R version 4.5.2 (2025-10-31 ucrt)",
+  "ITSMe": "2.0.0",
+  "geometry": "0.5.2",
+  "python": {
+   "python": "3.13.14",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "plyfile": "unknown",
+   "matplotlib": "3.11.2",
+   "machine": "AMD64",
+   "processor": "AMD64 Family 25 Model 24 Stepping 1, AuthenticAMD",
+   "os": "Windows-10-10.0.19045-SP0"
+  },
+  "scripts": [
+   "measurement_pipeline/scripts/prepare_all163.py",
+   "all163_common.py",
+   "all163_tree_worker.R",
+   "crown_volume_metrics.R (unchanged)",
+   "all163_postprocess.py",
+   "xlsx_styled.py"
+  ],
+  "git": "NA: project is not a git repository",
+  "script_sha256": {
+   "all163_common.py": "c44889058ef1852a65c66a3f1f29c1cd7ad2a4f4d45d5fe17d01d78fa1f761b5",
+   "all163_env.py": "7b052204ad187dc0cdea539bf308a8b24e7115a5bb94c867bec457357add3f40",
+   "all163_postprocess.py": "be2f9bffa40aa1f38838f2d4b1b9ac58d2df9169749b54a1f543a29dfc9af7df",
+   "all163_tree_worker.R": "30a4af2abe74ab056fd614b1558a14fa208e8e6b627a4a42ff6f69fcb559c702",
+   "build_all163_notebook.py": "3ff3e83c69e5eeac82465b18e32d0f88cd9f2b8643b930c69d9e96efba536ebf",
+   "crown_volume_metrics.R": "5db63be26f37a67e631b252dfa729767476e411a91173eac4f60ec413443f6e8",
+   "prepare_all163.py": "f75ed9afb1b8affc7a17ca2bc2bd74d39cf1b6625aafb0207ded06b84242a274",
+   "run_all163_notebook.py": "9e99e37d1299ca28d79501026fb1b1bdd3d9366b272d8e90ba5217fdb33bc423",
+   "verify_all163_independent.py": "37aaaeb4ac40c3833f73807a44ceb2a1627df3b7aafae6be4d55d13e9a5780a8",
+   "xlsx_styled.py": "72184e6d58663634dc74fc068c90311c61bd832d41165bd09bcc60f7e92012dc",
+   "xlsx_writer.py": "b267ad081bb29001526e58eb6468b0847366f9fbec324470b6021c5bc7cc4ddf"
+  }
+ },
+ "Height": {
+  "definition": "ITSMe tree_height_pc: highest point of the full cloud minus the foot-ground reference (vertical, m)",
+  "ground_reference": "Actual terrain-mesh triangle at the stem foot (axis meets mesh); fallback trees use the lowest-observation XY; 103/108 use the user-agreed corrected base",
+  "also_reported": "locally supported top (prepare_crown_volume_top20 rule) and 99th-percentile height",
+  "VALID": "finite, ground LOCALLY_SUPPORTED, robust foot, top LOCALLY_SUPPORTED_OBSERVED_TIP, highest point within 0.5 m of supported top, no visual exclusion"
+ },
+ "DBH": {
+  "location": "1.3 m along the fitted low-stem axis above the foot ground (lean-corrected: cloud rotated so the axis is vertical)",
+  "slice": "6 cm (ITSMe dbh_pc, thresholdR2 0.001, functional, concavity 4); crop = bark radius (mode of distances 1.0-1.6 m) + 10 cm",
+  "fallback": "median of accepted 6 cm slices at 1.1-1.5 m when the 1.3 m fit fails (labelled; REVIEW)",
+  "quality_rule": "diameter 3-200 cm, arc coverage >= 0.60, RMSE <= min(4 cm, max(1 cm, 10% of diameter)) (unchanged)",
+  "residual": "RMSE of the 1.3 m circle fit = sqrt(ITSMe R2 output), cm",
+  "exceptions": "067: outer-outline filter (points >3 cm inside the trunk outline set aside, in memory); 103: oval trunk, area-equivalent diameter sqrt(ellipse major x minor) also reported; 033 not released; 108 provisional only (user decisions 23 Oct 2026)",
+  "axis": "saved hash-matched checkpoint axis; trees without one get one attempt with the original low-stem helper; failure -> DBH N/A",
+  "unaccepted": "raw 1.3 m circle fits that fail the screen are kept in a separate column, never in the DBH column"
+ },
+ "Crown": {
+  "crown_base_rule": "continuous-crown rule agreed 23 Oct 2026: 0.25 m layers, r95 spread smoothed over 0.75 m; crown layer if wider than max(3 x narrowest trunk spread between 1 m and 60% height, 0.3 x widest layer); base = lowest crown layer above 1 m from which >= 70% of layers to the top are crown",
+  "user_choices_20_trees": "048 8.25, 056 4.25, 151 3.00, 076 5.00, 146 8.50, 118 10.75 m; other 14 of the 20 trees use the rule (user-reviewed)",
+  "crown_points": "ITSMe classify_crown_pc (thresholdbranch 1.5) crown points with Z >= crown base; if ITSMe returns no crown: all tree points above the base (distinct label, REVIEW)",
+  "area": "ITSMe projected_area_pc, concave hull concavity 3, m2",
+  "volume": "3D convex hull (geometry::convhulln) of the crown points, m3; includes internal air gaps; not wood volume or biomass",
+  "gap_screen": "envelope / sum of 1 m slab hulls; > 2 -> REVIEW",
+  "derived": "crown length = height - crown base; crown ratio = length / height; equivalent crown diameter = 2 sqrt(area / pi); point density = crown points / envelope volume"
+ },
+ "Structure indicators": {
+  "stem_clusters": "connected components (link 0.10 m, >= 8 points) of points within 1 m of the stem axis in a 10 cm layer at 1.3 m; indicator of extra stems, branches or understorey",
+  "fork_near_dbh": "more clusters at 1.6 m than at 1.0 m and at least 2 at 1.6 m",
+  "lean": "stem axis lean >= 10 degrees",
+  "truncated_top": "inherited tree_top_reliability REVIEW_REQUIRED or TOP_OR_BOUNDARY_REVIEW flag",
+  "roi_edge": "distance from stem position to the ROI bounding box; crown touches edge if any point above the crown base is within 0.10 m of it",
+  "stem_completeness": "fraction of 0.5 m slices from ground to crown base with any point within 0.5 m of the stem axis"
+ },
+ "Status rules": {
+  "VALID": "calculated and reliable under the stated rule",
+  "REVIEW": "value exists but a documented concern needs checking",
+  "N/A": "no reliable value; reason given",
+  "UNKNOWN": "insufficient information",
+  "ESTIMATED": "not used (REPORT_DATA_REQUEST.md rule 1: never estimate)",
+  "segmentation_status": "NA for all trees: no accepted/uncertain/discarded records exist for the current 163 clouds",
+  "not_checked": "branch ownership between neighbouring trees is not verified for any tree; 140 trees carry the inherited proximity-contact flag"
+ },
+ "Parallel processing": {
+  "preparation": "Python ProcessPoolExecutor, 48 workers, largest clouds first",
+  "measurement": "R PSOCK cluster, 60 workers (physical cores 64, free RAM 344 GB, 4 GB per worker), load-balanced, largest clouds first, BLAS/OpenMP threads = 1",
+  "checkpoints": "per_tree/tree_NNN/prep.json and result.json; reused only when source hash, preparation settings and worker code hash match",
+  "retries": "failed trees retried once",
+  "seconds": {
+   "prepare": 64.2507,
+   "measure": 51.7722
+  }
+ },
+ "Sensitivity (results/sensitivity.csv)": {
+  "trees": "146, 151, 063, 093, 069, 118, 084, 103 (accepted DBH; small to large; simple and neighbour-contact crowns)",
+  "dbh": "ITSMe diameter_slice_pc at 1.3 m along the stem, slice 3/5/6/10 cm, circle diameter and functional hull fdiameter",
+  "height": "highest point vs 99th percentile of point heights",
+  "crown": "single convex envelope vs sum of 1 m and 0.5 m slab envelopes",
+  "note": "direct slice fit can differ from the dbh_pc wrapper (tree_103: 69.1 vs 66.6 cm); the reported DBH uses the wrapper as in the 20-tree notebook"
+ },
+ "Not obtained": [
+  "figures (separate task)",
+  "before_after.csv: unedited Rayextract output not kept (manual_seg_v2 is already a manually cleaned baseline)",
+  "Rayextract parameters: not recorded in any project file",
+  "field inventory: no inventory spreadsheet found on the drive",
+  "segmentation accuracy, field validation, biomass (need reference data / out of scope)"
+ ]
+}

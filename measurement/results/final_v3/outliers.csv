@@ -1,0 +1,100 @@
+tree_id,reason,values
+tree_001,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_003,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_004,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_004,very small crown,crown area 3.01 m2 (5th-95th percentile 3.39-90.94)
+tree_005,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_006,failed or missing DBH fit,fit failed quality screen: arc coverage 0.35 < 0.60
+tree_007,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60
+tree_009,failed or missing DBH fit,fit failed quality screen: arc coverage 0.10 < 0.60; diameter outside 3-200 cm
+tree_010,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60; RMSE 1.22 cm > limit 1.13 cm
+tree_011,failed or missing DBH fit,fit failed quality screen: arc coverage 0.30 < 0.60
+tree_012,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_013,failed or missing DBH fit,fit failed quality screen: arc coverage 0.15 < 0.60
+tree_014,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60
+tree_015,failed or missing DBH fit,fit failed quality screen: arc coverage 0.50 < 0.60
+tree_017,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60
+tree_019,failed or missing DBH fit,fit failed quality screen: arc coverage 0.35 < 0.60
+tree_020,failed or missing DBH fit,fit failed quality screen: arc coverage 0.50 < 0.60
+tree_023,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_024,failed or missing DBH fit,fit failed quality screen: arc coverage 0.35 < 0.60
+tree_026,failed or missing DBH fit,fit failed quality screen: RMSE 5.22 cm > limit 4.00 cm
+tree_026,very large crown,crown area 97.16 m2 (5th-95th percentile 3.39-90.94)
+tree_028,failed or missing DBH fit,fit failed quality screen: arc coverage 0.50 < 0.60
+tree_029,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60; RMSE 6.02 cm > limit 3.30 cm
+tree_030,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_031,failed or missing DBH fit,fit failed quality screen: arc coverage 0.20 < 0.60; diameter outside 3-200 cm
+tree_032,failed or missing DBH fit,fit failed quality screen: arc coverage 0.20 < 0.60
+tree_033,failed or missing DBH fit,"not released: poor source data (user), stem base missing; fits at 1.1-1.5 m inconsistent"
+tree_033,very small crown,crown area 3.05 m2 (5th-95th percentile 3.39-90.94)
+tree_035,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_039,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_041,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60
+tree_041,very large crown,crown area 95.63 m2 (5th-95th percentile 3.39-90.94)
+tree_042,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60; RMSE 6.12 cm > limit 4.00 cm
+tree_043,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60
+tree_044,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60; RMSE 4.90 cm > limit 3.50 cm
+tree_044,very small crown,crown area 3.37 m2 (5th-95th percentile 3.39-90.94)
+tree_045,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60
+tree_046,failed or missing DBH fit,no stem axis could be fitted (fewer than 4 stem sections)
+tree_046,very small crown,crown area 3.37 m2 (5th-95th percentile 3.39-90.94)
+tree_047,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60
+tree_052,failed or missing DBH fit,fit failed quality screen: RMSE 2.47 cm > limit 1.16 cm
+tree_055,failed or missing DBH fit,fit failed quality screen: arc coverage 0.35 < 0.60
+tree_056,failed or missing DBH fit,"fit failed quality screen: arc coverage 0.45 < 0.60; earlier 10 cm-band review gave 10.66 cm (provisional, not adopted)"
+tree_057,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_058,failed or missing DBH fit,fit failed quality screen: arc coverage 0.25 < 0.60
+tree_062,failed or missing DBH fit,fit failed quality screen: arc coverage 0.20 < 0.60
+tree_067,very low stem completeness,0.38
+tree_069,very large crown,crown area 97.64 m2 (5th-95th percentile 3.39-90.94)
+tree_077,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_078,failed or missing DBH fit,fit failed quality screen: arc coverage 0.50 < 0.60
+tree_079,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_079,very large crown,crown area 228.71 m2 (5th-95th percentile 3.39-90.94)
+tree_080,failed or missing DBH fit,"fit failed quality screen: arc coverage 0.50 < 0.60; earlier 15 cm-band review gave 16.44 cm (provisional, not adopted)"
+tree_082,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_084,very large crown,crown area 103.72 m2 (5th-95th percentile 3.39-90.94)
+tree_090,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_094,failed or missing DBH fit,fit failed quality screen: RMSE 18.06 cm > limit 4.00 cm
+tree_096,failed or missing DBH fit,fit failed quality screen: arc coverage 0.50 < 0.60; RMSE 1.61 cm > limit 1.07 cm
+tree_097,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_100,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_101,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60; RMSE 1.04 cm > limit 1.00 cm
+tree_104,failed or missing DBH fit,no stem axis could be fitted (fewer than 4 stem sections)
+tree_105,failed or missing DBH fit,fit failed quality screen: arc coverage 0.30 < 0.60
+tree_106,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_108,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60; 3 cm point spacing is coarser than the screen allows for a ~9 cm stem; kept provisional (user decision)
+tree_109,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_110,very large crown,crown area 106.84 m2 (5th-95th percentile 3.39-90.94)
+tree_111,failed or missing DBH fit,no stem axis could be fitted (fewer than 4 stem sections)
+tree_112,failed or missing DBH fit,no stem axis could be fitted (fewer than 4 stem sections)
+tree_113,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60; RMSE 1.46 cm > limit 1.00 cm
+tree_117,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_119,failed or missing DBH fit,fit failed quality screen: arc coverage 0.50 < 0.60
+tree_120,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_121,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_122,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60; RMSE 2.22 cm > limit 1.03 cm
+tree_129,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60; RMSE 1.55 cm > limit 1.00 cm
+tree_130,failed or missing DBH fit,fit failed quality screen: arc coverage 0.35 < 0.60
+tree_132,very large crown,crown area 99.34 m2 (5th-95th percentile 3.39-90.94)
+tree_133,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_134,crown touching the ROI edge,min distance -0.00 m
+tree_136,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_137,failed or missing DBH fit,fit failed quality screen: arc coverage 0.40 < 0.60; RMSE 2.33 cm > limit 1.78 cm
+tree_139,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_140,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_141,failed or missing DBH fit,fit failed quality screen: no circle fit at 1.3 m
+tree_142,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_143,failed or missing DBH fit,fit failed quality screen: arc coverage 0.55 < 0.60; RMSE 1.78 cm > limit 1.47 cm
+tree_145,failed or missing DBH fit,fit failed quality screen: arc coverage 0.40 < 0.60
+tree_146,very small crown,crown area 1.89 m2 (5th-95th percentile 3.39-90.94)
+tree_147,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_148,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_151,very small crown,crown area 3.08 m2 (5th-95th percentile 3.39-90.94)
+tree_153,failed or missing DBH fit,no stem axis could be fitted (fewer than 4 stem sections)
+tree_156,failed or missing DBH fit,fit failed quality screen: RMSE 1.69 cm > limit 1.04 cm
+tree_157,failed or missing DBH fit,fit failed quality screen: arc coverage 0.45 < 0.60; RMSE 1.08 cm > limit 1.00 cm
+tree_158,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)
+tree_158,very small crown,crown area 2.68 m2 (5th-95th percentile 3.39-90.94)
+tree_159,failed or missing DBH fit,fit failed quality screen: arc coverage 0.35 < 0.60; RMSE 1.05 cm > limit 1.00 cm
+tree_163,failed or missing DBH fit,no stem axis could be fitted (stem sections do not span 0.75 m)

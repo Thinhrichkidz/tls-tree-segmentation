@@ -1,0 +1,381 @@
+{
+ "roi": {
+  "count": 1,
+  "roi_id": "WSL_ML2A_crop_55x55",
+  "source": "raw/WSL_ML2A_crop_55x55_3cm.ply",
+  "bbox_xy": [
+   261323.42924995424,
+   6264444.921251831,
+   261389.1350013733,
+   6264512.7582498165
+  ],
+  "assumption": "ROI boundary = axis-aligned XY bounding box of the raw cropped cloud."
+ },
+ "trees_refined": 163,
+ "segmentation_status_counts": "NA (no accepted/uncertain/discarded records for CloudCompare_review_v2; all human approvals PENDING)",
+ "tree_status": {
+  "SUCCESS": 76,
+  "PARTIAL SUCCESS": 87,
+  "FAILED": 0
+ },
+ "trees_all_core_valid": 16,
+ "dbh_fit_ok_false": 83,
+ "edge_affected_trees": 1,
+ "metric_status_counts": {
+  "height": {
+   "VALID": 53,
+   "ESTIMATED": 0,
+   "N/A": 0,
+   "REVIEW": 110,
+   "UNKNOWN": 0
+  },
+  "dbh": {
+   "VALID": 43,
+   "ESTIMATED": 0,
+   "N/A": 83,
+   "REVIEW": 37,
+   "UNKNOWN": 0
+  },
+  "crown_base": {
+   "VALID": 156,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 0,
+   "UNKNOWN": 0
+  },
+  "crown_area": {
+   "VALID": 131,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 25,
+   "UNKNOWN": 0
+  },
+  "crown_volume": {
+   "VALID": 100,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 56,
+   "UNKNOWN": 0
+  },
+  "crown_length": {
+   "VALID": 53,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 103,
+   "UNKNOWN": 0
+  },
+  "crown_ratio": {
+   "VALID": 53,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 103,
+   "UNKNOWN": 0
+  },
+  "crown_diameter": {
+   "VALID": 131,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 25,
+   "UNKNOWN": 0
+  },
+  "point_density": {
+   "VALID": 100,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 56,
+   "UNKNOWN": 0
+  }
+ },
+ "statistics": {
+  "height": {
+   "valid": {
+    "n": 53,
+    "mean": 16.82119134217036,
+    "median": 15.403719174561,
+    "sd": 5.055270448797804,
+    "min": 10.308760168821,
+    "max": 27.177788268631,
+    "p25": 12.372494216169,
+    "p75": 20.798545094807
+   },
+   "counts": {
+    "VALID": 53,
+    "ESTIMATED": 0,
+    "N/A": 0,
+    "REVIEW": 110,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 163,
+    "mean": 17.044291247502624,
+    "median": 16.356809953839,
+    "sd": 5.027084803153663,
+    "min": 9.386623957475,
+    "max": 27.177788268631,
+    "p25": 12.388689811755,
+    "p75": 21.125052415979
+   }
+  },
+  "dbh": {
+   "valid": {
+    "n": 43,
+    "mean": 31.653233203973773,
+    "median": 26.7923454345498,
+    "sd": 16.85836002462715,
+    "min": 10.441824507354799,
+    "max": 66.61396058804159,
+    "p25": 18.2135433600335,
+    "p75": 42.1000835861236
+   },
+   "counts": {
+    "VALID": 43,
+    "ESTIMATED": 0,
+    "N/A": 83,
+    "REVIEW": 37,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 80,
+    "mean": 30.64330934458884,
+    "median": 25.3758544488584,
+    "sd": 15.551172586918794,
+    "min": 10.1173987739345,
+    "max": 75.7806354667496,
+    "p25": 18.493450914725024,
+    "p75": 38.309201074822944
+   }
+  },
+  "crown_base": {
+   "valid": {
+    "n": 156,
+    "mean": 7.051282051282051,
+    "median": 6.75,
+    "sd": 4.143272622355381,
+    "min": 1.0,
+    "max": 19.0,
+    "p25": 3.25,
+    "p75": 10.75
+   },
+   "counts": {
+    "VALID": 156,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 0,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 7.051282051282051,
+    "median": 6.75,
+    "sd": 4.143272622355381,
+    "min": 1.0,
+    "max": 19.0,
+    "p25": 3.25,
+    "p75": 10.75
+   }
+  },
+  "crown_area": {
+   "valid": {
+    "n": 131,
+    "mean": 21.77293279458015,
+    "median": 14.55292655,
+    "sd": 19.38582197023329,
+    "min": 3.39174196,
+    "max": 90.10727087,
+    "p25": 9.006006337499995,
+    "p75": 26.038331000000003
+   },
+   "counts": {
+    "VALID": 131,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 25,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 25.754543153397435,
+    "median": 15.0156250025,
+    "sd": 29.54753116075866,
+    "min": 1.888123995,
+    "max": 228.709078445,
+    "p25": 8.59111450875,
+    "p75": 27.3166106975
+   }
+  },
+  "crown_volume": {
+   "valid": {
+    "n": 100,
+    "mean": 174.47244084027446,
+    "median": 85.66163632445324,
+    "sd": 221.7346338213021,
+    "min": 5.49224868047731,
+    "max": 972.652308071265,
+    "p25": 43.219061058982696,
+    "p75": 207.1752832483705
+   },
+   "counts": {
+    "VALID": 100,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 56,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 212.529044796292,
+    "median": 95.0579715644264,
+    "sd": 319.5938520799054,
+    "min": 3.40462023549717,
+    "max": 2426.609603227,
+    "p25": 42.38016924801138,
+    "p75": 224.76139240116828
+   }
+  },
+  "crown_length": {
+   "valid": {
+    "n": 53,
+    "mean": 9.741002662925077,
+    "median": 9.753779516405,
+    "sd": 3.7265572295068967,
+    "min": 3.5653985106599997,
+    "max": 21.577905511851,
+    "p25": 7.350789514595,
+    "p75": 11.653719174561
+   },
+   "counts": {
+    "VALID": 53,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 103,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 10.23231428429636,
+    "median": 9.8532726925735,
+    "sd": 4.132376384298648,
+    "min": 2.040127846351,
+    "max": 21.577905511851,
+    "p25": 7.3127113546395,
+    "p75": 13.00179758462875
+   }
+  },
+  "crown_ratio": {
+   "valid": {
+    "n": 53,
+    "mean": 0.5939193930429012,
+    "median": 0.5860590314118785,
+    "sd": 0.1891477068145061,
+    "min": 0.20756762475264073,
+    "max": 0.9242693019518223,
+    "p25": 0.4615421207148573,
+    "p75": 0.7507704930290253
+   },
+   "counts": {
+    "VALID": 53,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 103,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 0.6022862799869093,
+    "median": 0.5975703183149501,
+    "sd": 0.2009054442074926,
+    "min": 0.1694440351785219,
+    "max": 0.94188346120615,
+    "p25": 0.45751100432300534,
+    "p75": 0.7577839549120051
+   }
+  },
+  "crown_diameter": {
+   "valid": {
+    "n": 131,
+    "mean": 4.869627254657671,
+    "median": 4.304574494080253,
+    "sd": 2.0099072243986,
+    "min": 2.0781000911913625,
+    "max": 10.71112228199486,
+    "p25": 3.386265109445643,
+    "p75": 5.7578206250184625
+   },
+   "counts": {
+    "VALID": 131,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 25,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 5.1106992900861465,
+    "median": 4.372195566656325,
+    "sd": 2.5914288850422595,
+    "min": 1.550494803537676,
+    "max": 17.064625484203,
+    "p25": 3.307300554508876,
+    "p75": 5.89748568933453
+   }
+  },
+  "point_density": {
+   "valid": {
+    "n": 100,
+    "mean": 1152.6195874109808,
+    "median": 1069.121330996727,
+    "sd": 636.580731595481,
+    "min": 178.99438455192893,
+    "max": 3716.523890303501,
+    "p25": 692.4099104903067,
+    "p75": 1447.9508835932058
+   },
+   "counts": {
+    "VALID": 100,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 56,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 1084.4329745012474,
+    "median": 918.408411416003,
+    "sd": 712.6125759103596,
+    "min": 151.91586208789434,
+    "max": 5208.510428009744,
+    "p25": 596.4593103418321,
+    "p75": 1356.0401476179295
+   }
+  }
+ },
+ "run_time": {
+  "prepare_seconds": 64.2507,
+  "measure_seconds": 51.7722,
+  "per_tree_measure_seconds": {
+   "n": 163,
+   "mean": 8.28611685893287,
+   "median": 4.03244495391846,
+   "sd": 8.834042242426227,
+   "min": 0.386575222015381,
+   "max": 48.8365790843964,
+   "p25": 2.038002371788025,
+   "p75": 11.2653915882111
+  },
+  "workers": 60,
+  "machine": {
+   "python": "3.13.14",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "plyfile": "unknown",
+   "matplotlib": "3.11.2",
+   "machine": "AMD64",
+   "processor": "AMD64 Family 25 Model 24 Stepping 1, AuthenticAMD",
+   "os": "Windows-10-10.0.19045-SP0"
+  },
+  "physical_cores": 64,
+  "free_ram_gb_at_start": 343.5663
+ },
+ "points_before_after_downsampling": "NA (not recorded)",
+ "rayextract_segments": "NA (not recorded in this batch)"
+}
