@@ -1,0 +1,13 @@
+#,Tree,Why it is in the sample,Easting (m),Northing (m),Latitude,Longitude,Distance to plot edge (m),Our height (m),Height status,Our DBH (cm),DBH status,Stem lean (deg),FIELD DBH at 1.3 m (cm),FIELD height (m),Instrument / method,"Fork, lean, damage, notes",Photo no.
+1,tree_149,"all four core values VALID (DBH 13.4 cm, smallest of those trees)",261356.97,6264483.39,-33.732859,150.424196,24.4,10.54,VALID,13.4,VALID,1.4,,,,,
+2,tree_065,"all four core values VALID (DBH 18.0 cm, 25th percentile of those trees)",261351.83,6264491.48,-33.732785,150.424142,15.4,14.81,VALID,18.0,VALID,1.0,,,,,
+3,tree_144,"all four core values VALID (DBH 21.2 cm, 50th percentile of those trees)",261346.35,6264464.36,-33.733028,150.424076,14.6,15.85,VALID,21.2,VALID,22.4,,,,,
+4,tree_095,"all four core values VALID (DBH 36.7 cm, 75th percentile of those trees)",261365.46,6264487.74,-33.732821,150.424288,16.7,21.13,VALID,36.7,VALID,17.3,,,,,
+5,tree_103,"all four core values VALID (DBH 66.6 cm, largest of those trees)",261371.08,6264462.4,-33.733051,150.424342,9.4,27.05,VALID,66.6,VALID,14.3,,,,,
+6,tree_014,ESTIMATED DBH 18.4 cm (v4 pooled fit); DBH column N/A,261332.96,6264489.15,-33.732801,150.423938,6.9,17.27,REVIEW,18.4,ESTIMATED,1.1,,,,,
+7,tree_096,ESTIMATED DBH 11.9 cm (v4b small-stem RMSE floor); DBH column N/A,261366.16,6264500.03,-33.732711,150.424299,10.2,11.81,REVIEW,11.9,ESTIMATED,2.1,,,,,
+8,tree_112,ESTIMATED DBH 19.3 cm (v4b hollow-trunk RANSAC); DBH column N/A,261372.62,6264496.17,-33.732747,150.424368,7.9,16.49,VALID,19.3,ESTIMATED,-,,,,,
+9,tree_100,height fell 9.5 m after floating points above the crown were removed (now 17.28 m),261368.6,6264480.53,-33.732887,150.42432,15.2,17.28,VALID,19.5,ESTIMATED,-,,,,,
+10,tree_124,height fell 7.7 m after floating points above the crown were removed (now 13.41 m),261376.26,6264501.2,-33.732703,150.424409,3.2,13.41,VALID,20.3,REVIEW,0.2,,,,,
+11,tree_136,height REVIEW: ground uncertain (the two ground references differ by 0.71 m),261382.07,6264463.53,-33.733043,150.424461,5.8,15.73,REVIEW,38.8,REVIEW,11.3,,,,,
+12,tree_016,height REVIEW: ground uncertain (the two ground references differ by 0.55 m),261334.18,6264461.95,-33.733047,150.423944,2.2,18.35,REVIEW,41.2,VALID,8.3,,,,,

@@ -1,0 +1,29 @@
+﻿{
+    "workbook":  "G:\\22083142\\outputs\\WSL_ML2A\\55x55\\3cm\\Codex_help\\measurement_pipeline\\results\\ITSMe_all163_output_v6_FINAL_20261028\\ITSMe_all163_results.xlsx",
+    "opened":  true,
+    "sheets":  [
+                   "All Tree Results: $A$1:$BI$164",
+                   "Summary Statistics: $A$1:$N$43",
+                   "Quality Control: $A$1:$F$484",
+                   "Methodology \u0026 Metadata: $A$1:$B$97",
+                   "Check vs 20-tree results: $A$1:$N$23",
+                   "DBH lean-corrected slices: $A$1:$H$711",
+                   "Run details: $A$1:$I$164",
+                   "Changes vs previous version: $A$1:$H$242"
+               ],
+    "tree_rows":  163,
+    "colour_samples":  [
+                           "tree_001 Height status=REVIEW fill=#FCE5CD",
+                           "tree_001 DBH status=N/A fill=#F4CCCC",
+                           "tree_001 Crown volume status=REVIEW fill=#FCE5CD",
+                           "tree_049 Height status=REVIEW fill=#FCE5CD",
+                           "tree_049 DBH status=REVIEW fill=#FCE5CD",
+                           "tree_049 Crown volume status=VALID fill=#D9EAD3",
+                           "tree_099 Height status=REVIEW fill=#FCE5CD",
+                           "tree_099 DBH status=REVIEW fill=#FCE5CD",
+                           "tree_099 Crown volume status=VALID fill=#D9EAD3",
+                           "tree_163 Height status=REVIEW fill=#FCE5CD",
+                           "tree_163 DBH status=N/A fill=#F4CCCC",
+                           "tree_163 Crown volume status=VALID fill=#D9EAD3"
+                       ]
+}

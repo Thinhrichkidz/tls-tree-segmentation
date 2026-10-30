@@ -4,19 +4,51 @@ Tool: ITSMe (R) driven from Python/Jupyter. Input: the 163 manually corrected tr
 
 | Folder | Contents |
 |---|---|
-| `results/final_v3/` | Final audited results: `ITSMe_all163_results.xlsx`, `tree_attributes.csv`, `methods.json`, `summary.json`, `outliers.csv`, `sensitivity.csv`, `FINAL_AUDIT_REPORT.md`, `processing_summary.md`, executed notebook |
+| `results/final_v6/` | **Current results (28 Oct 2026).** Workbook, `tree_attributes.csv`, `methods.json`, `summary.json`, `outliers.csv`, `sensitivity.csv`, `height_refine.csv`, `processing_summary.md` (read first), validation logs, executed notebook, and `history/` with the step-by-step change notes |
+| `results/dbh_user_review/`, `results/height_user_review/` | The user's CloudCompare decisions used by v6 |
+| `results/field_check_sheet/` | Printable field sheet for 13 trees (tape/hypsometer), CSV and plot map |
+| `results/dbh_v4_experiment/`, `results/dbh_v4b_experiment/` | Tests behind the new DBH methods (hold-out and comparison with v3) |
+| `results/final_v3/` | Previous final (23 Oct), kept unchanged. Audited results: `ITSMe_all163_results.xlsx`, `tree_attributes.csv`, `methods.json`, `summary.json`, `outliers.csv`, `sensitivity.csv`, `FINAL_AUDIT_REPORT.md`, `processing_summary.md`, executed notebook |
 | `results/preliminary/` | Early height-only ranking of all exports and its method |
 | `results/AVAILABILITY_REPORT.md` | Which requested data could and could not be produced |
-| `notebooks/` | `ITSMe_ALL163_HEIGHT_DBH_CROWN_VOLUME_v3.ipynb` (batch notebook used for the final run) and `ITSMe_DBH_lean_correction.ipynb` |
+| `notebooks/` | `ITSMe_ALL163_HEIGHT_DBH_CROWN_VOLUME_v5.ipynb` (batch notebook for v6), `ITSMe_ALL163_HEIGHT_DBH_CROWN_VOLUME_v3.ipynb` (used for v3) and `ITSMe_DBH_lean_correction.ipynb` |
 | `scripts/` | Preparation, batch run, validation, workbook and figure scripts |
-| `figures/` | Report charts and QC side views |
+| `figures/` | `report_figures_v6/` + `visualisation_summary_v6.md` (current); `report_figures/` (v3); QC side views |
 | `docs/` | Data request and results/limitations notes |
 
 Status (from `FINAL_AUDIT_REPORT.md` / `processing_summary.md`): all human approvals are pending and nothing is field-validated. Many values are flagged REVIEW or N/A rather than estimated.
 
 Scripts and notebooks contain absolute paths from the original workstation (`D:\` / `G:\`); set the project root to your own copy before running. They need the full tree clouds, which are not in the repo.
 
-## Known issues
+## Version 6 (28 Oct 2026)
+
+`results/final_v6/` supersedes `final_v3/`. Main changes (details in `results/final_v6/processing_summary.md`):
+
+| Metric | v6 | v3 |
+|---|---|---|
+| Height VALID | 73 | 53 |
+| Any DBH (measured or ESTIMATED) | 126 | 80 |
+| Gap-aware crown volume (1 m slab hulls) VALID | 122 | new |
+| Crown projected area VALID | 123 | 131 |
+| All four core values VALID | 16 | 14 (16 as reported) |
+
+- **DBH:** new robust and fallback fits. Their values go only in an ESTIMATED column.
+- **Height:**
+  - top and connectivity re-checked on the current points;
+  - truncation judged against the plot crop boundary;
+  - feet moved under the trunk for 18 fallback trees.
+- **Crown:** a new slab-hull volume.
+- **Crop edge:** truncation and edge flags use the true tilted crop rectangle (`results/final_v6/manifests/roi.json`), not the bounding box.
+- **Source clouds:** several clouds were re-cleaned by the user.
+
+Known issues 1, 2 and 5 below are fixed in v6:
+- the all-VALID count is recomputed after the outlier pass;
+- a 16th validation check verifies it;
+- the `status` column is filled in.
+
+Issue 7 is resolved: tree_095's 36.7 cm DBH is correct. The 80.9 cm fit was pulled by understorey round the stem base (`results/tree095_dbh_check/`). Issue 3 is fixed in v6 (`methods.json` now says the unedited output is kept; RQ1 rerun in `results/rq1_before_after_20261028/`). Issues 4, 6 and 8 are not addressed.
+
+## Known issues (in `results/final_v3/`)
 
 The files in `results/final_v3/` are uploaded exactly as produced. An independent check of them (25 Oct 2026) found the following. The scripts were not changed to fix them.
 

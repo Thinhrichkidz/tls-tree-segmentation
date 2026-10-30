@@ -1,0 +1,7 @@
+plot centre,TLS set,TLS trees in circle,n (>=10 cm),TLS median,field median,median err %,p25 err %,p75 err %,max TLS,max field,KS,perm p
+GPS centre,measured,39,28,30.0,32.5,10.6,-1.7,-25.0,66.6,107.5,0.192,0.624
+GPS centre,VALID,39,16,35.8,32.5,27.0,-1.7,-6.7,66.6,107.5,0.207,0.721
+GPS centre,measured+EST,39,33,21.4,32.5,-25.9,-9.1,-25.5,66.6,107.5,0.216,0.434
+fitted map centre,measured,29,19,32.0,32.5,10.6,33.6,-25.0,66.6,107.5,0.227,0.527
+fitted map centre,VALID,29,8,38.9,32.5,48.7,58.3,2.4,66.6,107.5,0.337,0.416
+fitted map centre,measured+EST,29,22,28.9,32.5,-2.8,3.9,-27.9,66.6,107.5,0.248,0.391

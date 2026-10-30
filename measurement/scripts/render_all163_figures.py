@@ -6,7 +6,9 @@ Style reproduces measurement_pipeline/qc_figures/*_selected_3D_sideviews.png (pr
 Deliberate differences: 300 dpi; equal physical box aspect in 3D; no overlapping labels; titles and statuses come from
 the final audited workbook; the red stem-centre marker is drawn only where a fitted stem axis exists; colour bar added.
 Measurements are never recomputed here.
-Usage: python -I render_all163_figures.py --final <ITSMe_all163_output_v3_FINAL folder> [--out <folder>] [--workers N] [--trees ...]
+v3 (28 Oct 2026): subtitle adds the gap-aware crown volume (1 m slab hulls) and, where the DBH column is N/A, the ESTIMATED DBH;
+extra distribution chart for the slab volume. Works with the v6 FINAL workbook.
+Usage: python -I render_all163_figures.py --final <ITSMe_all163_output_v6_FINAL folder> [--out <folder>] [--workers N] [--trees ...]
 """
 import argparse
 import csv
@@ -27,7 +29,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 MP = ROOT / 'measurement_pipeline'
 SAMPLE_N, SEED, NEAR_M = 70000, 6003, 2.5
-STYLE_VERSION = 'all163-figures-v2'
+STYLE_VERSION = 'all163-figures-v3'
 NA = 'N/A'
 STAT_FILL = {'VALID': '#D9EAD3', 'ESTIMATED': '#FFF2CC', 'N/A': '#F4CCCC', 'REVIEW': '#FCE5CD', 'UNKNOWN': '#E7E6E6'}
 SERIES = {'VALID': ('#2a78d6', 'o'), 'REVIEW': ('#eb6834', '^')}   # dataviz reference palette slots 1-2, fixed order
@@ -69,6 +71,19 @@ def fmt(v, unit, nd):
 def status_text(w, value_col, status_col, label, unit, nd):
     s = w[status_col]
     return f'{label} {fmt(w[value_col], unit, nd) if s in ("VALID", "REVIEW") else NA} [{s}]'
+
+
+def dbh_text(w):
+    t = status_text(w, 'DBH (cm)', 'DBH status', 'DBH', 'cm', 2)
+    est = w.get('Estimated DBH (cm)')
+    return t + (f' (ESTIMATED {est:.1f} cm)' if w['DBH status'] == 'N/A' and isinstance(est, float) else '')
+
+
+def subtitle_for(w):
+    return ' | '.join([dbh_text(w),
+                       status_text(w, 'Crown projected area (m2)', 'Crown area status', 'crown area', 'm²', 2),
+                       status_text(w, 'Crown envelope volume (m3)', 'Crown volume status', 'crown envelope', 'm³', 1),
+                       status_text(w, 'Crown volume, 1 m slab hulls (m3)', 'Crown slab volume status', 'crown slab volume', 'm³', 1)])
 
 
 def title_for(tid, w):
@@ -147,9 +162,7 @@ def render_tree(job):
     cax = fig.add_subplot(gs[3])
     fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap='viridis'), cax=cax, label='Z above foot ground (m)')
     fig.suptitle(title_for(tid, w), fontsize=14, y=0.975)
-    sub = ' | '.join([status_text(w, 'DBH (cm)', 'DBH status', 'DBH', 'cm', 2),
-                      status_text(w, 'Crown projected area (m2)', 'Crown area status', 'crown area', 'm²', 2),
-                      status_text(w, 'Crown envelope volume (m3)', 'Crown volume status', 'crown envelope', 'm³', 1)])
+    sub = subtitle_for(w)
     note = (f"display sample {len(sp):,} of {len(P):,} points (seed {SEED}); brown = terrain-mesh vertices within ±{NEAR_M} m of the foot; "
             + ('red = fitted stem centre at ground' if has_axis else 'no fitted stem centre (no stem axis)'))
     fig.text(0.5, 0.905, sub, ha='center', fontsize=10)
@@ -242,7 +255,8 @@ def report_figures(rows_w, outdir):
     for col, scol, name, xlabel in [('Height ITSMe (m)', 'Height status', 'tree_height_distribution', 'Tree height above foot ground (m)'),
                                     ('DBH (cm)', 'DBH status', 'dbh_distribution', 'DBH, 1.3 m along stem (cm)'),
                                     ('Crown projected area (m2)', 'Crown area status', 'crown_area_distribution', 'Crown projected area (m²)'),
-                                    ('Crown envelope volume (m3)', 'Crown volume status', 'crown_volume_distribution', 'Crown envelope volume (m³)')]:
+                                    ('Crown envelope volume (m3)', 'Crown volume status', 'crown_volume_distribution', 'Crown envelope volume (m³)'),
+                                    ('Crown volume, 1 m slab hulls (m3)', 'Crown slab volume status', 'crown_slab_volume_distribution', 'Crown slab volume (sum of 1 m slab hulls, m³)')]:
         v, r = vals(col, scol, 'VALID'), vals(col, scol, 'REVIEW')
         na = sum(w[scol] == 'N/A' for w in W)
         fig, ax = plt.subplots(figsize=(7.5, 4.5))
@@ -323,7 +337,7 @@ def main():
         prep = json.loads((final / 'per_tree' / tid / 'prep.json').read_text())
         if png.exists() and side.exists():
             m = json.loads(side.read_text())
-            if m.get('source_sha256') == prep['review_sha256'] and m.get('style') == STYLE_VERSION and m.get('title') == title_for(tid, rows_w[tid]) \
+            if m.get('source_sha256') == prep['review_sha256'] and m.get('style') == STYLE_VERSION and m.get('title') == title_for(tid, rows_w[tid])                     and m.get('subtitle') == subtitle_for(rows_w[tid]) \
                     and m.get('png_sha256') == sha(png):
                 done.append(dict(m, reused=True)); continue
         jobs.append(dict(tree=tid, final=str(final), png=str(png), w=rows_w[tid]))

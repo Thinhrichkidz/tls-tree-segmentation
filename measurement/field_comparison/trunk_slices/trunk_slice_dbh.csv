@@ -1,0 +1,52 @@
+tree_id,dist_gps_m,dist_fit_m,pipeline_dbh_cm,pipeline_status,pipeline_est_cm,height_m,ground_source,n_slices,slice_dbh_cm,rule,circle_cm,circle_rms_cm,narrow_cm,long_cm,area_eq_cm,coverage,lean_deg,second_trunk_cm,combined_cm,flags,needs_eye_check
+tree_060,16.1,15.9,56.340731109699504,REVIEW,NA,24.1,terrain_mesh at stem foot (actual triang,3,55.9,circle,55.9,2.4,52.2,61.9,59.6,1.0,15.0,,,,
+tree_064,15.4,13.4,22.3570872522124,VALID,NA,16.6,terrain_mesh at stem foot (actual triang,3,22.6,circle,22.6,1.5,22.9,24.7,24.2,0.92,1.0,,,,
+tree_066,19.2,14.8,21.2613937253607,VALID,NA,18.0,terrain_mesh at stem foot (actual triang,3,21.4,circle,21.4,1.5,22.6,25.0,23.5,0.89,17.0,,,,
+tree_069,11.2,12.8,51.7170821839262,VALID,NA,26.2,terrain_mesh at stem foot (actual triang,3,51.5,circle,51.5,1.6,32.4,53.5,42.4,0.58,7.0,,,partial scan (coverage < 0.6),
+tree_074,15.0,10.8,63.648939779609606,VALID,NA,23.3,terrain_mesh at stem foot (actual triang,3,59.9,narrow width (leaning),69.9,5.8,59.9,87.7,74.2,1.0,33.0,,,,True
+tree_075,11.7,16.3,18.0517099117667,VALID,NA,18.9,terrain_mesh at stem foot (actual triang,3,18.9,circle,18.9,1.6,20.6,23.1,21.3,0.86,1.0,,,,
+tree_076,13.7,19.3,37.725326655787796,REVIEW,NA,21.2,terrain_mesh at stem foot (actual triang,3,38.8,circle,38.8,1.8,37.8,42.3,41.8,0.94,4.0,,,,
+tree_079,11.2,14.2,NA,N/A,NA,25.5,terrain_mesh at stem foot (actual triang,3,64.9,narrow width (leaning),78.5,5.4,64.9,94.0,82.0,1.0,40.0,31.2,72.0,possible second trunk,True
+tree_080,11.8,17.6,NA,N/A,15.698933308611801,15.6,terrain_mesh at stem foot (actual triang,3,16.4,circle,16.4,0.9,9.2,16.7,14.0,0.47,14.0,,,partial scan (coverage < 0.6),True
+tree_081,20.0,13.7,22.0772655381507,REVIEW,NA,21.4,terrain_mesh at stem foot (actual triang,3,25.5,circle,25.5,1.9,17.3,28.4,23.7,0.58,6.0,,,partial scan (coverage < 0.6),
+tree_083,8.3,5.1,27.360538371652698,REVIEW,NA,16.8,terrain_mesh at stem foot (actual triang,3,40.1,narrow width (leaning),41.0,8.0,40.1,60.1,56.8,0.86,36.0,36.5,54.2,possible second trunk,True
+tree_085,18.8,12.3,24.9792528231998,REVIEW,NA,23.8,terrain_mesh at stem foot (actual triang,3,25.6,narrow width (leaning),26.3,2.5,25.6,29.2,30.7,0.92,42.0,,,,True
+tree_086,13.3,6.9,18.6329431176259,REVIEW,NA,13.2,terrain_mesh at stem foot (actual triang,3,19.8,narrow width (leaning),19.8,1.8,19.8,24.0,23.2,0.86,51.0,21.0,28.9,possible second trunk,True
+tree_087,15.3,21.7,62.8799225842154,VALID,NA,19.6,terrain_mesh at stem foot (actual triang,3,63.8,circle,63.8,1.9,62.9,67.4,67.4,0.97,12.0,,,,
+tree_089,5.8,11.9,36.5014286834972,REVIEW,NA,17.7,terrain_mesh at stem foot (actual triang,3,39.6,narrow width (leaning),37.1,3.6,39.6,44.3,44.4,1.0,42.0,29.2,49.2,possible second trunk,True
+tree_090,20.1,13.5,NA,N/A,NA,14.2,terrain_mesh at stem foot (actual triang,3,58.9,area-equivalent (oval/rough),57.4,10.1,45.2,81.8,58.9,0.78,12.0,,,,True
+tree_091,18.3,11.7,27.9547230808163,VALID,NA,18.3,terrain_mesh at stem foot (actual triang,3,27.4,circle,27.4,1.5,23.6,29.1,28.5,0.72,12.0,,,,
+tree_092,3.4,3.7,10.1173987739345,REVIEW,NA,10.3,terrain_mesh at stem foot (actual triang,3,13.3,narrow width (leaning),15.8,3.9,13.3,28.4,20.2,0.56,60.0,,,partial scan (coverage < 0.6),True
+tree_093,6.8,0.2,42.961210862484,VALID,NA,23.7,terrain_mesh at stem foot (actual triang,3,42.9,circle,42.9,1.4,43.0,45.0,46.3,1.0,6.0,,,,
+tree_094,1.9,8.3,28.097196643326498,REVIEW,NA,20.9,terrain_mesh at stem foot (actual triang,3,36.0,area-equivalent (oval/rough),29.6,4.9,30.9,43.3,36.0,0.94,5.0,,,,True
+tree_095,11.4,17.9,36.6958205659026,VALID,NA,21.1,terrain_mesh at stem foot (actual triang,3,104.0,narrow width (leaning),111.4,19.4,104.0,161.3,150.0,1.0,22.0,,,,True
+tree_098,10.3,3.8,34.827533313516604,VALID,NA,20.9,terrain_mesh at stem foot (actual triang,3,37.3,circle,37.3,2.4,34.3,42.8,40.3,0.86,3.0,,,,
+tree_099,19.0,12.6,34.885544391477104,REVIEW,NA,17.6,terrain_mesh at stem foot (actual triang,3,70.5,narrow width (leaning),61.5,11.8,70.5,82.5,91.5,1.0,23.0,,,,True
+tree_100,4.9,11.1,NA,N/A,19.492151392440498,17.3,terrain_mesh at lowest-observation XY (f,3,55.2,narrow width (leaning),51.8,10.5,55.2,84.3,67.9,0.78,28.0,,,ground is a fallback,True
+tree_102,10.2,16.7,54.08738621853681,REVIEW,NA,24.1,terrain_mesh at stem foot (actual triang,3,54.7,circle,54.7,2.3,56.6,57.6,59.0,0.89,20.0,,,,
+tree_103,14.9,9.1,66.61396058804159,VALID,NA,27.0,terrain_mesh at corrected stem base (use,3,85.9,area-equivalent (oval/rough),78.3,7.6,69.4,98.7,85.9,1.0,13.0,,,,True
+tree_104,11.4,6.5,NA,N/A,19.4311848717918,24.9,terrain_mesh at lowest-observation XY (f,3,67.5,area-equivalent (oval/rough),64.7,10.6,53.4,87.8,67.5,0.58,8.0,,,partial scan (coverage < 0.6); ground is a fallback,True
+tree_105,4.5,6.0,NA,N/A,NA,10.0,terrain_mesh at stem foot (actual triang,3,46.8,narrow width (leaning),66.8,9.2,46.8,95.2,67.3,0.58,52.0,,,partial scan (coverage < 0.6),True
+tree_106,4.6,9.5,NA,N/A,14.0546626109005,11.0,terrain_mesh at lowest-observation XY (f,3,24.8,area-equivalent (oval/rough),18.9,4.1,16.8,26.0,24.8,0.64,4.0,20.7,32.3,possible second trunk; ground is a fallback,True
+tree_107,13.1,19.5,18.4068559614702,VALID,NA,15.4,terrain_mesh at stem foot (actual triang,3,18.7,circle,18.7,1.4,18.4,21.0,20.5,0.83,17.0,,,,
+tree_108,6.4,11.0,NA,N/A,NA,10.7,terrain_mesh at corrected stem base (use,3,21.1,area-equivalent (oval/rough),19.5,3.7,13.0,28.0,21.1,0.5,7.0,,,partial scan (coverage < 0.6),True
+tree_114,10.9,16.8,21.412590262699,REVIEW,NA,20.0,terrain_mesh at stem foot (actual triang,3,22.3,circle,22.3,1.1,21.9,25.9,24.1,0.94,1.0,,,,
+tree_115,12.8,18.7,16.0670778383062,REVIEW,NA,12.5,terrain_mesh at stem foot (actual triang,3,55.0,area-equivalent (oval/rough),43.4,8.1,43.6,69.2,55.0,0.61,18.0,22.6,59.4,possible second trunk,True
+tree_117,8.6,13.7,NA,N/A,8.66601580612322,10.4,terrain_mesh at lowest-observation XY (f,3,11.9,circle,11.9,2.3,13.1,16.0,15.0,0.53,5.0,,,partial scan (coverage < 0.6); ground is a fallback,True
+tree_118,10.4,15.7,54.415363860350695,VALID,NA,20.8,terrain_mesh at stem foot (actual triang,3,55.8,circle,55.8,1.8,54.0,58.4,59.8,1.0,15.0,,,,
+tree_120,9.9,12.7,40.3597868937448,REVIEW,NA,22.4,terrain_mesh at lowest-observation XY (f,3,49.2,area-equivalent (oval/rough),43.2,3.2,43.3,50.5,49.2,1.0,13.0,,,ground is a fallback,True
+tree_121,12.9,18.3,NA,N/A,10.1001491052994,9.4,terrain_mesh at lowest-observation XY (f,3,11.5,circle,11.5,1.7,11.0,16.5,12.8,0.58,13.0,,,partial scan (coverage < 0.6); ground is a fallback,True
+tree_123,11.9,15.9,13.9699340256225,REVIEW,NA,11.5,terrain_mesh at stem foot (actual triang,3,29.2,area-equivalent (oval/rough),25.6,4.8,20.1,38.2,29.2,0.78,17.0,,,,True
+tree_125,20.3,15.5,29.605506882515098,VALID,NA,11.5,terrain_mesh at stem foot (actual triang,3,30.7,narrow width (leaning),55.3,9.1,30.7,77.2,58.3,0.75,31.0,,,,True
+tree_126,14.6,18.3,50.2034858875018,VALID,NA,25.9,terrain_mesh at stem foot (actual triang,3,50.9,circle,50.9,2.5,48.4,57.6,55.2,0.97,12.0,,,,
+tree_127,14.7,19.0,40.0608243319284,VALID,NA,23.2,terrain_mesh at stem foot (actual triang,3,40.2,circle,40.2,1.2,40.7,41.4,41.9,1.0,4.0,,,,
+tree_132,13.0,12.4,31.967385630692302,REVIEW,NA,24.1,terrain_mesh at stem foot (actual triang,3,59.6,area-equivalent (oval/rough),54.1,8.2,43.7,74.0,59.6,0.72,19.0,,,,True
+tree_133,12.8,13.7,NA,N/A,NA,10.4,terrain_mesh at lowest-observation XY (f,3,96.8,narrow width (leaning),92.6,20.8,96.8,157.7,139.0,1.0,38.0,,,ground is a fallback,True
+tree_146,15.4,15.5,10.6472988729362,VALID,NA,12.1,terrain_mesh at stem foot (actual triang,3,11.1,circle,11.1,0.9,10.3,13.6,12.2,0.56,5.0,,,partial scan (coverage < 0.6),
+tree_149,11.4,16.2,13.3840344335793,VALID,NA,10.5,terrain_mesh at stem foot (actual triang,3,14.0,circle,14.0,1.2,15.3,15.3,16.0,0.72,2.0,,,,
+tree_150,11.1,15.8,18.3753768083003,VALID,NA,15.3,terrain_mesh at stem foot (actual triang,3,18.8,circle,18.8,1.2,18.8,19.9,20.7,0.81,1.0,,,,
+tree_151,15.5,20.9,10.441824507354799,VALID,NA,12.4,terrain_mesh at stem foot (actual triang,3,10.9,circle,10.9,0.9,10.3,12.2,11.6,0.61,11.0,,,,
+tree_152,7.2,10.8,16.9947242677348,VALID,NA,11.0,terrain_mesh at stem foot (actual triang,3,17.9,circle,17.9,1.6,17.0,20.6,20.9,0.81,13.0,,,,
+tree_154,12.2,18.7,10.9056239898875,VALID,NA,11.3,terrain_mesh at stem foot (actual triang,3,12.0,circle,12.0,1.0,11.3,13.6,13.1,0.64,2.0,,,,
+tree_160,10.0,14.1,18.522315899143297,VALID,NA,14.3,terrain_mesh at stem foot (actual triang,3,18.7,circle,18.7,1.6,19.5,22.0,22.6,0.89,0.0,,,,
+tree_163,14.9,9.3,NA,N/A,NA,23.4,terrain_mesh at lowest-observation XY (f,3,83.7,narrow width (leaning),135.3,16.4,83.7,177.7,131.4,1.0,63.0,,,ground is a fallback,True

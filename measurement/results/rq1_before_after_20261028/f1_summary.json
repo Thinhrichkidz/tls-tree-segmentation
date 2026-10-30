@@ -1,0 +1,246 @@
+{
+ "created": "2026-10-26",
+ "raw_points": 45449820,
+ "anomalies": {
+  "AUTO": {
+   "unmatched": 0,
+   "claimed_twice": 0
+  },
+  "ROUND1": {
+   "unmatched": 0,
+   "claimed_twice": 0
+  },
+  "ROUND2": {
+   "unmatched": 0,
+   "claimed_twice": 0
+  },
+  "FINAL": {
+   "unmatched": 0,
+   "claimed_twice": 0
+  }
+ },
+ "sizes": {
+  "AUTO": 28708304,
+  "ROUND1": 28708261,
+  "ROUND2": 26663898,
+  "FINAL": 26322588
+ },
+ "stages": {
+  "ROUND1": {
+   "n_auto": 162,
+   "n_refined": 199,
+   "scores": {
+    "0.5": {
+     "TP": 142,
+     "FP": 20,
+     "FN": 57,
+     "precision": 0.8765432098765432,
+     "recall": 0.7135678391959799,
+     "F1": 0.7867036011080333
+    },
+    "0.7": {
+     "TP": 131,
+     "FP": 31,
+     "FN": 68,
+     "precision": 0.808641975308642,
+     "recall": 0.6582914572864321,
+     "F1": 0.7257617728531855
+    },
+    "0.9": {
+     "TP": 109,
+     "FP": 53,
+     "FN": 90,
+     "precision": 0.6728395061728395,
+     "recall": 0.5477386934673367,
+     "F1": 0.6038781163434903
+    }
+   },
+   "mean_IoU_matched": 0.8476810524811924,
+   "median_IoU_matched": 1.0,
+   "auto_points": 28708304,
+   "refined_points": 28708261,
+   "auto_points_retained": 28708261,
+   "auto_points_removed": 43,
+   "refined_points_new": 0,
+   "auto_points_in_different_tree_than_best": null
+  },
+  "ROUND2": {
+   "n_auto": 162,
+   "n_refined": 163,
+   "scores": {
+    "0.5": {
+     "TP": 139,
+     "FP": 23,
+     "FN": 24,
+     "precision": 0.8580246913580247,
+     "recall": 0.852760736196319,
+     "F1": 0.8553846153846154
+    },
+    "0.7": {
+     "TP": 129,
+     "FP": 33,
+     "FN": 34,
+     "precision": 0.7962962962962963,
+     "recall": 0.7914110429447853,
+     "F1": 0.7938461538461539
+    },
+    "0.9": {
+     "TP": 108,
+     "FP": 54,
+     "FN": 55,
+     "precision": 0.6666666666666666,
+     "recall": 0.6625766871165644,
+     "F1": 0.6646153846153846
+    }
+   },
+   "mean_IoU_matched": 0.838623841982668,
+   "median_IoU_matched": 1.0,
+   "auto_points": 28708304,
+   "refined_points": 26663898,
+   "auto_points_retained": 26651771,
+   "auto_points_removed": 2056533,
+   "refined_points_new": 12127,
+   "auto_points_in_different_tree_than_best": null
+  },
+  "FINAL": {
+   "n_auto": 162,
+   "n_refined": 163,
+   "scores": {
+    "0.5": {
+     "TP": 138,
+     "FP": 24,
+     "FN": 25,
+     "precision": 0.8518518518518519,
+     "recall": 0.8466257668711656,
+     "F1": 0.8492307692307692
+    },
+    "0.7": {
+     "TP": 126,
+     "FP": 36,
+     "FN": 37,
+     "precision": 0.7777777777777778,
+     "recall": 0.7730061349693251,
+     "F1": 0.7753846153846153
+    },
+    "0.9": {
+     "TP": 100,
+     "FP": 62,
+     "FN": 63,
+     "precision": 0.6172839506172839,
+     "recall": 0.6134969325153374,
+     "F1": 0.6153846153846154
+    }
+   },
+   "mean_IoU_matched": 0.8237162563241965,
+   "median_IoU_matched": 1.0,
+   "auto_points": 28708304,
+   "refined_points": 26322588,
+   "auto_points_retained": 26266031,
+   "auto_points_removed": 2442273,
+   "refined_points_new": 56557,
+   "auto_points_in_different_tree_than_best": null
+  }
+ },
+ "final_refined_tree_classes": {
+  "IDENTICAL": 86,
+  "REBUILT_OR_MERGED_OR_SPLIT (IoU < 0.5)": 25,
+  "MAJOR_EDIT (IoU 0.5-0.9)": 38,
+  "MINOR_EDIT (IoU 0.9-0.999)": 14
+ },
+ "final_auto_tree_outcomes": {
+  "IDENTICAL": 86,
+  "MERGED_WITH_OTHERS": 24,
+  "SPLIT_INTO_SEVERAL": 29,
+  "MINOR_EDIT (IoU 0.9-0.999)": 6,
+  "MAJOR_EDIT (IoU 0.5-0.9)": 15,
+  "REBUILT_OR_MERGED_OR_SPLIT (IoU < 0.5)": 2
+ },
+ "final_merged_refined_trees": [
+  "tree_006",
+  "tree_019",
+  "tree_026",
+  "tree_031",
+  "tree_040",
+  "tree_041",
+  "tree_053",
+  "tree_055",
+  "tree_070",
+  "tree_074",
+  "tree_077",
+  "tree_079",
+  "tree_090",
+  "tree_091",
+  "tree_093",
+  "tree_094",
+  "tree_095",
+  "tree_102",
+  "tree_110",
+  "tree_118",
+  "tree_126",
+  "tree_132",
+  "tree_134",
+  "tree_135",
+  "tree_163"
+ ],
+ "final_split_auto_trees": [
+  7,
+  8,
+  26,
+  31,
+  33,
+  37,
+  44,
+  50,
+  58,
+  60,
+  67,
+  77,
+  82,
+  85,
+  88,
+  96,
+  97,
+  98,
+  99,
+  102,
+  106,
+  113,
+  118,
+  120,
+  123,
+  127,
+  135,
+  136,
+  138
+ ],
+ "significance_rule": "link counted if >= 50 shared points and >= 5% of either tree",
+ "final_refined_points_from_unassigned": {
+  "trees_with_new_points": 7,
+  "median_fraction_new": 0.0,
+  "max_fraction_new": 0.0719
+ },
+ "point_flow": {
+  "ROUND1": {
+   "auto": 28708304,
+   "kept": 28708261,
+   "removed": 43,
+   "added_new": 0,
+   "refined_total": 28708261
+  },
+  "ROUND2": {
+   "auto": 28708304,
+   "kept": 26651771,
+   "removed": 2056533,
+   "added_new": 12127,
+   "refined_total": 26663898
+  },
+  "FINAL": {
+   "auto": 28708304,
+   "kept": 26266031,
+   "removed": 2442273,
+   "added_new": 56557,
+   "refined_total": 26322588,
+   "kept_but_moved_to_a_different_tree_than_its_matched_tree": 3605506
+  }
+ }
+}

@@ -18,8 +18,8 @@ import all163_common as C
 import numpy as np
 
 MP, ROOT = C.MP, C.ROOT
-PREP_VERSION = 'all163-prep-v2'  # v2: user crown-base choices for 55 more trees
-SNAPSHOT = ROOT / 'session3_codex_20261023/state/CloudCompare_review_v2_CURRENT.csv'
+PREP_VERSION = 'all163-prep-v3'  # v2: user crown-base choices for 55 more trees; v3: edge distances to the true tilted crop rectangle
+SNAPSHOT = C.SNAPSHOT
 HEIGHTS = MP / 'results/all_tree_preliminary_heights.csv'
 CORRECTED_MANIFEST = MP / 'environment/CORRECTED_FOUR_TREE_RERUN_20261023_190059_manifest.csv'
 CORRECTED_AXIS = MP / 'results/CORRECTED_FOUR_TREE_RERUN_20261023_190059/axis'
@@ -106,12 +106,12 @@ def prepare(spec):
         rec.update(stem_xy=(o + s * 1.3 + t[:2]).tolist(), stem_xy_source='stem axis at 1.3 m')
     else:
         rec.update(stem_xy=t[:2].tolist(), stem_xy_source='stem base (foot XY); no stem axis')
-    x0, y0, x1, y1 = spec['roi']
-    sx, sy = rec['stem_xy']
-    rec['dist_to_roi_edge_m'] = float(min(sx - x0, x1 - sx, sy - y0, y1 - sy))
+    # Distances to the true crop footprint (tilted rectangle), not the axis-aligned bounding box (fixed 28 Oct 2026)
+    rect = spec['crop_rect']
+    rec['dist_to_roi_edge_m'] = float(C.dist_to_crop_edge(rec['stem_xy'], rect)[0])
     if rec['crown_base_m'] is not None:
         cp = p[local[:, 2] >= rec['crown_base_m']]
-        d = np.minimum.reduce([cp[:, 0] - x0, x1 - cp[:, 0], cp[:, 1] - y0, y1 - cp[:, 1]]) if len(cp) else np.array([np.inf])
+        d = C.dist_to_crop_edge(cp, rect) if len(cp) else np.array([np.inf])
         rec['crown_min_dist_to_roi_edge_m'] = float(d.min())
         rec['flag_crown_touches_edge'] = bool(d.min() <= 0.10)
     else:
@@ -141,7 +141,7 @@ def main():
     (out / 'manifests/source_state.json').write_text(json.dumps(dict(
         snapshot=str(SNAPSHOT.relative_to(ROOT)), files=len(snap), changed_since_snapshot=changed,
         checked_at=time.strftime('%Y-%m-%dT%H:%M:%S')), indent=1), encoding='utf-8')
-    assert not changed, f'Source clouds changed since the Session 3 snapshot: {changed}. Capture a new baseline first.'
+    assert not changed, f'Source clouds changed since the current snapshot: {changed}. Capture a new baseline first.'
     current_hash = {r['file']: r['sha256'] for r in snap}
     roi_path = out / 'manifests/roi.json'
     if not roi_path.exists():
@@ -151,7 +151,15 @@ def main():
         roi_path.write_text(json.dumps(dict(roi_id='WSL_ML2A_crop_55x55', source=raw.relative_to(ROOT).as_posix(),
             bbox_xy=[float(x.min()), float(y.min()), float(x.max()), float(y.max())],
             assumption='ROI boundary = axis-aligned XY bounding box of the raw cropped cloud.'), indent=1), encoding='utf-8')
-    roi = json.loads(roi_path.read_text())['bbox_xy']
+    roi_doc = json.loads(roi_path.read_text())
+    if 'crop_rectangle' not in roi_doc:   # true footprint: the crop is a rectangle tilted ~12.6 deg, not the bounding box
+        raw = ROOT / roi_doc['source']
+        v = C.PlyData.read(str(raw), mmap='r')['vertex'].data
+        roi_doc['crop_rectangle'] = C.crop_rectangle(np.asarray(v['x'], 'f8'), np.asarray(v['y'], 'f8'))
+        roi_doc['assumption'] = ('Crop footprint = minimum-area oriented rectangle of the raw cropped cloud (crop_rectangle); edge distances use it. '
+                                 'bbox_xy (axis-aligned bounding box) is kept for reference only.')
+        roi_path.write_text(json.dumps(roi_doc, indent=1), encoding='utf-8')
+    roi, crop_rect = roi_doc['bbox_xy'], roi_doc['crop_rectangle']
     heights = {r['stable_tree_id']: r for r in C.rows(HEIGHTS)}
     corrected = {r['stable_tree_id']: r for r in C.rows(CORRECTED_MANIFEST)}
     top20 = {r['stable_tree_id']: r for r in C.rows(TOP20_MANIFEST)}
@@ -160,13 +168,13 @@ def main():
     assert not set(choices) & set(agreed)
     wanted = [t for t in a.trees.split(',') if t] or sorted(heights)
     settings = dict(prep_version=PREP_VERSION, crown_rule=[C.DZ, C.CROWN_FRACTION, C.FACTOR, C.CONTINUITY],
-                    circle_source_sha256=C.CIRCLE_SOURCE_SHA256, roi=roi, user_choices_sha256=C.sha(USER_CHOICES))
+                    circle_source_sha256=C.CIRCLE_SOURCE_SHA256, roi=roi, crop_rect=crop_rect, user_choices_sha256=C.sha(USER_CHOICES))
     specs = []
     for tid in wanted:
         h = heights[tid]
         cur = current_hash[h['review_ply_filename']]
         spec = dict(tree=tid, dir=str(out / 'per_tree' / tid), review_ply_filename=h['review_ply_filename'], review_sha256=cur,
-                    settings=settings, roi=roi, dbh_outline_filter=False, dbh_report_mode='STANDARD', axis=None)
+                    settings=settings, roi=roi, crop_rect=crop_rect, dbh_outline_filter=False, dbh_report_mode='STANDARD', axis=None)
         robust = h['foot_method'].startswith('ROBUST')
         if tid in corrected:
             m = corrected[tid]

@@ -1,0 +1,80 @@
+{
+  "rotation_deg": -1.59,
+  "map_centre_utm": [
+    261365.71,
+    6264469.8
+  ],
+  "shift_from_gps_centre_m": [
+    -0.28,
+    -6.56
+  ],
+  "shift_length_m": 6.57,
+  "anchors": [
+    "1449",
+    "1448",
+    "1447",
+    "1450",
+    "1455",
+    "1432",
+    "1435",
+    "1439",
+    "1437"
+  ],
+  "anchor_pairs_used": 6,
+  "n_large_tls_candidates": 20,
+  "all_tree_score": 74.03,
+  "grid_best": {
+    "deg": -2,
+    "dx": -0.25,
+    "dy": -6.5,
+    "score": 41.48,
+    "anchors_within_2m": 5
+  },
+  "next_distinct_grid_solution": {
+    "deg": 15,
+    "dx": -4.0,
+    "dy": 8.0,
+    "score": 43.93,
+    "anchors_within_2m": 5
+  },
+  "sensitivity_to_n_large_tls": {
+    "15": {
+      "deg": -1,
+      "dx": -0.5,
+      "dy": -6.5,
+      "anchors_within_2m": 5,
+      "centre_diff_m": 0.25
+    },
+    "25": {
+      "deg": -2,
+      "dx": -0.5,
+      "dy": -6.5,
+      "anchors_within_2m": 6,
+      "centre_diff_m": 0.25
+    },
+    "30": {
+      "deg": -7,
+      "dx": -1.0,
+      "dy": 4.5,
+      "anchors_within_2m": 6,
+      "centre_diff_m": 11.03
+    },
+    "40": {
+      "deg": 15,
+      "dx": -5.0,
+      "dy": 8.0,
+      "anchors_within_2m": 7,
+      "centre_diff_m": 15.26
+    }
+  },
+  "counts": {
+    "confirmed": 6,
+    "probable": 8,
+    "unmatched": 12
+  },
+  "tls_trees_in_circle": {
+    "GPS centre": 39,
+    "fitted map centre": 30
+  },
+  "map_m_per_px": 0.02976
+}

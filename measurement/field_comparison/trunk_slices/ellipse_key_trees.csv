@@ -1,0 +1,8 @@
+tree_id,trunk,slices,major_cm,minor_cm,area_eq_cm,pipeline_dbh_cm,pipeline_status
+tree_163,1,3,179.1,85.1,123.4,NA,N/A
+tree_079,1,3,90.8,64.5,76.5,NA,N/A
+tree_079,2,2,82.2,63.1,72.0,NA,N/A
+tree_074,1,3,79.6,57.9,67.9,63.648939779609606,VALID
+tree_103,1,3,96.3,63.7,78.3,66.61396058804159,VALID
+tree_120,1,3,46.4,41.9,44.1,40.3597868937448,REVIEW
+tree_089,1,3,40.4,37.9,39.1,36.5014286834972,REVIEW

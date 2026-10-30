@@ -1,0 +1,20 @@
+tree_id,what the slice shows,best DBH estimate (cm),source of estimate,pipeline DBH (cm),pipeline status,automatic slice (cm),automatic slice usable
+tree_163,clean ring; one trunk leaning strongly east,85,ellipse short axis (lean),NA,N/A,83.7,yes
+tree_079,two clean separate trunks (user: twisted together),64 + 63 (combined 90),ellipse short axes; combined = basal-area equivalent,NA,N/A,64.9,one trunk only
+tree_103,clean oval ring (96 x 64 cm); slight lean,78,ellipse area-equivalent,66.6,VALID,85.9,no (stray branch points)
+tree_074,clean ring; leaning about 30 deg and somewhat oval,58-68,ellipse short axis to area-equivalent,63.6,VALID,59.9,yes
+tree_120,clean ring; slight lean,42-44,ellipse,40.4,REVIEW,49.2,no (inner clutter)
+tree_089,clean ring with clutter around it,38-39,ellipse,36.5,REVIEW,39.6,yes
+tree_095,trunk ring inside dense understorey,about 35,ring read by eye; pipeline agrees,36.7,VALID,104.0,no (understorey)
+tree_099,trunk ring inside clutter,about 35-40,ring read by eye; pipeline agrees,34.9,REVIEW,70.5,no (clutter)
+tree_094,ring with a branch attached,about 30,ring read by eye; pipeline agrees,28.1,REVIEW,36.0,no (branch)
+tree_132,partial arc plus clutter,about 30,side view width; pipeline agrees,32.0,REVIEW,59.6,no (clutter)
+tree_123,small trunk ring next to clutter,about 15,ring read by eye; pipeline agrees,14.0,REVIEW,29.2,no (picked clutter)
+tree_115,small stem in clutter,about 16-20,ring read by eye; pipeline agrees,16.1,REVIEW,55.0,no (clutter)
+tree_100,small ring in clutter,about 20,ring read by eye; estimated DBH agrees,NA (est 19.5),N/A,55.2,no (clutter)
+tree_104,two small stems,about 25-30 each,side view; unclear,NA (est 19.4),N/A,67.5,no (two stems merged)
+tree_105,thin stems and clutter; no large trunk,unclear (small),,NA,N/A,46.8,no
+tree_090,fork of two stems close to 1.3 m; partial scan,unclear,,NA,N/A,58.9,no
+tree_083,clutter; no clean trunk ring at 1.3 m,unclear,,27.4,REVIEW,40.1,no
+tree_125,messy leaning stem with clutter,about 30 (uncertain),pipeline,29.6,VALID,30.7,uncertain
+tree_133,shrub-like clutter; no trunk ring,none,,NA,N/A,96.8,no

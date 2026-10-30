@@ -1,0 +1,27 @@
+tag,species,quadrant,field_dbh_cm,tls_tree,distance_m,tls_dbh_pipeline_cm,tls_dbh_status,tls_dbh_estimated_cm,tls_dbh_slice_cm,dbh_used_for_check,dbh_diff_pct,dbh_check,match_class
+1437,Eucalyptus piperita,SE,107.5,tree_085,1.39,25.0,REVIEW,,,25.0,-76.8,fail,unmatched
+1439,Eucalyptus piperita,SW,90.0,tree_074,0.0,63.6,VALID,,,63.6,-29.3,fail,probable
+1448,Eucalyptus piperita,NW,83.0,tree_079S,1.24,,N/A,,80,80,-3.6,pass,confirmed
+1435,Angophora costata,SE,75.5,tree_103,0.01,66.6,VALID,,78,78,3.3,pass,confirmed
+1455,Eucalyptus piperita,NE,74.5,,,,,,,,,no DBH,unmatched
+1450,Eucalyptus piperita,NE,55.0,tree_108,0.45,,N/A,,,,,no DBH,probable
+1449,Angophora costata,NE,53.8,tree_102,1.85,54.1,REVIEW,,,54.1,0.5,pass,confirmed
+1432,Angophora costata,SE,51.4,tree_098,0.73,34.8,VALID,,,34.8,-32.2,fail,probable
+1447,Angophora costata,NW,51.3,tree_146,2.88,10.6,VALID,,,10.6,-79.2,fail,unmatched
+1430,Corymbia gummifera,SE,43.5,tree_093,2.59,43.0,VALID,,,43.0,-1.2,pass,probable
+1454,Angophora costata,NE,41.6,tree_133,2.21,,N/A,,,,,no DBH,unmatched
+1444,Syncarpia glomulifera,NW,37.2,tree_089,0.85,36.5,REVIEW,,,36.5,-1.9,pass,confirmed
+1431,Angophora costata,SE,36.1,tree_086,2.59,18.6,REVIEW,,,18.6,-48.4,fail,unmatched
+1436,Corymbia gummifera,SE,28.9,tree_091,1.22,28.0,VALID,,,28.0,-3.3,pass,confirmed
+1443,Angophora costata,NW,26.9,tree_094,3.05,28.1,REVIEW,,,28.1,4.5,pass,probable
+1442,Syncarpia glomulifera,SW,25.4,,,,,,,,,no DBH,unmatched
+1438,Angophora costata,SW,24.8,tree_081,2.08,22.1,REVIEW,,,22.1,-11.0,pass,probable
+1474,Syncarpia glomulifera,SE,21.3,tree_104,2.58,,N/A,19.4,,19.4,-8.8,pass,probable
+1473,Angophora costata,SE,19.7,,,,,,,,,no DBH,unmatched
+1451,Angophora costata,NE,18.7,tree_106,1.46,,N/A,14.1,,14.1,-24.8,pass,confirmed
+1441,Angophora costata,SW,17.2,,,,,,,,,no DBH,unmatched
+1453,Syncarpia glomulifera,NE,17.1,tree_120,2.04,40.4,REVIEW,,,40.4,136.0,fail,unmatched
+1446,Angophora costata,NW,16.3,tree_152,2.63,17.0,VALID,,,17.0,4.3,pass,probable
+1440,Corymbia gummifera,SW,14.0,tree_163,0.83,,N/A,,85,85,507.1,fail,unmatched
+1452,Angophora costata,NE,12.5,tree_105,2.24,,N/A,,,,,no DBH,unmatched
+1445,Corymbia gummifera,NW,11.2,,,,,,,,,no DBH,unmatched

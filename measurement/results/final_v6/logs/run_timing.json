@@ -1,0 +1,15 @@
+{
+  "workers": 57,
+  "free_ram_gb": 327.5001,
+  "ram_per_worker_gb": 4,
+  "physical_cores": 64,
+  "trees": 163,
+  "prep_seconds": 60.5353,
+  "measure_seconds": 52.9238,
+  "retried": 0,
+  "statuses": {
+    "ok": 127,
+    "partial": 36
+  },
+  "failures": []
+}

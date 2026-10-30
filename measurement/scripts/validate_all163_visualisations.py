@@ -1,6 +1,6 @@
 """Validate the all-163 visualisation outputs against the final audited workbook and the source clouds.
 
-Usage: python -I validate_all163_visualisations.py --vis <visualisation folder> --final <ITSMe_all163_output_v3_FINAL folder>
+Usage: python -I validate_all163_visualisations.py --vis <visualisation folder> --final <ITSMe_all163_output_v6_FINAL folder>
 Writes <vis>/logs/visualisation_validation.json.
 """
 import argparse
@@ -30,7 +30,7 @@ def main():
     vis, final = Path(a.vis), Path(a.final)
     rows = read_xlsx_rows(final / 'ITSMe_all163_results.xlsx')['All Tree Results']
     W = {r[0]: dict(zip(rows[0], r)) for r in rows[1:]}
-    snap = {r['file']: r['sha256'] for r in csv.DictReader(open(ROOT / 'session3_codex_20261023/state/CloudCompare_review_v2_CURRENT.csv', encoding='utf-8-sig'))}
+    snap = {r['file']: r['sha256'] for r in csv.DictReader(open(ROOT / 'session4_claude_20261028/state/CloudCompare_review_v2_CURRENT.csv', encoding='utf-8-sig'))}
     log = json.loads((vis / 'logs/render_log.json').read_text())
     index = list(csv.DictReader(open(vis / 'visualisation_index.csv', encoding='utf-8')))
     checks, problems = {}, []
@@ -64,11 +64,17 @@ def main():
             problems.append((tid, 'dpi', dpi))
         if 'APPROVED' in meta['title'].upper() and 'PENDING' not in meta['title']:
             problems.append((tid, 'approval claimed'))
-        for col, scol in [('DBH (cm)', 'DBH status'), ('Crown projected area (m2)', 'Crown area status'), ('Crown envelope volume (m3)', 'Crown volume status')]:
+        for col, scol in [('DBH (cm)', 'DBH status'), ('Crown projected area (m2)', 'Crown area status'), ('Crown envelope volume (m3)', 'Crown volume status'),
+                          ('Crown volume, 1 m slab hulls (m3)', 'Crown slab volume status')]:
             if f'[{w[scol]}]' not in meta['subtitle']:
                 problems.append((tid, 'subtitle status', scol))
             if w[scol] == 'N/A' and isinstance(w[col], float):
                 problems.append((tid, 'N/A with value', col))
+        est = w.get('Estimated DBH (cm)')
+        if w['DBH status'] == 'N/A' and isinstance(est, float) and f'ESTIMATED {est:.1f} cm' not in meta['subtitle']:
+            problems.append((tid, 'estimated DBH missing from subtitle'))
+        if w['DBH status'] != 'N/A' and 'ESTIMATED' in meta['subtitle']:
+            problems.append((tid, 'estimate shown next to a measured DBH'))
     checks['images_open_300dpi_titles_sources_markers_correct'] = not problems
     checks['single_figure_size'] = len(sizes) == 1
     # Ranking checks: shortest / tallest 8 among VALID heights; largest/smallest VALID DBH and crown area

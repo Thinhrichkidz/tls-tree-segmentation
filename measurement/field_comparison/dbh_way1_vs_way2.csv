@@ -1,0 +1,7 @@
+way,TLS set,n,median,median err %,p25 err %,p75 err %,KS,perm p
+1 no cutoff,measured,86,26.1,-11.8,-1.0,-25.5,0.202,0.354
+1 no cutoff,VALID,42,26.8,-7.3,-3.5,-20.1,0.192,0.517
+1 no cutoff,measured+EST,126,23.1,-21.5,-8.4,-34.7,0.254,0.089
+2 cutoff 11.2 cm,measured,82,27.1,-7.1,3.3,-25.0,0.191,0.394
+2 cutoff 11.2 cm,VALID,39,28.0,-3.3,-1.0,-20.1,0.192,0.564
+2 cutoff 11.2 cm,measured+EST,115,25.3,-12.6,-1.7,-29.9,0.23,0.164

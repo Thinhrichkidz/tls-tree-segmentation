@@ -1,0 +1,7 @@
+matches used,TLS DBH,n,bias cm (TLS-field),RMSE cm,median diff %,min diff %,max diff %
+confirmed,measured (VALID+REVIEW),10,-20.8,38.6,-46.5,-87.5,133.8
+confirmed,VALID only,5,-15.5,38.9,-47.8,-87.5,133.8
+confirmed,ESTIMATED,2,-21.2,23.6,-65.8,-75.7,-55.8
+confirmed+probable,measured (VALID+REVIEW),15,-17.1,39.9,-47.2,-87.5,576.8
+confirmed+probable,VALID only,8,-16.8,33.7,-47.5,-87.5,133.8
+confirmed+probable,ESTIMATED,3,-29.0,32.1,-75.7,-82.5,-55.8

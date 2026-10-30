@@ -1,0 +1,4 @@
+window_deg,trees,runs,gate_pass_pct,v4_median_abs_err_pct_all,v4_median_abs_err_pct_passed,v4_p90_abs_err_pct_passed,kasa_median_abs_err_pct,kasa_p90_abs_err_pct
+270,66,198,84.3,1.84,1.69,5.34,2.35,10.31
+180,66,198,62.1,4.43,3.75,11.59,6.53,26.68
+120,66,198,6.1,9.66,14.26,19.43,26.32,55.44

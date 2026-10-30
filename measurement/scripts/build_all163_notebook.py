@@ -11,7 +11,7 @@ assert not dst.exists(), 'notebook exists; write a new version instead'
 
 cells = [
     new_markdown_cell("""# ITSMe all-163 batch: height, DBH, crown area and crown-envelope volume
-Prepared 23 October 2026; v3 (audit) adds stricter QC rules, stronger validation and an independent recalculation step; v2 added the user's crown-base choices for 55 more trees (`CROWN_BASE_REVIEW_ALL163_20261023_194703/user_crown_choices.csv`). Extends `ITSMe_HEIGHT_DBH_CROWN_VOLUME_TOP20_20261023.ipynb` (unchanged) from 20 trees to all 163
+Prepared 23 October 2026; v5 (28 Oct 2026) adds step 2b, height refinements (`scripts/height_refine_all163.py`): the top rule re-checked on the current points and, for fallback-foot trees, the foot moved under the trunk; v4 (28 Oct 2026) adds the DBH v4 stage (`scripts/dbh_v4.R`: pooled 1.1-1.5 m robust circle fit) whose result appears only as ESTIMATED in the "Estimated DBH (cm)" column and never changes the DBH column; v3 (audit) adds stricter QC rules, stronger validation and an independent recalculation step; v2 added the user's crown-base choices for 55 more trees (`CROWN_BASE_REVIEW_ALL163_20261023_194703/user_crown_choices.csv`). Extends `ITSMe_HEIGHT_DBH_CROWN_VOLUME_TOP20_20261023.ipynb` (unchanged) from 20 trees to all 163
 trees in `CloudCompare_review_v2`. Run all cells with the **R (INFO6003 ITSMe)** kernel (`info6003-ir`).
 
 **What it does**
@@ -109,6 +109,11 @@ jsonlite::write_json(list(workers = WORKERS, free_ram_gb = free_gb, ram_per_work
   measure_seconds = run_seconds, retried = if (is.null(retry)) 0 else length(retry),
   statuses = as.list(table(st)), failures = Filter(function(r) identical(r$status, "failed"), res)),
   file.path(OUT, "logs", "run_timing.json"), auto_unbox = TRUE, pretty = TRUE)"""),
+    new_code_cell("""# 2b. Height refinements (Python): top-edge check on the current points, trunk-centre foot candidates for fallback-foot trees
+status <- system2(PY, c("-I", file.path(WORK, "scripts", "height_refine_all163.py"), "--out", OUT),
+                  stdout = file.path(OUT, "logs", "height_refine_stdout.txt"), stderr = file.path(OUT, "logs", "height_refine_stderr.txt"))
+cat(readLines(file.path(OUT, "logs", "height_refine_stdout.txt")), sep = "\n")
+if (status != 0) stop("Height refinement failed; see logs/height_refine_stderr.txt")"""),
     new_code_cell("""# 3. Results tables, Excel workbook, QC and validation (Python)
 status <- system2(PY, c("-I", file.path(WORK, "scripts", "all163_postprocess.py"), "--out", OUT, if (nzchar(PREVIOUS_OUT)) c("--previous", PREVIOUS_OUT)),
                   stdout = file.path(OUT, "logs", "postprocess_stdout.txt"), stderr = file.path(OUT, "logs", "postprocess_stderr.txt"))

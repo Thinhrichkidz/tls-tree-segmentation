@@ -1,0 +1,27 @@
+tag,species,field_dbh_cm,anchor,tls_tree,dist_m,tls_dbh_cm,tls_dbh_source,diff_pct,east_m,north_m
+1449,Angophora costata,53.8,True,tree_156,1.41,9.41411592406961,estimated,-82.5,3.9,17.94
+1444,Syncarpia glomulifera,37.2,False,tree_088,0.98,17.561678790556,pipeline,-52.8,-2.32,16.32
+1445,Corymbia gummifera,11.2,False,tree_084,0.35,75.7806354667496,pipeline,576.6,-4.0,16.58
+1443,Angophora costata,26.9,False,tree_087,1.11,62.8799225842154,pipeline,133.8,-3.27,13.85
+1446,Angophora costata,16.3,False,,,,,,-7.88,14.66
+1448,Eucalyptus piperita,83.0,True,,,,,,-9.61,13.86
+1447,Angophora costata,51.3,True,tree_067,0.35,26.8416577180781,pipeline,-47.7,-12.78,13.13
+1450,Eucalyptus piperita,55.0,True,tree_107,0.35,18.4068559614702,pipeline,-66.5,4.29,12.39
+1451,Angophora costata,18.7,False,tree_154,0.96,10.9056239898875,pipeline,-41.7,2.88,11.02
+1452,Angophora costata,12.5,False,tree_102,0.8,54.08738621853681,pipeline,332.7,2.57,10.69
+1453,Syncarpia glomulifera,17.1,False,tree_114,0.98,21.412590262699,pipeline,25.2,6.66,9.75
+1454,Angophora costata,41.6,False,tree_121,1.09,10.1001491052994,estimated,-75.7,8.13,8.9
+1455,Eucalyptus piperita,74.5,True,tree_126,0.5,50.2034858875018,pipeline,-32.6,14.05,5.46
+1442,Syncarpia glomulifera,25.4,False,tree_149,0.75,13.3840344335793,pipeline,-47.3,-9.22,7.74
+1430,Corymbia gummifera,43.5,False,tree_089,1.16,38.5,slice (eye-checked),-11.5,-3.43,6.07
+1473,Angophora costata,19.7,False,,,,,,5.07,5.24
+1432,Angophora costata,51.4,True,tree_094,1.26,30,slice (eye-checked),-41.6,-0.82,2.97
+1431,Angophora costata,36.1,False,,,,,,-4.45,2.95
+1474,Syncarpia glomulifera,21.3,False,,,,,,0.58,1.44
+1435,Angophora costata,75.5,True,,,,,,1.97,-0.93
+1439,Eucalyptus piperita,90.0,True,tree_079,0.33,90,slice (eye-checked),0.0,-10.5,2.86
+1440,Corymbia gummifera,14.0,False,tree_152,1.1,16.9947242677348,pipeline,21.4,-7.95,1.43
+1441,Angophora costata,17.2,False,,,,,,-9.0,0.67
+1438,Angophora costata,24.8,False,,,,,,-8.83,-2.42
+1437,Eucalyptus piperita,107.5,True,,,,,,-6.36,-3.83
+1436,Corymbia gummifera,28.9,False,,,,,,-3.45,-2.97

@@ -1,0 +1,19 @@
+{
+  "R": "R version 4.5.2 (2025-10-31 ucrt)",
+  "ITSMe": "2.0.0",
+  "geometry": "0.5.2",
+  "data.table": "1.18.6.1",
+  "python": {
+    "python": "3.13.14",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "plyfile": "unknown",
+    "matplotlib": "3.11.2",
+    "machine": "AMD64",
+    "processor": "AMD64 Family 25 Model 24 Stepping 1, AuthenticAMD",
+    "os": "Windows-10-10.0.19045-SP0"
+  },
+  "physical_cores": 64,
+  "logical_cores": 128,
+  "started": "2026-10-28T19:21:11+1100"
+}

@@ -1,0 +1,44 @@
+{
+  "rotation_deg": -10.66,
+  "map_centre_utm": [
+    261366.72,
+    6264482.43
+  ],
+  "shift_from_gps_centre_m": [
+    0.73,
+    6.06
+  ],
+  "shift_length_m": 6.11,
+  "pairs_used": 19,
+  "score": 43.14,
+  "grid_best": [
+    -11,
+    0.5,
+    6.0,
+    44.04
+  ],
+  "next_distinct_grid_solution": {
+    "deg": -5,
+    "dx": 0.5,
+    "dy": 5.5,
+    "score": 48.96
+  },
+  "anchors_only_fit": {
+    "rotation_deg": -6.77,
+    "centre_utm": [
+      261365.45,
+      6264481.44
+    ],
+    "centre_diff_from_full_fit_m": 1.61
+  },
+  "counts": {
+    "confirmed": 13,
+    "probable": 7,
+    "unmatched": 6
+  },
+  "tls_trees_in_circle": {
+    "GPS centre": 39,
+    "fitted map centre": 45
+  },
+  "map_m_per_px": 0.02976
+}

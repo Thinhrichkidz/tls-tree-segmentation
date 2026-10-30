@@ -25,8 +25,43 @@ from scipy.sparse.csgraph import connected_components
 from scipy.optimize import least_squares
 from plyfile import PlyData
 
+# Current source-cloud hash baseline (28 Oct 2026: tree_045 and tree_139 re-cleaned by the user; previous baseline
+# session3_codex_20261023/state/CloudCompare_review_v2_CURRENT.csv is kept unchanged)
+SNAPSHOT = ROOT / 'session4_claude_20261028/state/CloudCompare_review_v2_CURRENT.csv'
+
 # Agreed crown-base rule constants (CROWN_BASE_PROPOSAL_20261023_190901/method.json)
 DZ, CROWN_FRACTION, FACTOR, CONTINUITY = 0.25, 0.3, 3.0, 0.7
+
+
+def crop_rectangle(x, y):
+    """True crop footprint: minimum-area oriented rectangle of the 3 cm crop (same method as
+    session2_claude_20261023/scripts/edge_recheck.py). Returns angle (rad) and the extent of all points in the rotated frame."""
+    from scipy.spatial import ConvexHull
+    pts = np.column_stack([x[::50], y[::50]])
+    hull = pts[ConvexHull(pts).vertices]
+    best = None
+    for k in range(len(hull)):
+        e = hull[(k + 1) % len(hull)] - hull[k]
+        a = float(np.arctan2(e[1], e[0]))
+        rm = np.array([[np.cos(a), np.sin(a)], [-np.sin(a), np.cos(a)]])
+        q = hull @ rm.T
+        area = float(np.prod(q.max(0) - q.min(0)))
+        if best is None or area < best[0]:
+            best = (area, a, rm)
+    _, a, rm = best
+    q = np.column_stack([x, y]) @ rm.T
+    lo, hi = q.min(0), q.max(0)
+    return dict(angle_rad=a, lo=lo.tolist(), hi=hi.tolist(), size_m=(hi - lo).tolist(), area_ha=float(np.prod(hi - lo) / 1e4),
+                tilt_deg=float(np.degrees(a) % 90), method='minimum-area oriented rectangle of the convex hull (every 50th point); extent of all points')
+
+
+def dist_to_crop_edge(xy, rect):
+    """Distance (m) from global XY points to the tilted crop rectangle (negative = outside)."""
+    a = rect['angle_rad']
+    rm = np.array([[np.cos(a), np.sin(a)], [-np.sin(a), np.cos(a)]])
+    q = np.atleast_2d(np.asarray(xy, float))[:, :2] @ rm.T
+    lo, hi = rect['lo'], rect['hi']
+    return np.minimum.reduce([q[:, 0] - lo[0], hi[0] - q[:, 0], q[:, 1] - lo[1], hi[1] - q[:, 1]])
 
 
 def sha(path):

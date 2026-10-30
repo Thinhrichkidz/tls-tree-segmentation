@@ -1,0 +1,29 @@
+{
+ "roi_id": "WSL_ML2A_crop_55x55",
+ "source": "raw/WSL_ML2A_crop_55x55_3cm.ply",
+ "bbox_xy": [
+  261323.42924995424,
+  6264444.921251831,
+  261389.1350013733,
+  6264512.7582498165
+ ],
+ "assumption": "Crop footprint = minimum-area oriented rectangle of the raw cropped cloud (crop_rectangle); edge distances use it. bbox_xy (axis-aligned bounding box) is kept for reference only.",
+ "crop_rectangle": {
+  "angle_rad": 1.790988923582686,
+  "lo": [
+   6056112.071673281,
+   -1623345.7894829714
+  ],
+  "hi": [
+   6056169.402793031,
+   -1623290.7894587957
+  ],
+  "size_m": [
+   57.331119750626385,
+   55.00002417573705
+  ],
+  "area_ha": 0.3153212972306527,
+  "tilt_deg": 12.61610647596622,
+  "method": "minimum-area oriented rectangle of the convex hull (every 50th point); extent of all points"
+ }
+}

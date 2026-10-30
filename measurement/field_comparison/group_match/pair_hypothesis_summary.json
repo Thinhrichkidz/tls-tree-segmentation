@@ -1,0 +1,54 @@
+{
+  "best": {
+    "matched": 16,
+    "scale": 0.946,
+    "rotation_deg": -13.7,
+    "centre_east_north_of_gps_m": [
+      -0.07,
+      6.29
+    ]
+  },
+  "runner_up": {
+    "matched": 16,
+    "scale": 1.159,
+    "rotation_deg": -5.5,
+    "centre_east_north_of_gps_m": [
+      5.42,
+      -6.02
+    ]
+  },
+  "chance_best_scores": [
+    13,
+    13,
+    13,
+    13,
+    14,
+    14,
+    14,
+    14,
+    14,
+    15,
+    15,
+    15,
+    15,
+    15,
+    15,
+    15,
+    15,
+    16,
+    16,
+    16
+  ],
+  "chance_mean": 14.5,
+  "chance_max": 16,
+  "settings": {
+    "tol_m": 1.5,
+    "max_rot_deg": 20,
+    "scale_range": [
+      0.8,
+      1.4
+    ],
+    "n_large_tls": 25,
+    "area_radius_m": 26.0
+  }
+}

@@ -1,0 +1,27 @@
+tag,species,quadrant,field_dbh_cm,field_dbh_combined_cm,field_stems,field_notes,tls_tree,dist_m,second_dist_m,mutual_nearest,match_class,tls_dbh_cm,tls_dbh_status,tls_dbh_estimated_cm,dbh_diff_pct,dbh_check,map_x_m,map_y_m,utm_e,utm_n
+1449,Angophora costata,NE,53.8,53.8,1,,tree_156,1.08,1.99,True,probable,,N/A,9.4,-82.5,DBH disagrees >40%,1.16,12.95,261370.25,6264494.93
+1444,Syncarpia glomulifera,NW,37.2,37.2,1,,tree_088,0.94,1.97,True,confirmed,17.6,VALID,,-52.8,DBH disagrees >40%,-4.82,9.73,261363.78,6264492.88
+1445,Corymbia gummifera,NW,11.2,11.2,1,,tree_084,0.35,1.06,True,probable,75.8,REVIEW,,576.6,DBH disagrees >40%,-6.61,9.58,261362.0,6264493.07
+1443,Angophora costata,NW,26.9,26.9,1,,tree_087,1.14,3.09,True,confirmed,62.9,VALID,,133.8,DBH disagrees >40%,-5.18,6.96,261362.92,6264490.23
+1446,Angophora costata,NW,16.3,16.3,1,,,2.79,3.45,False,unmatched,10.4,VALID,,,,-10.12,6.64,261358.0,6264490.82
+1448,Eucalyptus piperita,NW,83.0,83.0,1,,tree_151,1.37,2.94,True,confirmed,10.4,VALID,,-87.4,DBH disagrees >40%,-11.7,5.39,261356.22,6264489.88
+1447,Angophora costata,NW,51.3,51.3,1,,tree_067,0.49,2.78,True,confirmed,26.8,VALID,,-47.7,DBH disagrees >40%,-14.76,3.84,261352.92,6264488.93
+1450,Eucalyptus piperita,NE,55.0,55.0,1,,tree_107,1.05,1.77,True,probable,18.4,VALID,,-66.5,DBH disagrees >40%,2.95,7.35,261370.97,6264489.11
+1451,Angophora costata,NE,18.7,18.7,1,,tree_154,0.48,1.36,True,probable,10.9,VALID,,-41.7,DBH disagrees >40%,1.85,5.6,261369.56,6264487.58
+1452,Angophora costata,NE,12.5,12.5,1,,,0.89,1.1,False,unmatched,10.9,VALID,,,,1.61,5.18,261369.25,6264487.22
+1453,Syncarpia glomulifera,NE,17.1,17.1,1,on plot boundary,tree_115,0.37,1.77,True,confirmed,16.1,REVIEW,,-6.0,ok,6.04,5.24,261373.62,6264486.46
+1454,Angophora costata,NE,41.6,41.6,1,rot at base,tree_121,0.2,2.09,True,confirmed,,N/A,10.1,-75.7,DBH disagrees >40%,7.77,4.73,261375.23,6264485.64
+1455,Eucalyptus piperita,NE,74.5,74.5,1,,tree_138,2.06,2.21,True,probable,17.7,REVIEW,,-76.2,DBH disagrees >40%,14.7,2.68,261381.66,6264482.34
+1442,Syncarpia glomulifera,SW,25.4,25.4,1,,tree_149,0.06,0.42,True,probable,13.4,VALID,,-47.3,DBH disagrees >40%,-9.76,-0.8,261356.97,6264483.44
+1430,Corymbia gummifera,SE,43.5,43.5,1,,tree_089,0.58,4.38,True,confirmed,36.5,REVIEW,,-16.1,ok,-3.39,-1.07,261363.18,6264482.0
+1473,Angophora costata,SE,19.7,19.7,1,,tree_117,1.0,2.29,True,confirmed,,N/A,8.7,-56.0,DBH disagrees >40%,5.54,0.21,261372.2,6264481.61
+1432,Angophora costata,SE,51.4,51.4,1,,tree_094,1.27,2.99,True,confirmed,28.1,REVIEW,,-45.3,DBH disagrees >40%,0.06,-3.6,261366.11,6264478.88
+1431,Angophora costata,SE,36.1,36.1,1,,,2.89,2.91,False,unmatched,36.5,REVIEW,,,,-3.66,-4.52,261362.28,6264478.66
+1474,Syncarpia glomulifera,SE,21.3,28.3,2,funnel web,,2.64,2.69,False,unmatched,28.1,REVIEW,,,,1.88,-4.82,261367.67,6264477.34
+1435,Angophora costata,SE,75.5,75.5,1,,tree_105,1.01,3.43,True,confirmed,,N/A,,,,3.9,-6.9,261369.27,6264474.92
+1439,Eucalyptus piperita,SW,90.0,90.0,1,,tree_079,1.38,2.12,True,probable,,N/A,,,,-9.85,-6.13,261355.9,6264478.22
+1440,Corymbia gummifera,SW,14.0,14.0,1,,tree_152,1.45,3.9,True,confirmed,17.0,VALID,,21.4,ok,-6.88,-6.96,261358.67,6264476.85
+1441,Angophora costata,SW,17.2,17.2,1,,,2.67,2.84,False,unmatched,17.0,VALID,,,,-7.77,-8.01,261357.6,6264476.0
+1438,Angophora costata,SW,24.8,24.8,1,,,3.75,4.84,False,unmatched,27.4,REVIEW,,,,-6.82,-11.13,261357.96,6264472.75
+1437,Eucalyptus piperita,SE,107.5,107.5,1,on plot boundary,tree_083,1.31,4.38,True,confirmed,27.4,REVIEW,,-74.5,DBH disagrees >40%,-3.93,-11.96,261360.64,6264471.39
+1436,Corymbia gummifera,SE,28.9,28.9,1,,tree_092,1.25,3.6,True,confirmed,10.1,REVIEW,,-65.0,DBH disagrees >40%,-1.16,-10.36,261363.66,6264472.46

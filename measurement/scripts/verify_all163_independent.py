@@ -69,7 +69,7 @@ def main():
     mv, mf = mesh['vertices'], mesh['faces']
     off = mv[:, :2].min(0)
     interp = LinearTriInterpolator(Triangulation(mv[:, 0] - off[0], mv[:, 1] - off[1], mf), mv[:, 2])
-    snap = {r['file']: r['sha256'] for r in csv.DictReader(open(ROOT / 'session3_codex_20261023/state/CloudCompare_review_v2_CURRENT.csv', encoding='utf-8-sig'))}
+    snap = {r['file']: r['sha256'] for r in csv.DictReader(open(ROOT / 'session4_claude_20261028/state/CloudCompare_review_v2_CURRENT.csv', encoding='utf-8-sig'))}
     rows = []
     for tid in (a.trees.split(',') if a.trees else SAMPLE):
         prep = json.loads((out / 'per_tree' / tid / 'prep.json').read_text())
@@ -80,8 +80,16 @@ def main():
         P = np.column_stack([np.asarray(v[k], float) for k in 'xyz'])
         t = np.array(prep['translation'])
         g_mesh = float(interp(t[0] - off[0], t[1] - off[1]))
+        # Height foot moved under the trunk (height_refine_all163.py): own mesh interpolation at the reported foot XY
+        hf = r.get('height_foot') or {}
+        g_height, g_height_pipeline = g_mesh, t[2]
+        if hf.get('source'):
+            foot = json.loads((out / 'per_tree' / tid / 'height_refine.json').read_text())['foot_candidates'][hf['source']]
+            g_height = float(interp(foot['xy'][0] - off[0], foot['xy'][1] - off[1]))
+            g_height_pipeline = t[2] + hf['dz_m']
         row = dict(tree=tid, points=len(P), ground_z_pipeline=t[2], ground_z_mesh_at_foot=g_mesh, ground_diff_m=g_mesh - t[2],
-                   height_independent=P[:, 2].max() - t[2], height_workbook=r['height']['v'], height_status=r['height']['s'])
+                   height_foot_source=hf.get('source') or 'translation foot', height_ground_diff_m=g_height - g_height_pipeline,
+                   height_independent=P[:, 2].max() - g_height, height_workbook=r['height']['v'], height_status=r['height']['s'])
         row['height_diff_m'] = row['height_independent'] - r['height']['v'] if r['height']['v'] is not None else None
         L = P - t
         if prep.get('axis_o') is not None:
@@ -115,7 +123,7 @@ def main():
         w = csv.DictWriter(f, fieldnames=keys); w.writeheader(); w.writerows(rows)
     hd = [abs(r['height_diff_m']) for r in rows if r.get('height_diff_m') is not None]
     dd = [abs(r['dbh_diff_cm']) for r in rows if r.get('dbh_diff_cm') is not None]
-    summary = dict(trees=len(rows), max_abs_height_diff_m=max(hd), max_abs_ground_diff_m=max(abs(r['ground_diff_m']) for r in rows),
+    summary = dict(trees=len(rows), max_abs_height_diff_m=max(hd), max_abs_ground_diff_m=max(abs(r['ground_diff_m']) for r in rows), max_abs_height_ground_diff_m=max(abs(r['height_ground_diff_m']) for r in rows), moved_foot_trees=[r['tree'] for r in rows if r['height_foot_source'] != 'translation foot'],
                    dbh_compared=len(dd), median_abs_dbh_diff_cm=float(np.median(dd)) if dd else None, max_abs_dbh_diff_cm=max(dd) if dd else None,
                    area_ratio_range=[min(r['area_ratio_workbook_to_convex'] for r in rows if 'area_ratio_workbook_to_convex' in r),
                                      max(r['area_ratio_workbook_to_convex'] for r in rows if 'area_ratio_workbook_to_convex' in r)],

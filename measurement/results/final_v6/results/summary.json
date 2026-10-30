@@ -1,0 +1,436 @@
+{
+ "roi": {
+  "count": 1,
+  "roi_id": "WSL_ML2A_crop_55x55",
+  "source": "raw/WSL_ML2A_crop_55x55_3cm.ply",
+  "bbox_xy": [
+   261323.42924995424,
+   6264444.921251831,
+   261389.1350013733,
+   6264512.7582498165
+  ],
+  "assumption": "Crop footprint = minimum-area oriented rectangle of the raw cropped cloud (crop_rectangle); edge distances use it. bbox_xy (axis-aligned bounding box) is kept for reference only.",
+  "crop_rectangle": {
+   "angle_rad": 1.790988923582686,
+   "lo": [
+    6056112.071673281,
+    -1623345.7894829714
+   ],
+   "hi": [
+    6056169.402793031,
+    -1623290.7894587957
+   ],
+   "size_m": [
+    57.331119750626385,
+    55.00002417573705
+   ],
+   "area_ha": 0.3153212972306527,
+   "tilt_deg": 12.61610647596622,
+   "method": "minimum-area oriented rectangle of the convex hull (every 50th point); extent of all points"
+  }
+ },
+ "trees_refined": 163,
+ "segmentation_status_counts": "NA (no accepted/uncertain/discarded records for CloudCompare_review_v2; all human approvals PENDING)",
+ "tree_status": {
+  "SUCCESS": 82,
+  "PARTIAL SUCCESS": 81,
+  "FAILED": 0
+ },
+ "trees_all_core_valid": 16,
+ "dbh_fit_ok_false": 77,
+ "dbh_estimated_n": 40,
+ "edge_affected_trees": 21,
+ "metric_status_counts": {
+  "height": {
+   "VALID": 73,
+   "ESTIMATED": 0,
+   "N/A": 0,
+   "REVIEW": 90,
+   "UNKNOWN": 0
+  },
+  "dbh": {
+   "VALID": 42,
+   "ESTIMATED": 0,
+   "N/A": 77,
+   "REVIEW": 44,
+   "UNKNOWN": 0
+  },
+  "crown_base": {
+   "VALID": 156,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 0,
+   "UNKNOWN": 0
+  },
+  "crown_area": {
+   "VALID": 123,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 33,
+   "UNKNOWN": 0
+  },
+  "crown_volume": {
+   "VALID": 95,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 61,
+   "UNKNOWN": 0
+  },
+  "crown_volume_slab": {
+   "VALID": 122,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 34,
+   "UNKNOWN": 0
+  },
+  "crown_length": {
+   "VALID": 71,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 85,
+   "UNKNOWN": 0
+  },
+  "crown_ratio": {
+   "VALID": 71,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 85,
+   "UNKNOWN": 0
+  },
+  "crown_diameter": {
+   "VALID": 123,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 33,
+   "UNKNOWN": 0
+  },
+  "point_density": {
+   "VALID": 95,
+   "ESTIMATED": 0,
+   "N/A": 7,
+   "REVIEW": 61,
+   "UNKNOWN": 0
+  }
+ },
+ "statistics": {
+  "height": {
+   "valid": {
+    "n": 73,
+    "mean": 16.751599261268947,
+    "median": 15.56539851066,
+    "sd": 5.024117136905543,
+    "min": 9.390048313782733,
+    "max": 27.177788268631,
+    "p25": 12.372494216169,
+    "p75": 20.798545094807
+   },
+   "counts": {
+    "VALID": 73,
+    "ESTIMATED": 0,
+    "N/A": 0,
+    "REVIEW": 90,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 163,
+    "mean": 16.825786606579555,
+    "median": 16.099727773152,
+    "sd": 4.9018539753125205,
+    "min": 9.390048313782733,
+    "max": 27.177788268631,
+    "p25": 12.388689811755,
+    "p75": 20.8292064496145
+   }
+  },
+  "dbh": {
+   "valid": {
+    "n": 42,
+    "mean": 31.924097439109076,
+    "median": 26.81700157631395,
+    "sd": 16.967744958941257,
+    "min": 10.441824507354799,
+    "max": 66.61396058804159,
+    "p25": 18.1326266359001,
+    "p75": 42.530647224303806
+   },
+   "counts": {
+    "VALID": 42,
+    "ESTIMATED": 0,
+    "N/A": 77,
+    "REVIEW": 44,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 86,
+    "mean": 30.645013024135565,
+    "median": 26.1467773680828,
+    "sd": 15.335943194324631,
+    "min": 10.1173987739345,
+    "max": 75.7806354667496,
+    "p25": 18.54997270376395,
+    "p75": 39.736755386297126
+   }
+  },
+  "crown_base": {
+   "valid": {
+    "n": 156,
+    "mean": 7.137820512820513,
+    "median": 6.75,
+    "sd": 4.147803039911501,
+    "min": 1.0,
+    "max": 19.0,
+    "p25": 3.25,
+    "p75": 10.75
+   },
+   "counts": {
+    "VALID": 156,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 0,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 7.137820512820513,
+    "median": 6.75,
+    "sd": 4.147803039911501,
+    "min": 1.0,
+    "max": 19.0,
+    "p25": 3.25,
+    "p75": 10.75
+   }
+  },
+  "crown_area": {
+   "valid": {
+    "n": 123,
+    "mean": 22.399314253780485,
+    "median": 14.41088758,
+    "sd": 20.743235399786464,
+    "min": 3.373967605,
+    "max": 90.10727087,
+    "p25": 8.85534275,
+    "p75": 26.277292655
+   },
+   "counts": {
+    "VALID": 123,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 33,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 25.65616662326923,
+    "median": 14.616278065,
+    "sd": 29.583078462875292,
+    "min": 1.888123995,
+    "max": 228.709078445,
+    "p25": 8.577861967500002,
+    "p75": 27.3166106975
+   }
+  },
+  "crown_volume": {
+   "valid": {
+    "n": 95,
+    "mean": 181.2417395226926,
+    "median": 77.8418050015926,
+    "sd": 243.2174908055827,
+    "min": 5.49224868047731,
+    "max": 1025.50572961229,
+    "p25": 42.31244731356775,
+    "p75": 194.38023670542754
+   },
+   "counts": {
+    "VALID": 95,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 61,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 209.15043371743852,
+    "median": 85.66163632445324,
+    "sd": 320.4567719854419,
+    "min": 2.44578237342732,
+    "max": 2426.609603227,
+    "p25": 41.9687392288911,
+    "p75": 220.87127163526748
+   }
+  },
+  "crown_volume_slab": {
+   "valid": {
+    "n": 122,
+    "mean": 104.6950986017942,
+    "median": 47.04189082474445,
+    "sd": 143.16720480590988,
+    "min": 4.4065632597477,
+    "max": 713.210069050962,
+    "p25": 26.177109236218676,
+    "p75": 99.95444943944226
+   },
+   "counts": {
+    "VALID": 122,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 34,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 132.20728378756473,
+    "median": 48.140320573782304,
+    "sd": 219.0439460774387,
+    "min": 2.16768229322146,
+    "max": 1673.01006982279,
+    "p25": 24.080254694517,
+    "p75": 127.96213260936526
+   }
+  },
+  "crown_length": {
+   "valid": {
+    "n": 71,
+    "mean": 9.79873841043262,
+    "median": 9.588007328022,
+    "sd": 3.7070743728136275,
+    "min": 3.5653985106599997,
+    "max": 21.577905511851,
+    "p25": 7.508561724804499,
+    "p75": 11.7734424993915
+   },
+   "counts": {
+    "VALID": 71,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 85,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 9.915988240751686,
+    "median": 9.616486563676,
+    "sd": 4.007903716434054,
+    "min": 2.040127846351,
+    "max": 21.577905511851,
+    "p25": 6.903014811302499,
+    "p75": 12.25340373076175
+   }
+  },
+  "crown_ratio": {
+   "valid": {
+    "n": 71,
+    "mean": 0.5960019378110568,
+    "median": 0.6002763531260592,
+    "sd": 0.18863175904777743,
+    "min": 0.20756762475264073,
+    "max": 0.9242693019518223,
+    "p25": 0.4574000317891165,
+    "p75": 0.7439780661717279
+   },
+   "counts": {
+    "VALID": 71,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 85,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 0.5926158985967563,
+    "median": 0.5889862015348386,
+    "sd": 0.20201930073096538,
+    "min": 0.1694440351785219,
+    "max": 0.94188346120615,
+    "p25": 0.4287194098115116,
+    "p75": 0.7567496917643339
+   }
+  },
+  "crown_diameter": {
+   "valid": {
+    "n": 123,
+    "mean": 4.902296669475147,
+    "median": 4.2835163057456445,
+    "sd": 2.126960322064907,
+    "min": 2.0726478179713475,
+    "max": 10.71112228199486,
+    "p25": 3.357729008361937,
+    "p75": 5.784226596033578
+   },
+   "counts": {
+    "VALID": 123,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 33,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 5.094450463603388,
+    "median": 4.31392348397501,
+    "sd": 2.599294172248919,
+    "min": 1.550494803537676,
+    "max": 17.064625484203,
+    "p25": 3.3047217921808825,
+    "p75": 5.89748568933453
+   }
+  },
+  "point_density": {
+   "valid": {
+    "n": 95,
+    "mean": 1203.4161248159787,
+    "median": 1068.5389092174307,
+    "sd": 688.4931160360511,
+    "min": 309.91440693379343,
+    "max": 3716.523890303501,
+    "p25": 671.6437442707423,
+    "p75": 1544.4906338726132
+   },
+   "counts": {
+    "VALID": 95,
+    "ESTIMATED": 0,
+    "N/A": 7,
+    "REVIEW": 61,
+    "UNKNOWN": 0
+   },
+   "valid_plus_review": {
+    "n": 156,
+    "mean": 1111.6710642002945,
+    "median": 948.2566688582456,
+    "sd": 720.0630702528734,
+    "min": 151.91586208789434,
+    "max": 5208.510428009744,
+    "p25": 629.3196399274967,
+    "p75": 1405.9644661047478
+   }
+  }
+ },
+ "run_time": {
+  "prepare_seconds": 60.5353,
+  "measure_seconds": 52.9238,
+  "per_tree_measure_seconds": {
+   "n": 163,
+   "mean": 8.701040383496899,
+   "median": 4.09683895111084,
+   "sd": 9.304441661609625,
+   "min": 0.531041860580444,
+   "max": 50.1032729148865,
+   "p25": 2.377899408340455,
+   "p75": 11.562879443168649
+  },
+  "workers": 57,
+  "machine": {
+   "python": "3.13.14",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "plyfile": "unknown",
+   "matplotlib": "3.11.2",
+   "machine": "AMD64",
+   "processor": "AMD64 Family 25 Model 24 Stepping 1, AuthenticAMD",
+   "os": "Windows-10-10.0.19045-SP0"
+  },
+  "physical_cores": 64,
+  "free_ram_gb_at_start": 327.5001
+ },
+ "points_before_after_downsampling": "NA (not recorded)",
+ "rayextract_segments": "NA (not recorded in this batch)"
+}

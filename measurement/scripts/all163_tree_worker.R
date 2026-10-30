@@ -5,7 +5,10 @@
 # and the 103 ellipse / area-equivalent diameter. Every stage is attempted independently; failures are recorded.
 suppressPackageStartupMessages({ library(ITSMe); library(jsonlite); library(digest) })
 
-WORKER_VERSION <- "all163-worker-v2"  # v2: records peak R memory per tree
+WORKER_VERSION <- "all163-worker-v6"  # v2: records peak R memory per tree; v3: adds dbh_v4_* (joint robust fit, ESTIMATED only, v3 DBH unchanged);
+                                      # v4: adds dbh_v4b_* (small-stem RMSE floor, RANSAC trunk circle) computed for every tree;
+                                      # v5: saves the fit centres (trunk position for the height foot fix);
+                                      # v6: saves the summed slab-hull volumes (gap-aware crown volume)
 AXIS_SEARCH <- NULL
 MIN_ARC <- 0.6; MAX_RMSE_M <- 0.04; SLICE_HEIGHTS <- c(1.1, 1.2, 1.3, 1.4, 1.5)
 
@@ -59,6 +62,7 @@ envelope <- function(cp) {
       h <- tryCatch(crown_convex_hull(p), error = function(e) NULL); if (!is.null(h)) vol <- vol + h$volume_m3
     }
     out[[paste0("slab_ratio_", thickness, "m")]] <- if (vol > 0) hull$volume_m3 / vol else NA_real_
+    out[[paste0("slab_volume_", thickness, "m_m3")]] <- if (vol > 0) vol else NA_real_   # sum of slab convex hulls
   }
   out
 }
@@ -69,6 +73,7 @@ measure_tree <- function(prep_path, root) {
   prep <- fromJSON(prep_path)
   dir <- dirname(prep_path); res_path <- file.path(dir, "result.json")
   stamp <- list(worker = WORKER_VERSION, worker_sha256 = digest(file = file.path(root, "measurement_pipeline/scripts/all163_tree_worker.R"), algo = "sha256"),
+                dbh_v4_sha256 = digest(file = file.path(root, "measurement_pipeline/scripts/dbh_v4.R"), algo = "sha256"),
                 prep_sha256 = digest(file = prep_path, algo = "sha256"))
   if (file.exists(res_path)) {
     old <- fromJSON(res_path)
@@ -76,6 +81,7 @@ measure_tree <- function(prep_path, root) {
   }
   # Helper functions go into the global environment so envelope() (defined at top level) can see them.
   source(file.path(root, "measurement_pipeline/scripts/crown_volume_metrics.R"), local = globalenv())
+  source(file.path(root, "measurement_pipeline/scripts/dbh_v4.R"), local = globalenv())
   set.seed(6003)
   r <- list(tree = prep$tree, review_sha256 = prep$review_sha256, stamp = stamp, errors = list(), warnings = character())
   wlog <- function(w) { r$warnings <<- c(r$warnings, conditionMessage(w)); invokeRestart("muffleWarning") }
@@ -155,6 +161,34 @@ measure_tree <- function(prep_path, root) {
       TRUE
     })
   } else r$errors$dbh <- paste("no stem axis:", if (is.null(prep$axis_failure)) "unavailable" else prep$axis_failure)
+  # DBH v4 (dbh_v4.R): pooled 1.1-1.5 m robust circle fit. Reported only as ESTIMATED where the v3 DBH above is missing.
+  # Errors here go to r$errors$dbh_v4, which does not change the v3 DBH. No stem axis: vertical axis through the stem foot assumed.
+  stage("dbh_v4", {
+    if (!is.null(prep$axis_o)) {
+      o4 <- c(prep$axis_o[1], prep$axis_o[2], 0); v4 <- c(prep$axis_s[1], prep$axis_s[2], 1); v4 <- v4 / sqrt(sum(v4^2))
+      P4 <- sweep(as.matrix(tree1[, c("X", "Y", "Z")]), 2, o4) %*% t(rotation_to_vertical(v4))
+      rp4 <- data.frame(X = P4[, 1], Y = P4[, 2], Z = P4[, 3])
+    } else rp4 <- tree1[, c("X", "Y", "Z")]
+    f4 <- joint_fit(rp4); r$dbh_v4_gate <- v4_gate(f4); r$dbh_v4_axis <- !is.null(prep$axis_o)
+    if (!is.null(f4)) {
+      r$dbh_v4_m <- f4$d; r$dbh_v4_arc <- f4$arc; r$dbh_v4_rmse_m <- f4$rmse; r$dbh_v4_points <- f4$n
+      r$dbh_v4_slice_spread <- f4$spread; r$dbh_v4_bark_radius_m <- f4$bark
+      r$dbh_v4_cx <- f4$cx; r$dbh_v4_cy <- f4$cy   # centre in the DBH frame (= local frame when there is no stem axis)
+    }
+    # v4b fallbacks, same frame: small-stem RMSE floor on the v4 fit first, then the RANSAC trunk circle. Computed for every tree
+    # (so they can be checked against v3); the post-processing releases them only where v4 fails and the user review allows it.
+    fr4 <- ransac_fit(rp4)
+    r$dbh_v4b_floor_gate <- v4b_floor_gate(f4); r$dbh_v4b_ransac_gate <- ransac_gate(fr4)
+    if (!is.null(fr4)) {
+      r$dbh_v4b_ransac_m <- fr4$d; r$dbh_v4b_ransac_arc <- fr4$arc; r$dbh_v4b_ransac_rmse_m <- fr4$rmse
+      r$dbh_v4b_ransac_points <- fr4$n; r$dbh_v4b_ransac_band_points <- fr4$band_points
+      r$dbh_v4b_ransac_inside_ratio <- fr4$inside_ratio; r$dbh_v4b_ransac_slice_spread <- fr4$spread
+      r$dbh_v4b_ransac_cx <- fr4$cx; r$dbh_v4b_ransac_cy <- fr4$cy
+    }
+    r$dbh_v4b_method <- if (r$dbh_v4b_floor_gate == "ok") "FLOOR" else if (r$dbh_v4b_ransac_gate == "ok") "RANSAC" else "none"
+    r$dbh_v4b_m <- switch(r$dbh_v4b_method, FLOOR = f4$d, RANSAC = fr4$d, NULL)
+    TRUE
+  })
   r$seconds <- as.numeric(difftime(Sys.time(), t_start, units = "secs"))
   g <- gc(); r$r_peak_memory_mb <- sum(g[, ncol(g)])   # R heap peak for this tree (max used, MB)
   r$pid <- Sys.getpid()
