@@ -1,0 +1,13 @@
+# Code and data issues (no code was modified)
+
+| # | Location | Behaviour | Effect on reported numbers | Suggested fix |
+|---|---|---|---|---|
+| 1 | `measurement_pipeline/scripts/all163_postprocess.py:188` vs `:236-245` | `all_core_valid` is set in `assess()` before the outlier pass demotes crown area/volume (5th–95th percentile) to REVIEW | `summary.json`, `processing_summary.md` and the workbook say 16 all-VALID; the correct count is 14 (tree_069, tree_146). The report already uses 14 | Recompute `all_core_valid` (and the tree-status colour) after the outlier loop |
+| 2 | `all163_postprocess.py` `validate()` (15 checks) | No check compares `trees_all_core_valid` with the per-metric statuses | False assurance: "15 checks passed" with a known inconsistency | Add a check that recomputes all-VALID from the four status columns |
+| 3 | `methods.json` "Not obtained" (written by `methods()` in `all163_postprocess.py`) | States "unedited Rayextract output not kept" | Wrong: `outputs/WSL_ML2A/55x55/3cm/trees/clouds` holds the 162 raycloudtools trees | Correct the string |
+| 4 | `scripts/sensitivity_all163.R` | Not in `methods.json` script hashes; mtime 20:41 is later than `sensitivity.csv` (20:14) | `sensitivity.csv` may not match the current script | Hash it and rerun into a new folder |
+| 5 | `results/tree_attributes.csv` column `status` | All 163 values are empty; the actual tree status is only in the workbook/records.json | Confusing to readers of the released CSV | Fill it with `tree_status` or drop it |
+| 6 | `all163_manifest.csv`, `per_tree/*/prep.json`, `scripts/adapt_notebooks.py:169` | Absolute `G:\22083142\...` paths | Not portable; the worker asserts the file hash at that path | Use paths relative to the project root |
+| 7 | tree_095 (`per_tree/tree_095/result.json`) | The bark-radius histogram gives 0.635 m (crop radius 0.735 m), but ITSMe `dbh_pc` returns 36.7 cm with arc 1.0; a plain LS circle fit on the same slice (503 pts) gives 80.9 cm; lean 17.3° | One of the 14 all-VALID trees may have a wrong DBH; VALID medians would move slightly | Inspect the 1.3 m slice visually; consider REVIEW when the circle diameter and 2 × bark-radius disagree by > 30% |
+| 8 | Status rules (`assess()`) | Several REVIEW triggers (≥2 clusters at 1.3 m, fallback foot, highest point > 0.5 m above supported top, cloud edited after QC) are not described in the report | Table 3 rules reproduce 69/66 VALID instead of 53/43 | Documentation fix (see suggested edits) |
+| 9 | `environment/python-requirements-lock.txt` | Pins Jupyter packages only; numpy/scipy/matplotlib/plyfile versions are recorded only in `logs/environment.json` | Python environment not reproducible from the lockfile | `pip freeze` of the run venv |

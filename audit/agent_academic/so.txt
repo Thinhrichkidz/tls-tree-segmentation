@@ -1,0 +1,657 @@
+School of Computer, Data and Mathematical Sciences
+
+                    INFO6003 Postgraduate Research Project
+                                      Spring 2026
+Western Sydney University acknowledges the peoples of the Darug, Dharawal, Eora and Wiradjuri nations. We also
+acknowledge that the teaching and learning currently delivered across our campuses is a continuance of the teaching
+and learning that has occurred on these lands for tens of thousands of years.
+
+INFO6003 Postgraduate Research Project Spring 2026 Subject Outline
+
+Subject Details
+
+Subject Code:           INFO6003
+
+Subject Name:           Postgraduate Research Project
+
+Credit Points:          10
+
+Subject Level:          6
+
+Assumed Knowledge: Not Applicable
+
+    Note: Students with any problems, concerns or doubts should discuss those with the Subject Coordinator as early as they can.
+
+Subject Coordinator
+
+Name:           Hao Wu
+
+Location:       PS-EN 1.35
+
+Email:          hao.wu1@westernsydney.edu.au
+
+Consultation Arrangement:
+
+Tuesdays 10am-12pm
+
+Edition: Spring 2026
+Copyright © 2026 University Western Sydney trading as Western Sydney University ABN 53 014 069 881 CRICOS Provider No: 00917K No part of this publication may be reproduced or transmitted in any form
+or by any means, electronic or mechanical, including photocopying, recording, or by any information storage and retrieval system, without the prior written permission from the Dean of the School. Copyright
+for acknowledged materials reproduced herein is retained by the copyright holder. All readings in this publication are copied under licence in accordance with Part VB of the Copyright Act 1968.
+Contents
+
+1 About Postgraduate Research Project     2
+
+1.1 An Introduction to this Subject . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+
+1.2 What is Expected of You . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+
+1.3 Changes to Subject as a Result of Past Student Feedback . . . . . . . . . . . . . . . . . . . . . . . . 3
+
+2 Learning and Teaching Activities        5
+
+3 Assessment Information                  6
+
+3.1 Subject Learning Outcomes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+
+3.2 Assessment Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+
+3.2.1 Learning Contract - Supervision Agreement . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+
+3.2.2 Project Proposal . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+
+3.2.3 Project Report . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+
+3.2.4 Oral Presentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+
+4 Readings and Resources                  17
+
+5 Key Teaching and Learning Policies      18
+
+                                       1
+1 About Postgraduate Research Project
+
+1.1 An Introduction to this Subject
+
+This project-based subject provides students with opportunities to develop comprehensive research and project
+management skills. Students are matched with a supervisor to explore an area of research interest. Working closely
+with their supervisor, each student will identify their individual research topic then engage in theoretical and practical
+research investigations. Each student is expected to develop their skills to work independently as a researcher to
+manage their research project as well as produce and deliver a comprehensive research report on their findings. This
+subject provides students with the skills necessary to move on to higher academic research levels or pursue career
+opportunities in industry-based research.
+
+1.2 What is Expected of You
+
+Study Load
+
+A student is expected to study an hour per credit point a week. For example a 10 credit point subject would require
+10 hours of study per week. This time includes the time spent within classes during lectures, tutorials or practicals.
+
+  Note for Summer Terms: As Summer subjects deliver the same content and classes over a shorter period of time,
+the subjects are run in a more intensive mode. Regardless of the delivery mode, the study hours for each subject in
+Summer will be around 30 hours.
+
+Attendance
+
+Students must participate in the regular meetings with their supervisor(s).
+
+Approach to Learning
+
+Approach to Learning
+
+INFO6003 Postgraduate Project is a one-semester, problem-based research project subject. Students undertake
+an independent research or applied project under the guidance of an academic supervisor, applying the knowledge
+and skills developed throughout their postgraduate coursework. The learning approach includes workshops, learning
+sessions for the research project, regular consultation with academic supervisors, and other activities (e.g., literature
+review, system design and implementation, data collection and analysis, experimentation, evaluation, and technical
+writing) necessary to complete the research project. Workshops Multiple workshops will be offered throughout the
+semester to support students in developing the practical skills required to undertake and complete their research
+projects. These workshops are designed to complement students' independent project work and are not individually
+assessed. The workshops include a High Performance Computing (HPC) workshop in Week 3, introducing students to
+the University's HPC resources and computational research environment, and a Presentation and LaTeX workshop in
+Week 4, focusing on effective research presentations, academic writing, LaTeX document preparation, and reference
+management. Additional workshops or research seminars may be provided where appropriate. Consultation with
+Academic Supervisor(s) Students will carry out their research projects in consultation with their academic supervisor(s).
+Students are expected to attend regular meetings, normally on a weekly basis or as otherwise agreed with their
+supervisor(s), to discuss project progress, research challenges, experimental results, and future work.
+
+To ensure a successful start to the project, students are advised to meet with their supervisor(s) during the first
+week of the semester to discuss the project scope, expectations, and an initial project plan. Students are required
+to submit a Supervisor Agreement by Week 3 and a Project Proposal by Week 4. Given the condensed timeline of
+a one-semester project, early engagement with the supervisor and timely commencement of research activities are
+
+                                                                        2
+essential. Delays in starting the project may significantly impact a student's ability to complete the required project
+outcomes.
+
+Importantly:
+
+It is the student's responsibility to arrange regular meetings with their supervisor(s) and seek advice on project progress
+throughout the semester.
+
+Students are expected to attend scheduled research meetings at the agreed time. Failure to maintain regular
+communication and satisfactory progress may adversely affect the successful completion of the project.
+
+Students are required to maintain appropriate records of project work, data, software development, experimental
+results, and research activities. Supervisors may require students to maintain an electronic project notebook or a
+GitHub repository to facilitate project supervision and assessment.
+
+For communication, it is expected that students respond to supervisor emails and other communications in a timely
+and professional manner. Learning Sessions This is a 10 credit point subject. Students are expected to spend
+approximately 10 hours per week on project-related activities. These activities include independent research, literature
+review, project implementation, experimentation, meetings with supervisors, attendance at workshops, report writing,
+and preparation for the final presentation.
+
+Online Learning Requirements
+
+Subject materials will be made available on the subject's Ultra (E-Learning) site (https://vuws.westernsydney.edu.
+au/). You are expected to consult Ultra at least twice a week, as all subject announcements will be made via Ultra.
+Teaching and learning materials will be regularly updated and posted online by the teaching team.
+
+Special Requirements
+
+Essential Equipment:
+Not Applicable
+
+  Legislative Pre-Requisites:
+Not Applicable
+
+1.3 Changes to Subject as a Result of Past Student Feedback
+
+The University values student feedback in order to improve the quality of its educational programs. The feedback
+provided helps us improve teaching methods and subjects of study. The survey subjects results inform subject content
+and design, Subject Outlines, teaching methods, assessment processes and teaching materials.
+
+You are welcome to provide feedback that is related to the teaching of this subject. At the end of the semester
+you will be given the opportunity to complete a Student Feedback on Subject questionnaire to assess the subject.
+If requested by your subject coordinator, you may also have the opportunity to complete a Student Feedback on
+Teaching (SFT) questionnaire to provide feedback for individual teaching staff.
+
+As a result of student feedback, the following changes and improvements to this Subject have recently been made:
+
+    ­ The following improvements have been made to this subject in response to student feedback and the ongoing
+       review of postgraduate project delivery: Introduced a GitHub repository requirement as part of the final report
+       assessment to encourage continuous project development throughout the semester. Students are expected
+       to maintain their repository with regular weekly commits, recognising both the final project outcomes and
+       the development process. Introduced a High Performance Computing (HPC) workshop to provide students
+
+                                                                        3
+with practical experience in using the University's computational resources for research and machine learning
+projects. Introduced a Presentation and LaTeX workshop to strengthen students' research communication
+skills, including professional presentation techniques, academic writing, and technical document preparation.
+
+                                                                 4
+   2 Learning and Teaching Activities
+
+5  Teaching    Assessment Due
+   Weeks       - Learning Contract - Supervision Agreement
+   Week 1      - Project Proposal
+   20-07-2026
+   Week 2      - Project Report
+   27-07-2026  - Oral Presentation
+   Week 3
+   03-08-2026
+   Week 4
+   10-08-2026
+   Week 5
+   17-08-2026
+   Week 6
+   24-08-2026
+   Week 7
+   31-08-2026
+   Week 8
+   07-09-2026
+   Week 9
+   14-09-2026
+   Week 10
+   21-09-2026
+   Week 11
+   28-09-2026
+   Week 12
+   05-10-2026
+   Week 13
+   12-10-2026
+   Week 14
+   19-10-2026
+   Week 15
+   26-10-2026
+   Week 16
+   02-11-2026
+   Week 17
+   09-11-2026
+
+   The above timetable should be used as a guide only, as it is subject to change. Students will be advised of any changes as they become known on the Subject's Ultra site.
+3 Assessment Information
+
+3.1 Subject Learning Outcomes
+
+   Outcome
+
+1 Critically analyse the relevant literature to identify potential research problems.
+
+2 Generate research questions and hypothesis based on literature review.
+
+3 Justify the research proposal in relation to its significance in literature and its anticipated impact.
+
+4 Construct a plan and methodology to conduct research on an identified question/issue/problem.
+
+5 Articulate research aims and findings in professional, formal and informal formats and contexts.
+
+6 Apply self-management skills in planning and executing research.
+
+7  Demonstrate research ethics in synthesising complex information from a range of sources and referencing
+   appropriately.
+
+3.2 Assessment Summary
+
+The assessment items in this subject are designed to enable you to demonstrate that you have achieved the subject
+learning outcomes. Completion and submission of all assessment items which have been designated as mandatory or
+compulsory is essential to receive a passing grade.
+
+To pass this subject you must:
+
+Complete all the required items:
+- attend the oral presentation session(s) and satisfactorily complete the oral presentation
+- submit the the final report of professional standard by due dates
+- achieve a minimum overall mark of 50%
+
+Item                   Weight Due Date                              SLOs Assessed Mandatory Threshold
+Learning Contract -
+Supervision Agreement  S/U      week 3                              2, 6                     Yes           Yes
+Project Proposal
+Project Report         25%      week 4                              1, 2, 3, 4, 6            Yes           No
+Oral Presentation
+                       60%      week 14                             3, 4, 5, 6, 7            Yes           No
+
+                       15%      week 16                             1, 2, 3, 4, 5, 6, No                   No
+
+                                                                    7
+
+Feedback on Assessment
+
+Feedback is an important part of the learning process that can improve your progress towards achieving the learning
+outcomes. Feedback is any written or spoken response made in relation to academic work such as an assessment
+task, a performance or product. It can be given to you by a teacher, an external assessor or student peer, and may
+be given individually or to a group of students. As a Western Sydney University student, it is your responsibility to
+seek out and act on feedback that is provided to you as a resource to further your learning.
+
+                                                                        6
+Feedbacks on presentations will be released within two weeks.
+
+Academic Integrity and Student Misconduct Rule
+
+ Western cares about your success as a student and in your future career. Studying with academic integrity safeguards
+your professional reputation and your degree. All Western students must:
+
+    ­ be familiar with the policies listed below;
+    ­ apply principles of academic integrity;
+    ­ act honestly and ethically in producing all academic work and assessment tasks; and
+    ­ submit work that is their own and acknowledge any sources used in their work.
+
+Each time you submit an assessment, you will declare that you have completed it individually, unless it is a group
+assignment. In the case of a group assignment, each group member should be ready to document their individual
+contribution if needed.
+
+The Student Misconduct Rule applies to all students of Western Sydney University including Western Sydney
+University programs taught by other education providers. You must not engage in academic, research or general
+misconduct as defined in the Rule or you may be subject to sanctions. The University considers submitting falsified
+documentation in support of requests to redo, resit or extend submissions, including sitting of deferred examinations,
+as instances of general misconduct.
+
+More information is available in the Academic Integrity Guidelines. It is your responsibility to apply these principles
+to all work you submit to the University.
+
+Special Consideration and Requests for Extensions
+
+Western recognises that there may be times when things outside of your control impact your ability to complete your
+studies.
+
+You can submit a Special Consideration or extension application to request that you are:
+
+    ­ granted an extension,
+    ­ excused from a compulsory teaching activity,
+    ­ being offered an opportunity to complete a different, academically equivalent assessment task or
+    ­ granted another appropriate adjustment.
+
+Before submitting your application, you should:
+
+    ­ gather any supporting documentation that demonstrates how you have been impacted by circumstances outside
+       of your control; and
+
+    ­ refer to the Supporting Documentation website for guidance on acceptable evidence.
+
+If you do not have documentation at the time of submitting your application, you should still apply. You may be
+asked to provide supporting documents at a later stage.
+
+Need help?
+
+If you are having difficulties with understanding or completing an assessment task, contact your Subject Coordinator
+as soon as possible. Western also has a range of academic support services, including:
+
+                                                                        7
+    ­ Library Study Smart: book a one-to-one Zoom consultation with a literacy expert. You can discuss how
+       to develop your assignment writing and study skills or seek assistance to understand referencing and citation
+       requirements. Check the Library Study Smart website for how-to study guides and tools.
+
+    ­ Studiosity: Upload your assignment draft to Studiosity within Ultra to receive writing feedback within 24
+       hours.
+
+    ­ Online workshops, programs and resources: From maths and stats help to academic literacy and peer support
+       programs, the University has a range of resources to assist.
+
+Please also remember that there is a range of wellbeing support available - from counselling and disability services to
+welfare.
+
+                                                                        8
+Assessment Details
+
+3.2.1 Learning Contract - Supervision Agreement
+
+Weight:                          S/U
+Type of Collaboration:           Individual
+Due:                             week 3
+Submission:                      to Ultra
+Format:
+Length:                          1-2 pages
+Threshold Detail:
+Use of Artificial Intelligence:  The use of generative AI is permitted only as a support tool and must be
+                                 declared in the submitted assessment in accordance with the University's
+                                 Academic Integrity Policy.
+
+Instructions:
+
+                                                 9
+3.2.2 Project Proposal
+
+Weight:                          25%
+Type of Collaboration:           Individual
+Due:                             week 4
+Submission:                      to Ultra
+Format:                          1,500 - 2,500 words
+Length:                          1,500 - 2,500 words
+Use of Artificial Intelligence:  The use of generative AI is permitted only as a support tool and must be
+                                 declared in the submitted assessment in accordance with the University's
+                                 Academic Integrity Policy.
+
+Instructions:
+
+ Students submit a proposal describing the project aims, background, methodology, timeline, expected outcomes,
+and project feasibility. The proposal should be developed in consultation with the academic supervisor.
+
+                                 10
+Marking Criteria:
+
+Project Definition and Motivation (30%)
+
+F (<49%): Project topic is unclear, poorly motivated, or not feasible for a one-semester project. Aims or research
+questions are missing or inappropriate.
+P (50-65%): Project topic and aims are identified, but motivation, scope, or research questions lack clarity or depth.
+Feasibility is only partly addressed.
+C (65-74%): Project is clearly defined with appropriate motivation, aims, and scope. Feasibility within one semester
+is generally demonstrated.
+D (75-84%): Project is well motivated, clearly scoped, and supported by strong aims or research questions. Feasibility
+and project value are clearly justified.
+HD (85-100%): Project is highly coherent, well motivated, and clearly significant. Aims, scope, research questions,
+and feasibility are exceptionally well articulated.
+
+Background and Literature (25%)
+
+F (<49%): Background is missing, inaccurate, or unsupported by relevant literature.
+P (50-65%): Provides basic background and some relevant sources, but coverage is limited or mostly descriptive.
+C (65-74%): Provides a clear background and discusses relevant literature appropriately, identifying the project
+context and need.
+D (75-84%): Demonstrates strong understanding of relevant literature, with clear connections to the proposed
+project and its contribution.
+HD (85-100%): Demonstrates excellent command of the literature, critically identifying gaps, limitations, and a
+strong rationale for the proposed work.
+
+Proposed Methodology (25%)
+
+F (<49%): Methodology is missing, vague, inappropriate, or not aligned with the project aims.
+P (50-65%): Methodology is described at a basic level but lacks detail, justification, or clear alignment with the
+project objectives.
+C (65-74%): Methodology is appropriate, clearly described, and generally aligned with the project aims.
+D (75-84%): Methodology is well developed, justified, and feasible. Key methods, data, tools, evaluation plans, or
+implementation steps are clearly explained.
+HD (85-100%): Methodology is rigorous, well justified, and highly appropriate. Proposed methods, evaluation
+strategy, resources, and implementation plan demonstrate strong technical maturity.
+
+Project Plan and Feasibility (20%)
+
+F (<49%): Project plan is missing, unrealistic, or does not demonstrate how the project can be completed within
+the semester.
+P (50-65%): Provides a basic project plan or timeline, but milestones, risks, resources, or feasibility are only partly
+addressed.
+C (65-74%): Provides a clear and realistic project plan with appropriate milestones and consideration of feasibility.
+D (75-84%): Provides a well-structured and realistic plan with clear milestones, resource considerations, and
+awareness of risks or constraints.
+HD (85-100%): Provides an excellent, detailed, and highly feasible project plan. Milestones, risks, resources, ethics
+or data requirements, and expected outcomes are carefully considered.
+
+                                                                       11
+3.2.3 Project Report
+
+Weight:                          60%
+Type of Collaboration:
+Due:                             Individual
+Submission:
+Format:                          week 14
+
+Length:                          to Ultra
+Use of Artificial Intelligence:
+                                 Length: 12 pages in LNCS format or 7 pages in an approved machine learning
+                                 conference format, including references.
+
+                                 5000 - 7500 words (includes figures, formulas, tables)
+
+                                 The use of generative AI is permitted only as a support tool and must be
+                                 declared in the submitted assessment in accordance with the University's
+                                 Academic Integrity Policy.
+
+Instructions:
+
+ Report
+
+Length: 12 pages in LNCS format or 7 pages in an approved machine learning conference format, including references.
+
+The final report assessment consists of two equally important components: the written report and the project's
+GitHub repository. Each component contributes 50% of the marks for this assessment.
+
+The written report is the major written component of the project and should present a complete account of the
+work undertaken throughout the semester. The report should clearly explain the project motivation, objectives,
+methodology, implementation, experimental evaluation, results, discussion and conclusions. Students are expected
+to demonstrate critical thinking, technical competence and sound analytical reasoning. The report should be clearly
+written, logically organised and presented according to accepted academic standards. Report templates will be made
+available in Ultra.
+
+The GitHub repository is assessed as evidence of the project's development process and technical implementation.
+Students are expected to maintain the repository throughout the semester, making regular commits that document
+the evolution of the project. As a general expectation, students should commit meaningful progress on at least a
+weekly basis. Assessment will consider the quality and organisation of the repository, code quality, documentation,
+reproducibility, version control practices, and the consistency of development over time. Repositories that are largely
+populated only at the end of the semester, with little evidence of continuous development, will receive substantially
+lower marks regardless of the quality of the final code.
+
+                                 12
+Marking Criteria:
+
+Written Report (50%)
+
+F (<49%): Report is incomplete, poorly organised, or lacks essential sections. Methods, results, or conclusions are
+missing or inadequately explained. Writing quality is poor and does not meet postgraduate academic standards.
+P (50-65%): Report covers the main components of the project but lacks depth or clarity in several areas. Some
+methodology, analysis, or discussion is underdeveloped. Writing and organisation are generally acceptable.
+C (65-74%): Well-structured report that clearly presents the project motivation, methodology, implementation,
+results, discussion and conclusions. Writing is clear and demonstrates sound academic practice with only minor
+weaknesses.
+D (75-84%): High-quality report with well-justified methodology, comprehensive analysis and thoughtful discussion.
+Writing is professional, logically organised and demonstrates strong critical thinking.
+HD (85-100%): Outstanding report of publication quality. Demonstrates excellent technical writing, critical analysis,
+rigorous evaluation and insightful discussion. The report is exceptionally clear, coherent and professionally presented.
+
+GitHub Repository (30%)
+
+F (<49%): Repository is missing, poorly organised, largely empty, or contains only a final upload with little evidence
+of development throughout the semester. Documentation is absent or inadequate.
+P (50-65%): Repository contains the project code and basic documentation but shows limited evidence of continuous
+development. Commit history is inconsistent or infrequent.
+C (65-74%): Repository is organised and documented with regular commits demonstrating ongoing development
+during the semester. Code is generally reproducible and appropriately managed using version control.
+D (75-84%): Repository is well organised, clearly documented and demonstrates consistent development through
+meaningful commits made throughout the semester. Good software engineering and version control practices are
+evident.
+HD (85-100%): Repository demonstrates exemplary software engineering practice. Development is consistently
+documented through regular, meaningful commits across the semester. Code is clean, reproducible, well documented
+and professionally maintained.
+
+Technical Quality and Analysis (20%)
+
+F (<49%): Technical work is incomplete or incorrect. Experiments, evaluation or analysis are missing or poorly
+executed. Conclusions are unsupported.
+P (50-65%): Technical implementation is functional but limited. Evaluation is basic and analysis lacks depth. Some
+conclusions are only partially supported by evidence.
+C (65-74%): Sound technical implementation with appropriate experimentation and evaluation. Analysis is generally
+accurate and conclusions are supported by the results.
+D (75-84%): Strong technical implementation with comprehensive evaluation, thoughtful analysis and well-supported
+conclusions. Demonstrates good critical reasoning and awareness of limitations.
+HD (85-100%): Excellent technical work demonstrating innovation, rigorous experimentation, comprehensive
+evaluation and insightful analysis. Conclusions are thoroughly justified and reflect a high level of technical maturity.
+
+                                                                       13
+3.2.4 Oral Presentation
+
+Weight:                          15%
+Type of Collaboration:
+Due:                             Individual
+Submission:
+Format:                          week 16
+
+Length:                          to Ultra
+Use of Artificial Intelligence:
+                                 Duration: 15 minutes for an individual project or 20 minutes for a pair project,
+                                 followed by questions.
+
+                                 15 - 20 minutes
+
+                                 The use of generative AI is permitted only as a support tool and must be
+                                 declared in the submitted assessment in accordance with the University's
+                                 Academic Integrity Policy.
+
+Instructions:
+
+ Duration: 15 minutes for an individual project or 20 minutes for a pair project, followed by questions.
+
+Presentations are strictly limited to the allocated time. Students are required to attend and participate in the entire
+presentation session.
+
+The final presentation provides students with the opportunity to communicate the motivation, objectives, methodology,
+implementation, key results and conclusions of their project. Students should demonstrate a thorough understanding
+of the work undertaken, justify the technical decisions made throughout the project, discuss the significance and
+limitations of their findings, and reflect on possible future work where appropriate. Students should also be prepared
+to respond to questions from the academic panel and audience.
+
+Assessment will consider the quality and technical depth of the project, clarity of communication, presentation skills,
+organisation, ability to answer questions, and overall understanding of the project.
+
+Presentation slides are intended to support the presentation rather than serve as a standalone document. Students
+are encouraged to use concise slides that communicate key ideas clearly, with appropriate use of figures, diagrams
+and demonstrations where relevant.
+
+Students who do not participate in the entire presentation session will receive an FNS (Fail - Non Submission) grade
+for the subject. Delivering an individual presentation alone does not satisfy this requirement.
+
+                                 14
+Marking Criteria:
+
+Content (40%)
+
+F (<49%): Content is incomplete, inaccurate, or poorly connected to the project aims. Methods, implementation,
+results, or conclusions are missing or very weakly presented.
+P (50-65%): Presents the basic project aims, methods, and outcomes. Some results are included, but discussion is
+limited and parts of the project remain underdeveloped.
+C (65-74%): Clearly presents the project motivation, methodology, implementation, results, and conclusions.
+Content is generally accurate and appropriately scoped, with some analytical discussion.
+D (75-84%): Well-developed content with clear motivation, justified methodology, strong results, and thoughtful
+discussion. Demonstrates a strong understanding of the project contribution and limitations.
+HD (85-100%): Comprehensive and insightful presentation of the complete project. Methods, results, evaluation,
+conclusions, limitations, and contributions are clearly justified and critically interpreted.
+
+Understanding (20%)
+
+F (<49%): Shows limited understanding of the project, methods, results, or conclusions. Cannot explain key
+decisions or answer basic questions.
+P (50-65%): Shows basic understanding, but explanations lack depth. Can describe the project but has difficulty
+justifying choices or interpreting results.
+C (65-74%): Shows good understanding of the project context, methodology, results, and limitations. Can explain
+key choices with minor gaps.
+D (75-84%): Demonstrates strong understanding through accurate and confident explanation of methods, results,
+decisions, and limitations.
+HD (85-100%): Demonstrates deep conceptual and technical understanding. Explains assumptions, decisions,
+results, limitations, and implications with clarity and critical insight.
+
+Clarity (15%)
+
+F (<49%): Presentation is confusing, poorly structured, or difficult to follow. Visuals are unclear, missing, or
+ineffective.
+P (50-65%): Presentation is understandable but uneven. Some sections lack structure, clarity, or effective explanation
+of visuals.
+C (65-74%): Presentation is clear and logically structured. Visuals support the explanation, with only minor issues
+in flow or detail.
+D (75-84%): Presentation is very clear, well organised, and supported by effective visuals. The project narrative is
+coherent and easy to follow.
+HD (85-100%): Presentation is exceptionally clear, polished, and professional. Visuals are highly effective, and
+complex ideas are communicated accessibly.
+
+Presentation Skills (15%)
+
+F (<49%): Delivery is unprepared, unclear, or difficult to follow. Poor pacing, weak confidence, or excessive reliance
+on notes.
+P (50-65%): Delivery is understandable but inconsistent. Some issues with pacing, confidence, engagement, or
+reliance on notes.
+C (65-74%): Clear and reasonably confident delivery. Pacing and engagement are appropriate, with minor issues
+only.
+D (75-84%): Confident, well-paced, and professional delivery. Engages the audience and explains technical content
+effectively.
+HD (85-100%): Highly polished, confident, and engaging delivery. Excellent pacing, tone, presence, and professional
+communication.
+
+Questions and Engagement (10%)
+
+F (<49%): Does not respond adequately to questions or shows little engagement with the presentation session.
+P (50-65%): Provides basic responses to questions and shows limited engagement with peers' presentations.
+C (65-74%): Responds to questions appropriately and demonstrates reasonable engagement with the presentation
+
+                                                                       15
+session.
+D (75-84%): Responds well to questions and contributes constructively to discussion through relevant comments
+or questions.
+HD (85-100%): Provides thoughtful, technically sound responses and demonstrates strong scholarly engagement
+with peers' work through insightful questions or discussion.
+
+                                                                       16
+4 Readings and Resources
+
+You can find all required readings in the Reading List section of this subject's site on the Learning Management
+System.
+
+                                                                       17
+5 Key Teaching and Learning Policies
+
+The University has several policies that relate to teaching and learning. Links to important policies affecting students
+are below. It is your responsibility to ensure you familiarise yourself with these policies so that you are aware of your
+rights and responsibilities.
+
+    ­ Assessment Policy
+    ­ Assessment Procedures - Review of Grade
+    ­ Bullying Prevention Policy
+    ­ Special Consideration Policy
+    ­ Student Administration Policy
+    ­ Examinations Policy
+    ­ Learning and Teaching Policy
+    ­ Progression Procedure
+    ­ Student Code of Conduct
+    ­ Student Misconduct Rule
+
+                                                                       18
+

@@ -1,0 +1,59 @@
+file,role,pattern,line,text
+adapt_notebooks.py,other,drive_letter_path,31,"ROOT <- ""G:/22083142/outputs/WSL_ML2A/55x55/3cm/Codex_help"""
+adapt_notebooks.py,other,drive_letter_path,169,"ROOT = Path(r""G:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help"")"
+adapt_notebooks.py,other,backslash_path_literal,169,"ROOT = Path(r""G:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help"")"
+adapt_notebooks.py,other,drive_letter_path,336,"rscript=Path('C:/Program Files/R/R-4.5.2/bin/Rscript.exe');env=os.environ.copy();env.update(LC_ALL='C',LANG='C',LANGUAGE='')"
+adapt_notebooks.py,other,exe_call,336,"rscript=Path('C:/Program Files/R/R-4.5.2/bin/Rscript.exe');env=os.environ.copy();env.update(LC_ALL='C',LANG='C',LANGUAGE='')"
+adapt_notebooks.py,other,program_files,336,"rscript=Path('C:/Program Files/R/R-4.5.2/bin/Rscript.exe');env=os.environ.copy();env.update(LC_ALL='C',LANG='C',LANGUAGE='')"
+all163_common.py,v6_chain,deps_sys_path,20,"sys.path.insert(0, str(ROOT / 'verification_output' / '_deps'))"
+all163_env.py,v6_chain,deps_sys_path,7,"sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'verification_output' / '_deps'))"
+build_all163_notebook.py,other,exe_call,48,"PY <- file.path(WORK, "".venv"", ""Scripts"", ""python.exe"")"
+build_all163_notebook.py,other,venv_Scripts_dir,48,"PY <- file.path(WORK, "".venv"", ""Scripts"", ""python.exe"")"
+build_all163_notebook.py,other,powershell_or_cmd,73,"free_gb <- as.numeric(system2(""powershell"", c(""-NoProfile"", ""-Command"", ""(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory""), stdout = TRUE)) / 1024^2"
+configure_and_test_itsme.py,other,drive_letter_path,5,R_EXE=Path('C:/Program Files/R/R-4.5.2/bin/x64/R.exe')
+configure_and_test_itsme.py,other,exe_call,5,R_EXE=Path('C:/Program Files/R/R-4.5.2/bin/x64/R.exe')
+configure_and_test_itsme.py,other,program_files,5,R_EXE=Path('C:/Program Files/R/R-4.5.2/bin/x64/R.exe')
+configure_and_test_itsme.py,other,unc_path,33,"""%PIPELINE_DIR%.venv\\Scripts\\python.exe"" -m jupyterlab --notebook-dir ""%PIPELINE_DIR%."""
+configure_and_test_itsme.py,other,exe_call,33,"""%PIPELINE_DIR%.venv\\Scripts\\python.exe"" -m jupyterlab --notebook-dir ""%PIPELINE_DIR%."""
+configure_and_test_itsme.py,other,venv_Scripts_dir,33,"""%PIPELINE_DIR%.venv\\Scripts\\python.exe"" -m jupyterlab --notebook-dir ""%PIPELINE_DIR%."""
+configure_and_test_itsme.py,other,backslash_path_literal,33,"""%PIPELINE_DIR%.venv\\Scripts\\python.exe"" -m jupyterlab --notebook-dir ""%PIPELINE_DIR%."""
+configure_and_test_itsme.py,other,powershell_or_cmd,35,"(W/'START_ITSME_JUPYTER.cmd').write_text(launcher,encoding='ascii')"
+configure_and_test_itsme.py,other,powershell_or_cmd,36,"(W/'.env').write_text('# Project-local runtime configuration; START_ITSME_JUPYTER.cmd applies these settings.\nR_LIBS_USER='+LIB.as_posix()+'\nRGL_USE_NULL=TRUE\nLC_ALL=C\n',encoding='utf-8')"
+configure_and_test_itsme.py,other,venv_Scripts_dir,41,os.environ['PATH']=str(W/'.venv/Scripts')+os.pathsep+os.environ['PATH']
+crown_base_proposal.py,other,deps_sys_path,25,"sys.path.insert(0, str(ROOT / 'verification_output' / '_deps'))"
+crown_base_rerun.R,other,drive_letter_path,7,"ROOT <- ""G:/22083142/outputs/WSL_ML2A/55x55/3cm/Codex_help"""
+finish_itsme_runtime_report.py,other,venv_Scripts_dir,12,os.environ['PATH']=str(W/'.venv/Scripts')+os.pathsep+os.environ['PATH']
+finish_itsme_runtime_report.py,other,powershell_or_cmd,100,"Double-click `{W/'START_ITSME_JUPYTER.cmd'}` to launch the project JupyterLab, then open the executed notebook to inspect saved outputs. Choose **R (INFO6003 ITSMe)** when running an R notebook. The g"
+finish_itsme_runtime_report.py,other,powershell_or_cmd,115,Double-click `{W/'START_ITSME_JUPYTER.cmd'}`. It launches the project JupyterLab using `.venv` and the separate R library. Choose **R (INFO6003 ITSMe)** for ITSMe notebooks.
+home_pc_tools.py,other,exe_call,82,"candidates=[rscript.with_name('R.exe'),rscript.parent/'x64/R.exe']"
+home_pc_tools.py,other,exe_call,84,if rex is None:raise FileNotFoundError('Cannot locate R.exe alongside the configured Rscript.exe')
+home_pc_tools.py,other,exe_call,89,"dump(W/'environment/home_runtime.json',dict(Rscript=str(rscript),R_executable=str(rex),R_library_relative='measurement_pipeline/environment/home-R-library',Python_relative='measurement_pipeline/.home-"
+home_pc_tools.py,other,venv_Scripts_dir,89,"dump(W/'environment/home_runtime.json',dict(Rscript=str(rscript),R_executable=str(rex),R_library_relative='measurement_pipeline/environment/home-R-library',Python_relative='measurement_pipeline/.home-"
+home_pc_tools.py,other,powershell_or_cmd,90,print('Home kernel configured. Launch START_HOME_JUPYTER.cmd; no notebook executed.')
+preliminary_heights.py,other,deps_sys_path,5,"sys.path.insert(0,str(ROOT/'verification_output/_deps'))"
+prepare_corrected_four_tree_rerun.py,other,deps_sys_path,20,"sys.path.insert(0, str(ROOT / 'verification_output' / '_deps'))"
+prepare_crown_volume_top20.py,other,deps_sys_path,17,"sys.path.insert(0, str(ROOT / 'verification_output' / '_deps'))"
+recheck_cleaned_dbh.py,other,deps_sys_path,6,"sys.path.insert(0,str(ROOT/'verification_output/_deps'))"
+recheck_cleaned_dbh.py,other,drive_letter_path,65,"script=script.replace('RUN_DIR <- ""G:/22083142/outputs/WSL_ML2A/55x55/3cm/Codex_help/measurement_pipeline/results/DBH_remaining_band_review_20261023_172945/tree_103/dbh_pc_check""',f'RUN_DIR <- ""{out.a"
+recheck_cleaned_dbh.py,other,drive_letter_path,72,"proc=subprocess.run([r'C:\Program Files\R\R-4.5.2\bin\Rscript.exe',str(rp)],env=env,stdout=log,stderr=subprocess.STDOUT)"
+recheck_cleaned_dbh.py,other,exe_call,72,"proc=subprocess.run([r'C:\Program Files\R\R-4.5.2\bin\Rscript.exe',str(rp)],env=env,stdout=log,stderr=subprocess.STDOUT)"
+recheck_cleaned_dbh.py,other,program_files,72,"proc=subprocess.run([r'C:\Program Files\R\R-4.5.2\bin\Rscript.exe',str(rp)],env=env,stdout=log,stderr=subprocess.STDOUT)"
+recheck_cleaned_dbh.py,other,backslash_path_literal,72,"proc=subprocess.run([r'C:\Program Files\R\R-4.5.2\bin\Rscript.exe',str(rp)],env=env,stdout=log,stderr=subprocess.STDOUT)"
+render_all163_figures.py,other,deps_sys_path,26,"sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'verification_output' / '_deps'))"
+reproduce_local_xyz.py,other,deps_sys_path,6,"sys.path.insert(0,str(ROOT/'verification_output/_deps'))"
+validate_all163_visualisations.py,other,deps_sys_path,14,"sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'verification_output' / '_deps'))"
+verify_all163_independent.py,v6_chain,deps_sys_path,20,"sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'verification_output' / '_deps'))"
+write_measurement_reports.py,other,deps_sys_path,38,- Existing isolated NumPy/SciPy/plyfile/matplotlib dependencies were reused from `verification_output/_deps`. Nothing was installed. No GPU claim is made.
+write_measurement_reports.py,other,deps_sys_path,179,"| Python 3.13.14 | preliminary read-only height preparation; future QSM command wrapper | present; scientific libraries only in existing verification `_deps`, not default Python |"
+write_measurement_reports.py,other,drive_letter_path,181,| R 4.5.2 | ITSMe analysis | present at `C:/Program Files/R/R-4.5.2/bin/Rscript.exe` |
+write_measurement_reports.py,other,exe_call,181,| R 4.5.2 | ITSMe analysis | present at `C:/Program Files/R/R-4.5.2/bin/Rscript.exe` |
+write_measurement_reports.py,other,program_files,181,| R 4.5.2 | ITSMe analysis | present at `C:/Program Files/R/R-4.5.2/bin/Rscript.exe` |
+write_measurement_reports.py,other,deps_sys_path,188,"After your installation approval, the simplest route is **native Windows R + JupyterLab/IRkernel for ITSMe; Docker Desktop's Linux container for RayCloudTools/TreeTools**. No GPU requirement is assume"
+write_measurement_reports.py,other,powershell_or_cmd,190,```powershell
+write_measurement_reports.py,other,unc_path,193,"& ""{W}\\.venv\\Scripts\\python.exe"" -m pip install jupyterlab ipykernel"
+write_measurement_reports.py,other,exe_call,193,"& ""{W}\\.venv\\Scripts\\python.exe"" -m pip install jupyterlab ipykernel"
+write_measurement_reports.py,other,venv_Scripts_dir,193,"& ""{W}\\.venv\\Scripts\\python.exe"" -m pip install jupyterlab ipykernel"
+write_measurement_reports.py,other,backslash_path_literal,193,"& ""{W}\\.venv\\Scripts\\python.exe"" -m pip install jupyterlab ipykernel"
+ITSMe_ALL163_HEIGHT_DBH_CROWN_VOLUME_v5.ipynb,v6_chain,exe_call,52,"""PY <- file.path(WORK, \"".venv\"", \""Scripts\"", \""python.exe\"")\n"","
+ITSMe_ALL163_HEIGHT_DBH_CROWN_VOLUME_v5.ipynb,v6_chain,venv_Scripts_dir,52,"""PY <- file.path(WORK, \"".venv\"", \""Scripts\"", \""python.exe\"")\n"","
+ITSMe_ALL163_HEIGHT_DBH_CROWN_VOLUME_v5.ipynb,v6_chain,powershell_or_cmd,104,"""free_gb <- as.numeric(system2(\""powershell\"", c(\""-NoProfile\"", \""-Command\"", \""(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory\""), stdout = TRUE)) / 1024^2\n"","

@@ -1,0 +1,431 @@
+{
+ "csv_status_counts": {
+  "height_status": {
+   "REVIEW": 110,
+   "VALID": 53
+  },
+  "dbh_status": {
+   "N/A": 83,
+   "VALID": 43,
+   "REVIEW": 37
+  },
+  "crown_area_status": {
+   "VALID": 131,
+   "REVIEW": 25,
+   "N/A": 7
+  },
+  "crown_volume_status": {
+   "VALID": 100,
+   "REVIEW": 56,
+   "N/A": 7
+  }
+ },
+ "csv_status_column_all_nan": true,
+ "records_status_counts": {
+  "height": {
+   "REVIEW": 110,
+   "VALID": 53
+  },
+  "dbh": {
+   "N/A": 83,
+   "VALID": 43,
+   "REVIEW": 37
+  },
+  "crown_base": {
+   "VALID": 156,
+   "N/A": 7
+  },
+  "crown_area": {
+   "VALID": 131,
+   "REVIEW": 25,
+   "N/A": 7
+  },
+  "crown_volume": {
+   "VALID": 100,
+   "REVIEW": 56,
+   "N/A": 7
+  },
+  "crown_length": {
+   "REVIEW": 103,
+   "VALID": 53,
+   "N/A": 7
+  },
+  "crown_ratio": {
+   "REVIEW": 103,
+   "VALID": 53,
+   "N/A": 7
+  },
+  "crown_diameter": {
+   "VALID": 131,
+   "REVIEW": 25,
+   "N/A": 7
+  }
+ },
+ "csv_vs_records_status_disagreements": [],
+ "all_core_valid_from_csv": 14,
+ "all_core_valid_trees": [
+  "tree_053",
+  "tree_065",
+  "tree_067",
+  "tree_074",
+  "tree_087",
+  "tree_095",
+  "tree_103",
+  "tree_107",
+  "tree_118",
+  "tree_144",
+  "tree_149",
+  "tree_150",
+  "tree_152",
+  "tree_160"
+ ],
+ "all_core_valid_flag_in_records": 16,
+ "all_core_valid_medians": {
+  "height": 16.5240676608765,
+  "dbh_cm": 19.8647752740577,
+  "volume_m3": 80.73042442728806
+ },
+ "all_core_valid_stale_trees": {
+  "tree_069": [
+   [
+    "crown_area",
+    "REVIEW",
+    "ery large crown (outside 5th-95th percentile of crown areas); check ownership/completeness"
+   ],
+   [
+    "crown_volume",
+    "REVIEW",
+    "ery large crown (outside 5th-95th percentile of crown areas); check ownership/completeness"
+   ]
+  ],
+  "tree_146": [
+   [
+    "crown_area",
+    "REVIEW",
+    "ery small crown (outside 5th-95th percentile of crown areas); check ownership/completeness"
+   ],
+   [
+    "crown_volume",
+    "REVIEW",
+    "ery small crown (outside 5th-95th percentile of crown areas); check ownership/completeness"
+   ]
+  ]
+ },
+ "tree_status_records": {
+  "PARTIAL SUCCESS": 87,
+  "SUCCESS": 76
+ },
+ "tree_status_recomputed_from_csv": {
+  "SUCCESS": 76,
+  "PARTIAL": 87,
+  "FAILED": 0
+ },
+ "dbh_available": 80,
+ "dbh_method_counts_available": {
+  "1.3 m along stem": 66,
+  "median of 3 accepted slices, 1.1-1.5 m": 6,
+  "median of 2 accepted slices, 1.1-1.5 m": 5,
+  "median of 1 accepted slices, 1.1-1.5 m": 2,
+  "median of 4 accepted slices, 1.1-1.5 m": 1
+ },
+ "dbh_na_total": 83,
+ "dbh_na_no_axis": 28,
+ "dbh_na_fit_failed": 54,
+ "dbh_na_other": {
+  "tree_033": "not released: poor source data (user), stem base missing; fits at 1.1-1.5 m inconsistent"
+ },
+ "dbh_review_reason_counts": {
+  "clusters at 1.3 m": 27,
+  "median of accepted 1.1-1.5 m slices, not a direct 1.3 m fit": 14,
+  "axis/foot offset": 1,
+  "1.3 m measurement height uncertain": 1,
+  "stem axis refitted on current points": 1
+ },
+ "dbh_review_only_fallback": 8,
+ "failed_with_slice_points_known": 55,
+ "failed_slice_points_lt10": 12,
+ "failed_slice_points_describe": {
+  "count": 55.0,
+  "mean": 44.54545454545455,
+  "std": 93.44612592921362,
+  "min": 0.0,
+  "25%": 10.0,
+  "50%": 16.0,
+  "75%": 35.0,
+  "max": 603.0
+ },
+ "fit_failed_trees_points_lt10": [
+  "tree_003",
+  "tree_004",
+  "tree_009",
+  "tree_011",
+  "tree_012",
+  "tree_013",
+  "tree_024",
+  "tree_077",
+  "tree_082",
+  "tree_130",
+  "tree_141",
+  "tree_157"
+ ],
+ "hd_n": 80,
+ "hd_min_max_median": [
+  31.106954164045217,
+  118.39953903310624,
+  67.61272638318033
+ ],
+ "hd_if_dbh_in_cm_unitless_wrong": [
+  0.31106954164045214,
+  1.1839953903310623
+ ],
+ "spearman_all": {
+  "n": 80,
+  "rho": 0.8310360993905298,
+  "p": 1.450854164303536e-21,
+  "ties_h": 0,
+  "ties_d": 0
+ },
+ "spearman_valid_pairs": {
+  "n": 23,
+  "rho": 0.9061264822134387,
+  "p": 2.677556594376649e-09
+ },
+ "pearson_all": 0.781458376871041,
+ "hd_outside_20_150": 0,
+ "crown_length_valid": {
+  "n": 53,
+  "median": 9.753779516405
+ },
+ "crown_ratio_valid": {
+  "n": 53,
+  "median": 0.5860590314118785
+ },
+ "crown_eq_diam_valid": {
+  "n": 131,
+  "median": 4.304574494080253
+ },
+ "crown_base_stats": {
+  "n": 156,
+  "median": 6.75,
+  "min": 1.0,
+  "max": 19.0,
+  "review": 0
+ },
+ "largest_volume": [
+  "tree_079",
+  2426.609603227,
+  "REVIEW"
+ ],
+ "largest_area": [
+  "tree_079",
+  228.709078445,
+  "REVIEW"
+ ],
+ "top10_volume_status": {
+  "tree_079": [
+   2426.6,
+   "REVIEW"
+  ],
+  "tree_026": [
+   1336.1,
+   "REVIEW"
+  ],
+  "tree_084": [
+   1174.7,
+   "REVIEW"
+  ],
+  "tree_031": [
+   1025.5,
+   "REVIEW"
+  ],
+  "tree_110": [
+   999.0,
+   "REVIEW"
+  ],
+  "tree_061": [
+   972.7,
+   "VALID"
+  ],
+  "tree_020": [
+   930.2,
+   "VALID"
+  ],
+  "tree_041": [
+   911.0,
+   "REVIEW"
+  ],
+  "tree_069": [
+   902.3,
+   "REVIEW"
+  ],
+  "tree_104": [
+   868.9,
+   "VALID"
+  ]
+ },
+ "valid_volume_max": [
+  "tree_061",
+  972.652308071265
+ ],
+ "table5": {
+  "height": {
+   "valid": [
+    53,
+    15.403719174561,
+    10.308760168821,
+    27.177788268631
+   ],
+   "all": [
+    163,
+    16.356809953839,
+    9.386623957475,
+    27.177788268631
+   ]
+  },
+  "dbh": {
+   "valid": [
+    43,
+    26.7923454345498,
+    10.4418245073548,
+    66.61396058804159
+   ],
+   "all": [
+    80,
+    25.375854448858398,
+    10.1173987739345,
+    75.7806354667496
+   ]
+  },
+  "crown_area": {
+   "valid": [
+    131,
+    14.55292655,
+    3.39174196,
+    90.10727087
+   ],
+   "all": [
+    156,
+    15.0156250025,
+    1.888123995,
+    228.709078445
+   ]
+  },
+  "crown_volume": {
+   "valid": [
+    100,
+    85.66163632445324,
+    5.49224868047731,
+    972.652308071265
+   ],
+   "all": [
+    156,
+    95.0579715644264,
+    3.40462023549717,
+    2426.609603227
+   ]
+  },
+  "crown_base": {
+   "valid": [
+    156,
+    6.75,
+    1.0,
+    19.0
+   ]
+  }
+ },
+ "outliers_rows": 99,
+ "outliers_reason_counts": {
+  "failed or missing DBH fit": 83,
+  "very small crown": 7,
+  "very large crown": 7,
+  "very low stem completeness": 1,
+  "crown touching the ROI edge": 1
+ },
+ "outliers_distinct_trees": 91,
+ "n_stems_dist": {
+  "0": 3,
+  "1": 97,
+  "2": 40,
+  "3": 12,
+  "4": 5,
+  "5": 4,
+  "6": 2
+ },
+ "n_stems_ge2": 63,
+ "fork": 41,
+ "lean": {
+  "False": 118,
+  "NA": 28,
+  "True": 17
+ },
+ "truncated_top": 46,
+ "crown_touches_edge": {
+  "False": 155,
+  "NA": 7,
+  "True": 1
+ },
+ "stem_dist_to_edge_lt": {
+  "<1 m": 0,
+  "<2 m": 1,
+  "<5 m": 7
+ },
+ "stem_completeness_lt_0_5": 1,
+ "ground_source_counts": {
+  "terrain_mesh at stem foot (actual triangle)": 134,
+  "terrain_mesh at lowest-observation XY (fallback foot; uncertain)": 27,
+  "terrain_mesh at corrected stem base (user-agreed)": 2
+ },
+ "stem_xy_source_counts": {
+  "stem axis at 1.3 m": 135,
+  "stem base (foot XY); no stem axis": 28
+ },
+ "fallback_foot_inherited": 27,
+ "n_points_total_163": 26597991,
+ "crs_column": [
+  "EPSG:32756"
+ ],
+ "height_doc_rule_disagree": [
+  [
+   "tree_033",
+   "REVIEW",
+   "VALID"
+  ],
+  [
+   "tree_114",
+   "REVIEW",
+   "VALID"
+  ]
+ ],
+ "height_table3_rule_disagree_n": 16,
+ "height_table3_rule_counts": {
+  "REVIEW": 94,
+  "VALID": 69
+ },
+ "dbh_table3_rule_counts": {
+  "N/A": 83,
+  "VALID": 66,
+  "REVIEW": 14
+ },
+ "dbh_table3_vs_stored_disagree_n": 23,
+ "edited_after_inherited_qc": [
+  "tree_033",
+  "tree_067",
+  "tree_079",
+  "tree_102",
+  "tree_103",
+  "tree_108",
+  "tree_114"
+ ],
+ "dbh13_rule_recheck_mismatch": [],
+ "dbh13_rule_checked_n": 126,
+ "summary_json_claims": {
+  "trees_all_core_valid": 16,
+  "tree_status": {
+   "SUCCESS": 76,
+   "PARTIAL SUCCESS": 87,
+   "FAILED": 0
+  },
+  "dbh_fit_ok_false": 83,
+  "edge": 1
+ }
+}

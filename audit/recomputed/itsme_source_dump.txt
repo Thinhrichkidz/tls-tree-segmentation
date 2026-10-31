@@ -1,0 +1,381 @@
+[1] '2.0.0'
+function (pc, slice_height = 0.1, slice_thickness = 0.06, functional = FALSE, 
+    concavity = 4, dtm = NA, r = 5, plot = FALSE, how = "median", 
+    arc_min_length_cm = NULL, arc_min_angle = 18, arc_tolerance = 0.05, 
+    min_inner_buffer = 0.06, inner_buffer_fraction = 0.5, plotcolors = c("#000000", 
+        "#1c027a", "#08aa7c", "#fac87f")) 
+{
+    h_list <- tree_height_pc(pc = pc, dtm = dtm, r = r)
+    lowest_point <- h_list$lp
+    if (max(pc$Z) - lowest_point > slice_height) {
+        pc_slice <- pc[(pc$Z > lowest_point + slice_height - 
+            slice_thickness/2) & (pc$Z < lowest_point + slice_height + 
+            slice_thickness/2), ]
+        xy_slice <- pc_slice[, c("X", "Y")]
+        if (nrow(xy_slice) > 3) {
+            XY_slice <- data.matrix(xy_slice)
+            k <- 2
+            knn1 <- nabor::knn(XY_slice, XY_slice, k = k, radius = 0)
+            knn_ind <- data.frame(knn = knn1[[1]][, 2:k])
+            knn_dist <- data.frame(knn.dist = knn1[[2]][, 2:k])
+            remove <- which(knn_dist[, k - 1] > 0.05)
+            if (length(remove) != 0) {
+                xy_slice <- xy_slice[-remove, ]
+            }
+            x_slice <- xy_slice$X
+            y_slice <- xy_slice$Y
+            x_m <- mean(x_slice)
+            y_m <- mean(y_slice)
+            center_estimate <- tryCatch({
+                stats::optim(par = c(x_m, y_m), fn = f, x = x_slice, 
+                  y = y_slice, method = "L-BFGS-B")
+            }, error = function(cond) {
+                message(cond)
+                return(NaN)
+            })
+            if (is.list(center_estimate)) {
+                x_c <- center_estimate$par[1]
+                y_c <- center_estimate$par[2]
+                Ri <- calc_r(x_slice, y_slice, x_c, y_c)
+                R <- get_radius(Ri, how = how)
+                residu <- sum((Ri - R)^2)/length(Ri)
+                diam <- 2 * R
+                arc_cov <- arc_coverage(slice_points = xy_slice, 
+                  radius = R, xc = x_c, yc = y_c, arc_min_length_cm = arc_min_length_cm, 
+                  arc_min_angle = arc_min_angle, arc_tolerance = arc_tolerance)
+                inner_empty <- inner_circle_empty(slice_points = xy_slice, 
+                  radius = R, xc = x_c, yc = y_c, min_inner_buffer = min_inner_buffer, 
+                  inner_buffer_fraction = inner_buffer_fraction)
+                all_in_donut <- all_points_in_donut(slice_points = xy_slice, 
+                  radius = R, xc = x_c, yc = y_c, arc_tolerance = arc_tolerance)
+                if (functional) {
+                  points <- sf::st_as_sf(unique(xy_slice), coords = c("X", 
+                    "Y"))
+                  hull <- concaveman::concaveman(points, concavity)
+                  pa <- sf::st_area(hull)
+                  fdiam <- sqrt(pa/pi) * 2
+                }
+                else {
+                  hull <- NaN
+                  fdiam <- NaN
+                }
+            }
+            else {
+                return(list(diameter = NaN, R2 = NaN, center = NaN, 
+                  fdiameter = NaN, hull = NaN, arc_coverage = NA_real_, 
+                  inner_circle_empty = NA, all_points_in_donut = NA))
+            }
+        }
+        else {
+            return(list(diameter = NaN, R2 = NaN, center = NaN, 
+                fdiameter = NaN, hull = NaN, arc_coverage = NA_real_, 
+                inner_circle_empty = NA, all_points_in_donut = NA))
+        }
+        if (!is.nan(R)) {
+            if (R > 1.5) {
+                R <- diam <- center_estimate <- NaN
+                arc_cov <- NA_real_
+                inner_empty <- NA
+                all_in_donut <- NA
+            }
+        }
+        if (plot) {
+            X <- Y <- x0 <- y0 <- r <- NULL
+            plotDIAM <- ggplot2::ggplot() + ggplot2::geom_point(data = xy_slice, 
+                ggplot2::aes(X, Y, color = "points stem slice"), 
+                size = 1)
+            if (functional) {
+                plotDIAM <- plotDIAM + ggplot2::geom_sf(data = sf::st_geometry(hull), 
+                  ggplot2::aes(color = "concave hull"), size = 1, 
+                  fill = NA) + ggplot2::ggtitle(paste0("diameter at ", 
+                  as.character(round(slice_height, 2)), " m = ", 
+                  as.character(round(diam * 100, 1)), " cm ", 
+                  "(R2 = ", as.character(round(residu * 100, 
+                    2)), " cm)", "\n", "fDAB = ", as.character(round(fdiam * 
+                    100, 1)), " cm", sep = "")) + ggplot2::scale_color_manual(name = "", 
+                  values = c(`points stem slice` = plotcolors[1], 
+                    `concave hull` = plotcolors[3]), guide = ggplot2::guide_legend(override.aes = list(linetype = c(1, 
+                    0), shape = c(NA, 16), size = c(1, 2)))) + 
+                  ggplot2::theme(panel.grid.major = ggplot2::element_line(colour = "gray90"), 
+                    panel.background = ggplot2::element_blank(), 
+                    title = ggplot2::element_text(size = 12, 
+                      face = "bold"), axis.line = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.title.y = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text.x = ggplot2::element_text(angle = 90, 
+                      vjust = 0.5, hjust = 1), axis.title.x = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.ticks = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.ticks.length = ggplot2::unit(0.2, 
+                      "cm"))
+            }
+            else {
+                plotDIAM <- plotDIAM + ggplot2::coord_fixed(ratio = 1) + 
+                  ggplot2::ggtitle(paste0("diameter at ", as.character(round(slice_height, 
+                    2)), " m = ", as.character(round(diam * 100, 
+                    1)), " cm ", "(R2 = ", as.character(round(residu * 
+                    100, 2)), " cm)", sep = "")) + ggplot2::scale_color_manual(name = "", 
+                  values = c(`points stem slice` = plotcolors[1]), 
+                  guide = ggplot2::guide_legend(override.aes = list(linetype = c(0), 
+                    shape = c(16), size = c(2)))) + ggplot2::theme(panel.grid.major = ggplot2::element_line(colour = "gray90"), 
+                  panel.background = ggplot2::element_blank(), 
+                  title = ggplot2::element_text(size = 12, face = "bold"), 
+                  axis.line = ggplot2::element_line(linewidth = 0.8, 
+                    color = "black"), axis.title.y = ggplot2::element_text(size = 14, 
+                    color = "black"), axis.text = ggplot2::element_text(size = 14, 
+                    color = "black"), axis.text.x = ggplot2::element_text(angle = 90, 
+                    vjust = 0.5, hjust = 1), axis.title.x = ggplot2::element_text(size = 14, 
+                    color = "black"), axis.ticks = ggplot2::element_line(linewidth = 0.8, 
+                    color = "black"), axis.ticks.length = ggplot2::unit(0.2, 
+                    "cm"))
+            }
+            if (!is.nan(R)) {
+                data_circle <- data.frame(x0 = x_c, y0 = y_c, 
+                  r = R)
+                plotDIAM <- plotDIAM + ggplot2::geom_point(data = data_circle, 
+                  ggplot2::aes(x0, y0, color = "estimated center"), 
+                  size = 1) + ggforce::geom_circle(data = data_circle, 
+                  ggplot2::aes(x0 = x0, y0 = y0, r = r, color = "fitted circle"), 
+                  inherit.aes = FALSE, show.legend = TRUE)
+                if (functional) {
+                  plotDIAM <- plotDIAM + ggplot2::scale_color_manual(name = "", 
+                    values = c(`points stem slice` = plotcolors[1], 
+                      `concave hull` = plotcolors[3], `estimated center` = plotcolors[4], 
+                      `fitted circle` = plotcolors[2]), guide = ggplot2::guide_legend(override.aes = list(linetype = c(1, 
+                      0, 1, 0), shape = c(NA, 16, NA, 16), size = c(1, 
+                      2, 1, 2)))) + ggplot2::theme(panel.grid.major = ggplot2::element_line(colour = "gray90"), 
+                    panel.background = ggplot2::element_blank(), 
+                    title = ggplot2::element_text(size = 12, 
+                      face = "bold"), axis.line = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.title.y = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text.x = ggplot2::element_text(angle = 90, 
+                      vjust = 0.5, hjust = 1), axis.title.x = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.ticks = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.ticks.length = ggplot2::unit(0.2, 
+                      "cm"))
+                }
+                else {
+                  plotDIAM <- plotDIAM + ggplot2::scale_color_manual(name = "", 
+                    values = c(`points stem slice` = plotcolors[1], 
+                      `estimated center` = plotcolors[4], `fitted circle` = plotcolors[2]), 
+                    guide = ggplot2::guide_legend(override.aes = list(linetype = c(0, 
+                      1, 0), shape = c(16, NA, 16), size = c(2, 
+                      1, 2)))) + ggplot2::theme(panel.grid.major = ggplot2::element_line(colour = "gray90"), 
+                    panel.background = ggplot2::element_blank(), 
+                    title = ggplot2::element_text(size = 12, 
+                      face = "bold"), axis.line = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.title.y = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text.x = ggplot2::element_text(angle = 90, 
+                      vjust = 0.5, hjust = 1), axis.title.x = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.ticks = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.ticks.length = ggplot2::unit(0.2, 
+                      "cm"))
+                }
+            }
+            print(plotDIAM)
+            return(list(diameter = diam, R2 = residu, center = center_estimate, 
+                fdiameter = fdiam, hull = hull, arc_coverage = arc_cov, 
+                inner_circle_empty = inner_empty, all_points_in_donut = all_in_donut, 
+                plot = plotDIAM))
+        }
+        else {
+            return(list(diameter = diam, R2 = residu, center = center_estimate, 
+                fdiameter = fdiam, hull = hull, arc_coverage = arc_cov, 
+                inner_circle_empty = inner_empty, all_points_in_donut = all_in_donut))
+        }
+    }
+    else {
+        return(list(diameter = NaN, R2 = NaN, center = NaN, fdiameter = NaN, 
+            hull = NaN, arc_coverage = NA_real_, inner_circle_empty = NA, 
+            all_points_in_donut = NA))
+    }
+}
+<bytecode: 0x0000018d3194edc8>
+<environment: namespace:ITSMe>
+function (pc, thresholdR2 = 0.001, slice_thickness = 0.06, functional = FALSE, 
+    concavity = 4, dtm = NA, r = 5, how = "median", arc_min_length_cm = NULL, 
+    arc_min_angle = 18, arc_tolerance = 0.05, min_inner_buffer = 0.06, 
+    inner_buffer_fraction = 0.5, plot = FALSE, plotcolors = c("#000000", 
+        "#1c027a", "#08aa7c", "#fac87f")) 
+{
+    h_list <- tree_height_pc(pc = pc, dtm = dtm, r = r)
+    lowest_point <- h_list$lp
+    out_015 <- diameter_slice_pc(pc = pc, slice_height = 0.15, 
+        slice_thickness = slice_thickness + 0.02, functional = functional, 
+        concavity = concavity, dtm = dtm, r = r, how = how)
+    if (is.nan(out_015$diameter)) {
+        out_015$diameter <- 2
+    }
+    out_130 <- diameter_slice_pc(pc = pc, slice_height = 1.3, 
+        slice_thickness = slice_thickness, functional = functional, 
+        concavity = concavity, dtm = dtm, r = r, how = how, arc_min_length_cm = arc_min_length_cm, 
+        arc_min_angle = arc_min_angle, arc_tolerance = arc_tolerance, 
+        min_inner_buffer = min_inner_buffer, inner_buffer_fraction = inner_buffer_fraction)
+    if (is.nan(out_130$diameter)) {
+        trunk_pc <- tryCatch({
+            extract_lower_trunk_pc(pc = pc, slice_thickness = slice_thickness + 
+                0.02, dtm = dtm, r = r, how = how)
+        }, error = function(cond) {
+            return(pc)
+        })
+        out_130 <- diameter_slice_pc(pc = trunk_pc, slice_height = 1.3, 
+            slice_thickness = slice_thickness, functional = functional, 
+            concavity = concavity, dtm = dtm, r = r, how = how, 
+            arc_min_length_cm = arc_min_length_cm, arc_min_angle = arc_min_angle, 
+            arc_tolerance = arc_tolerance, min_inner_buffer = min_inner_buffer, 
+            inner_buffer_fraction = inner_buffer_fraction)
+    }
+    else {
+        skip_low_slice_check <- isTRUE(out_130$all_points_in_donut) && 
+            !is.na(out_130$arc_coverage) && out_130$arc_coverage == 
+            1 && isTRUE(out_130$inner_circle_empty)
+        if ((!skip_low_slice_check & out_015$diameter < out_130$diameter) | 
+            out_130$R2 > thresholdR2 * out_130$diameter | out_130$diameter > 
+            2) {
+            trunk_pc <- tryCatch({
+                extract_lower_trunk_pc(pc = pc, slice_thickness = slice_thickness + 
+                  0.02, dtm = dtm, r = r, how = how)
+            }, error = function(cond) {
+                return(pc)
+            })
+            out_130 <- diameter_slice_pc(pc = trunk_pc, slice_height = 1.3, 
+                slice_thickness = slice_thickness, functional = functional, 
+                concavity = concavity, dtm = dtm, r = r, how = how, 
+                arc_min_length_cm = arc_min_length_cm, arc_min_angle = arc_min_angle, 
+                arc_tolerance = arc_tolerance, min_inner_buffer = min_inner_buffer, 
+                inner_buffer_fraction = inner_buffer_fraction)
+        }
+    }
+    if (plot) {
+        if (is.nan(out_130$diameter)) {
+            pc_dbh <- pc[(pc$Z > lowest_point + 1.3 - slice_thickness/2) & 
+                (pc$Z < lowest_point + 1.3 + slice_thickness/2), 
+                ]
+            X <- Y <- NULL
+            plotDBH <- ggplot2::ggplot() + ggplot2::geom_point(data = pc_dbh, 
+                ggplot2::aes(X, Y, color = "points stem slice"), 
+                size = 1) + ggplot2::coord_fixed(ratio = 1) + 
+                ggplot2::ggtitle(paste("DBH = NaN, ", "R2 = NaN, ", 
+                  "fDBH = NaN", sep = "")) + ggplot2::scale_color_manual(name = "", 
+                values = c(`points stem slice` = plotcolors[1]), 
+                guide = ggplot2::guide_legend(override.aes = list(linetype = c(0), 
+                  shape = c(16), size = c(2)))) + ggplot2::theme(panel.grid.major = ggplot2::element_line(colour = "gray90"), 
+                panel.background = ggplot2::element_blank(), 
+                title = ggplot2::element_text(size = 12, face = "bold"), 
+                axis.line = ggplot2::element_line(linewidth = 0.8, 
+                  color = "black"), axis.title.y = ggplot2::element_text(size = 14, 
+                  color = "black"), axis.text = ggplot2::element_text(size = 14, 
+                  color = "black"), axis.text.x = ggplot2::element_text(angle = 90, 
+                  vjust = 0.5, hjust = 1), axis.title.x = ggplot2::element_text(size = 14, 
+                  color = "black"), axis.ticks = ggplot2::element_line(linewidth = 0.8, 
+                  color = "black"), axis.ticks.length = ggplot2::unit(0.2, 
+                  "cm"))
+        }
+        else {
+            pc_dbh <- pc[(pc$Z > lowest_point + 1.3 - slice_thickness/2) & 
+                (pc$Z < lowest_point + 1.3 + slice_thickness/2), 
+                ]
+            X <- Y <- x0 <- y0 <- r <- NULL
+            data_circle <- data.frame(x0 = out_130$center[[1]][1], 
+                y0 = out_130$center[[1]][2], r = out_130$diameter/2)
+            radius <- out_130$diameter/2
+            donut_outer_radius <- radius + arc_tolerance
+            donut_inner_radius <- max(0, radius - arc_tolerance)
+            inner_buffer <- max(min_inner_buffer, inner_buffer_fraction * 
+                radius)
+            inner_radius <- radius - inner_buffer
+            data_donut_outer <- data.frame(x0 = out_130$center[[1]][1], 
+                y0 = out_130$center[[1]][2], r = donut_outer_radius)
+            data_donut_inner <- data.frame(x0 = out_130$center[[1]][1], 
+                y0 = out_130$center[[1]][2], r = donut_inner_radius)
+            data_inner_buffer <- data.frame(x0 = out_130$center[[1]][1], 
+                y0 = out_130$center[[1]][2], r = inner_radius)
+            plotDBH <- ggplot2::ggplot() + ggforce::geom_circle(data = data_donut_outer, 
+                ggplot2::aes(x0 = x0, y0 = y0, r = r, color = "arc coverage zone"), 
+                inherit.aes = FALSE, linetype = "solid", linewidth = 0.5, 
+                fill = NA, show.legend = TRUE) + ggforce::geom_circle(data = data_donut_inner, 
+                ggplot2::aes(x0 = x0, y0 = y0, r = r, color = "arc coverage zone"), 
+                inherit.aes = FALSE, linetype = "solid", linewidth = 0.5, 
+                fill = NA, show.legend = FALSE) + ggforce::geom_circle(data = data_inner_buffer, 
+                ggplot2::aes(x0 = x0, y0 = y0, r = r, color = "inner empty zone"), 
+                inherit.aes = FALSE, linetype = "solid", linewidth = 0.5, 
+                fill = NA, show.legend = TRUE) + ggplot2::geom_point(data = pc_dbh, 
+                ggplot2::aes(X, Y, color = "points stem slice"), 
+                size = 1)
+            if (functional) {
+                plotDBH <- plotDBH + ggplot2::geom_sf(data = sf::st_geometry(out_130$hull), 
+                  ggplot2::aes(color = "concave hull"), linewidth = 1, 
+                  fill = NA) + ggplot2::geom_point(data = data_circle, 
+                  ggplot2::aes(x0, y0, color = "estimated center"), 
+                  size = 1) + ggforce::geom_circle(data = data_circle, 
+                  ggplot2::aes(x0 = x0, y0 = y0, r = r, color = "fitted circle"), 
+                  inherit.aes = FALSE, show.legend = TRUE, linewidth = 1) + 
+                  ggplot2::ggtitle(paste("DBH = ", as.character(round(out_130$diameter * 
+                    100, 1)), " cm ", "(R2 = ", as.character(round(out_130$R2 * 
+                    100, 2)), " cm);", "\n", "fDBH = ", as.character(round(out_130$fdiameter * 
+                    100, 1)), " cm", sep = "")) + ggplot2::scale_color_manual(name = "", 
+                  values = c(`points stem slice` = plotcolors[1], 
+                    `concave hull` = plotcolors[3], `estimated center` = plotcolors[4], 
+                    `fitted circle` = plotcolors[2], `arc coverage zone` = "grey55", 
+                    `inner empty zone` = "grey85"), guide = ggplot2::guide_legend(override.aes = list(linetype = c(0, 
+                    1, 0, 1, 1, 1), shape = c(16, NA, 16, NA, 
+                    NA, NA), size = c(2, 1, 2, 1, 0.5, 0.5)))) + 
+                  ggplot2::theme(panel.grid.major = ggplot2::element_line(colour = "gray90"), 
+                    panel.background = ggplot2::element_blank(), 
+                    title = ggplot2::element_text(size = 12, 
+                      face = "bold"), axis.line = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.title = ggplot2::element_blank(), 
+                    axis.text = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text.x = ggplot2::element_text(angle = 90, 
+                      vjust = 0.5, hjust = 1), axis.ticks = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.ticks.length = ggplot2::unit(0.2, 
+                      "cm"), legend.position = "right")
+            }
+            else {
+                plotDBH <- plotDBH + ggplot2::coord_fixed(ratio = 1) + 
+                  ggplot2::geom_point(data = data_circle, ggplot2::aes(x0, 
+                    y0, color = "estimated center"), size = 1) + 
+                  ggforce::geom_circle(data = data_circle, ggplot2::aes(x0 = x0, 
+                    y0 = y0, r = r, color = "fitted circle"), 
+                    inherit.aes = FALSE, show.legend = TRUE, 
+                    linewidth = 1) + ggplot2::ggtitle(paste0("DBH = ", 
+                  round(out_130$diameter * 100, 2), " cm ", "(R2 = ", 
+                  round(out_130$R2 * 100, 2), " cm)", "\n", "arc coverage = ", 
+                  round(out_130$arc_coverage, 2), "; inner empty = ", 
+                  out_130$inner_circle_empty)) + ggplot2::scale_color_manual(name = "", 
+                  breaks = c("points stem slice", "estimated center", 
+                    "fitted circle", "arc coverage zone", "inner empty zone"), 
+                  values = c(`points stem slice` = plotcolors[1], 
+                    `estimated center` = plotcolors[4], `fitted circle` = plotcolors[2], 
+                    `arc coverage zone` = "grey55", `inner empty zone` = "grey85"), 
+                  guide = ggplot2::guide_legend(override.aes = list(shape = c(16, 
+                    16, NA, NA, NA), linetype = c(0, 0, 1, 1, 
+                    1), size = c(2, 2, NA, NA, NA), linewidth = c(NA, 
+                    NA, 1, 0.5, 0.5), fill = rep(NA, 5)))) + 
+                  ggplot2::theme(panel.grid.major = ggplot2::element_line(colour = "gray90"), 
+                    panel.background = ggplot2::element_blank(), 
+                    title = ggplot2::element_text(size = 12, 
+                      face = "bold"), axis.line = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.title = ggplot2::element_blank(), 
+                    axis.text = ggplot2::element_text(size = 14, 
+                      color = "black"), axis.text.x = ggplot2::element_text(angle = 90, 
+                      vjust = 0.5, hjust = 1), axis.ticks = ggplot2::element_line(linewidth = 0.8, 
+                      color = "black"), axis.ticks.length = ggplot2::unit(0.2, 
+                      "cm"), legend.position = "right")
+            }
+        }
+        print(plotDBH)
+        return(list(dbh = out_130$diameter, R2 = out_130$R2, 
+            center = out_130$center, fdbh = out_130$fdiameter, 
+            arc_coverage = out_130$arc_coverage, inner_circle_empty = out_130$inner_circle_empty, 
+            plot = plotDBH))
+    }
+    else {
+        return(list(dbh = out_130$diameter, R2 = out_130$R2, 
+            center = out_130$center, fdbh = out_130$fdiameter, 
+            arc_coverage = out_130$arc_coverage, inner_circle_empty = out_130$inner_circle_empty))
+    }
+}
+<bytecode: 0x0000018d31987738>
+<environment: namespace:ITSMe>

@@ -1,0 +1,273 @@
+{
+ "ply_count": 163,
+ "session4": {
+  "baseline_rows": 163,
+  "n_differences": 0,
+  "differences": []
+ },
+ "session3": {
+  "baseline_rows": 163,
+  "n_differences": 18,
+  "differences": [
+   [
+    "tree_023_MANUAL_REVIEW.ply",
+    "hash differs",
+    "d7064eac3a0ee089b7834f20e5f4d81f1d1e9ef6853a9cb16142cfcd770f93e2",
+    "1b81d6ed653d742e2901902eee43d1192426df20542dacdaa1c5d5bba60aa390"
+   ],
+   [
+    "tree_027_MANUAL_REVIEW.ply",
+    "hash differs",
+    "b132ba4850748bf9dbb8a32c208cc21682dec3b24dbc333f3d0ceeed6f037ef9",
+    "193de9e4109d377ae46f1537e3f9f797d75d7c96bfaf064ebf5a80a3594c1a24"
+   ],
+   [
+    "tree_035_MANUAL_REVIEW.ply",
+    "hash differs",
+    "181384d90b7b0cb12a86c47744de804aef92c01bb542ac61da0338101fa492d0",
+    "776c218b437169a3411274a06244c5e309ef3ee7eaede53092fd894490fa5a9b"
+   ],
+   [
+    "tree_039_MANUAL_REVIEW.ply",
+    "hash differs",
+    "217ec6f2e8e1df4adda0ab0c1f1e9127961f7306dec21bdabc0890c0d80767d1",
+    "a5f0eb546b1821d406f082c83a5e9de1ffd25bbd8f403069a3de9d464162cb73"
+   ],
+   [
+    "tree_045_MANUAL_REVIEW.ply",
+    "hash differs",
+    "513735df6922d7f8d9b552b2ba3a91de78929c3a5de431b4493b64c55e3eacf1",
+    "3d0d49bf5e670b7b7eaaa92697359e9224710f1bec088bf19bef118675ee4fe1"
+   ],
+   [
+    "tree_055_MANUAL_REVIEW.ply",
+    "hash differs",
+    "a08c8c34a3dbba0db718741a9ff637188fca99dc18c5f5caa4991d91a366c77a",
+    "793ba1958960f991509285b4c413461b71b55a00772bf5ee4824717da84b9669"
+   ],
+   [
+    "tree_082_MANUAL_REVIEW.ply",
+    "hash differs",
+    "50c78b564dd97edab27deacaab524a4e3552dccf51bd9c6c07c10a33249401c3",
+    "f8245fb069e2d5d649285ca83036a17975ca05e6339057062e73873abbd12dce"
+   ],
+   [
+    "tree_083_MANUAL_REVIEW.ply",
+    "hash differs",
+    "36aaedd7ca022da5fa5927137dbaef67087ad5ccb8e9aab57c072624b80d78ec",
+    "ed5b44cceaa007375b9803f910fabc0bb3696c0e5ebf7a3b81ecb71469d49bbf"
+   ],
+   [
+    "tree_094_MANUAL_REVIEW.ply",
+    "hash differs",
+    "0a2aeaf85874e4bd42470d5c1b8ad2aec0b3f608afe4788c5a79d23895c5d349",
+    "92967d5806104b20d2e6d09890f25020cf48d767bc2b0a8cf49edfb25d0d1fa0"
+   ],
+   [
+    "tree_099_MANUAL_REVIEW.ply",
+    "hash differs",
+    "8a52de0c18c7e7da86a5fb6ef18e81d75af3f27f9a7b916ac525983208e94b8d",
+    "5cdd2cd86be31c757b6d428f062b049128964aef3f495f5e56e5f6ebdde39dc2"
+   ],
+   [
+    "tree_100_MANUAL_REVIEW.ply",
+    "hash differs",
+    "9999be37bc36ab6bb9aeb5d06bec5278a4db0f4033735c1b707de532ebe0491a",
+    "3ebba6b47bcb47d1fa1182231adea8f0865ba50fa71b31d5928cfa4cea36b944"
+   ],
+   [
+    "tree_120_MANUAL_REVIEW.ply",
+    "hash differs",
+    "5580e371f322280c5d81a369a159e32f86c4e15be529cca09a87aa7854a45376",
+    "83f02752e45c65b3b2aa7a63d88bd6c283480e238bd5ae07e495632a0c3ad5f2"
+   ],
+   [
+    "tree_121_UNCHANGED.ply",
+    "hash differs",
+    "9c3f303b461c0a2dc11b2175a9241aed00ab442efe195c8591930351d1a063a5",
+    "34ef9c5d1f8a73d50418520ea71f38758c36f071a8a02bfbe654bdaddb7edb56"
+   ],
+   [
+    "tree_124_MANUAL_REVIEW.ply",
+    "hash differs",
+    "9651de2fa7570a5604441b7ce20b653b89e04e68a31a5420d0339b666a87cfe4",
+    "fce24c71ad8eb22413471bc94c7fe68369c9b90a2b6844090b9ea0d674ed8a62"
+   ],
+   [
+    "tree_136_MANUAL_REVIEW.ply",
+    "hash differs",
+    "4a613f65c82d708be1bfa5a04a805225711dcf7f5fe7e50391952f1dd00155c0",
+    "9d72cce5df92c71083af5e55164d67ef2471567d19422a8e7c8c3673214edf4b"
+   ],
+   [
+    "tree_137_MANUAL_REVIEW.ply",
+    "hash differs",
+    "901cee3e1c6119d63116442d02b83b75722327240e0e850d63f9793c2b41ec5f",
+    "0b34814f19d19ade7a6021ade2c35c35ecaaa83943d069b98f3e72fe98e5fe5a"
+   ],
+   [
+    "tree_139_MANUAL_REVIEW.ply",
+    "hash differs",
+    "1ac39814356634d129eb16fa28f0fe7280f02dceaadae1835e787dfaa6fb875c",
+    "e45782f1136a3b4b655770910fa1b82c09863d0fee28b2b8e5650b3ea90d3bf7"
+   ],
+   [
+    "tree_147_MANUAL_REVIEW.ply",
+    "hash differs",
+    "586a8ddea059ae59df3de115504dc6fa17a8d342b79f2b2e4a6576a889ff6afb",
+    "6bb2ee3d4381635ca6d86fd2e4f57d56f57b7a5a9bf03a85a480926ef79a8f65"
+   ]
+  ]
+ },
+ "manifest": {
+  "rows": 121,
+  "counts": {
+   "HASH DIFFERS": 11,
+   "MISSING": 1,
+   "OK": 97,
+   "dir or no hash: exists": 12
+  },
+  "not_ok": [
+   [
+    "HANDOVER/manifest_check.json",
+    "HASH DIFFERS",
+    "1ca3091d8110886d1319f7af72dede4ca8ce9b0556a024a72e6fcf3d4a6555fa",
+    "99a035f119300e438d97c628eca5e558503fe63839a20209cf357c03f69ba80f",
+    "251",
+    251
+   ],
+   [
+    "AGENTS.md",
+    "HASH DIFFERS",
+    "8f344f7daa118a84a476c69f1b8a0f702876632a57607cdaed113db4fdd11544",
+    "61202f41d7767a781e4041a117cc315cf2e5e904d347f07822820cc853e01378",
+    "12315",
+    14795
+   ],
+   [
+    "measurement_pipeline/results/ITSMe_all163_output_v3_FINAL_20261023_201144/per_tree/",
+    "dir or no hash: exists"
+   ],
+   [
+    "measurement_pipeline/results/ITSMe_all163_visualisations_20261023_202459/individual_trees/",
+    "dir or no hash: exists"
+   ],
+   [
+    "measurement_pipeline/results/ITSMe_all163_visualisations_20261023_202459/comparisons/",
+    "dir or no hash: exists"
+   ],
+   [
+    "measurement_pipeline/results/ITSMe_all163_visualisations_20261023_202459/report_figures/",
+    "dir or no hash: exists"
+   ],
+   [
+    "measurement_pipeline/scripts/all163_common.py",
+    "HASH DIFFERS",
+    "c44889058ef1852a65c66a3f1f29c1cd7ad2a4f4d45d5fe17d01d78fa1f761b5",
+    "861e72860c213ee5983bf282cb2a1b00373cf29495da15ae7ac970129e208519",
+    "8512",
+    10550
+   ],
+   [
+    "measurement_pipeline/scripts/all163_postprocess.py",
+    "HASH DIFFERS",
+    "be2f9bffa40aa1f38838f2d4b1b9ac58d2df9169749b54a1f543a29dfc9af7df",
+    "c38d59d67805e477a11d4eb00051a90aa41cb861331587eae35ef9063e29f585",
+    "50185",
+    69782
+   ],
+   [
+    "measurement_pipeline/scripts/all163_tree_worker.R",
+    "HASH DIFFERS",
+    "30a4af2abe74ab056fd614b1558a14fa208e8e6b627a4a42ff6f69fcb559c702",
+    "d38e0134ff22afe07411f3a24f27ce26cd068119f7d8f8b03fcbda18fd244a66",
+    "10763",
+    13576
+   ],
+   [
+    "measurement_pipeline/scripts/build_all163_notebook.py",
+    "HASH DIFFERS",
+    "3ff3e83c69e5eeac82465b18e32d0f88cd9f2b8643b930c69d9e96efba536ebf",
+    "1eb7f11eb22e34853165c80d5dfc62848a92e6219c695880f636dc86582c7f01",
+    "10843",
+    11803
+   ],
+   [
+    "measurement_pipeline/scripts/home_pc_tools.py",
+    "HASH DIFFERS",
+    "8743f6c28d4d41928c9151176644a04aa0d9897673fa23d5709d67ee27d35b64",
+    "d703e5ed283c574262914b53f6c4399c5f8c8546e7c44ad33f3d1a771c372b54",
+    "8284",
+    8299
+   ],
+   [
+    "measurement_pipeline/scripts/prepare_all163.py",
+    "HASH DIFFERS",
+    "f75ed9afb1b8affc7a17ca2bc2bd74d39cf1b6625aafb0207ded06b84242a274",
+    "848702b4481e50f0d25752edaeae7a5223bc77010b36018ce3ccc0ed160609de",
+    "14581",
+    15377
+   ],
+   [
+    "measurement_pipeline/scripts/render_all163_figures.py",
+    "HASH DIFFERS",
+    "3cae6ecd9c5e19d4c067c3c8385823c81d3c586c455f2f8860e943e6148dc503",
+    "e693be7b6a447397a01f65c6e83c6afec859465439b96245d0c36ba8d0472aa5",
+    "23807",
+    24661
+   ],
+   [
+    "measurement_pipeline/scripts/validate_all163_visualisations.py",
+    "HASH DIFFERS",
+    "09db3c3f1d716c85f5d707afa6f93243f8b9b1cc690517b4c1c4e0218e660ffb",
+    "cd1a529c28db6843f2334ea2b5ab054434aaf16638b2d802ceb3bd34974bf5ca",
+    "5856",
+    6440
+   ],
+   [
+    "measurement_pipeline/scripts/verify_all163_independent.py",
+    "HASH DIFFERS",
+    "37aaaeb4ac40c3833f73807a44ceb2a1627df3b7aafae6be4d55d13e9a5780a8",
+    "d9a05540c651c1257cefa8231503955520fff3d11427d0057388b966d4009727",
+    "7894",
+    8698
+   ],
+   [
+    "raw/WSL_ML2A_crop_55x55_3cm.ply",
+    "dir or no hash: exists"
+   ],
+   [
+    "CloudCompare_review_v2/",
+    "dir or no hash: exists"
+   ],
+   [
+    "measurement_pipeline/checkpoints/",
+    "dir or no hash: exists"
+   ],
+   [
+    "measurement_pipeline/environment/R-library/",
+    "dir or no hash: exists"
+   ],
+   [
+    "verification_output/_deps/",
+    "dir or no hash: exists"
+   ],
+   [
+    "measurement_pipeline/.venv/",
+    "dir or no hash: exists"
+   ],
+   [
+    "C:\\Users\\22083142\\AppData\\Local\\Programs\\Python\\Python313",
+    "dir or no hash: exists"
+   ],
+   [
+    "C:\\Program Files\\R\\R-4.5.2",
+    "dir or no hash: exists"
+   ],
+   [
+    "\\\\ad.uws.edu.au\\dfshare\\StudentHomes2014\\22083142\\Downloads\\session-export-1792748318231.zip",
+    "MISSING"
+   ]
+  ]
+ }
+}

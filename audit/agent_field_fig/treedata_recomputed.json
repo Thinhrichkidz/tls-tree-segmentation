@@ -1,0 +1,238 @@
+{
+ "sha256": "fb308df06f978acd1fb48adf815c974a958b6312c72a45dd64d65722e1c44748",
+ "bytes": 147684,
+ "physical_lines": 1508,
+ "columns": 47,
+ "data_rows": 1508,
+ "fully_empty_rows": 0,
+ "blank_site_rows": 1,
+ "blank_site_row_nonblank_fields": [
+  {
+   "resprouting_epicormic": "n",
+   "resprouting_basal": "n",
+   "canopy_live_dead": "l",
+   "canopy_percent_alive": "100",
+   "n_stem_hollows": "0",
+   "n_branch_hollows": "0"
+  }
+ ],
+ "site_linked": 1507,
+ "n_sites": 37,
+ "sites": [
+  "DSF_CP1B",
+  "DSF_CUP",
+  "DSF_ED1A",
+  "DSF_H1A",
+  "DSF_H2A",
+  "DSF_H3A",
+  "DSF_H4A",
+  "DSF_L1A",
+  "DSF_L2A",
+  "DSF_L4A",
+  "DSF_L4B",
+  "DSF_M2A",
+  "DSF_M3A",
+  "DSF_M4A",
+  "DSF_M4B",
+  "DSF_MG1B",
+  "DSF_MH1A",
+  "DSF_MH2A",
+  "DSF_MH3C",
+  "DSF_MH4A",
+  "DSF_ML1A",
+  "DSF_ML2B",
+  "DSF_ML3A",
+  "DSF_ML4C",
+  "DSF_TR1C",
+  "DSF_WB1B",
+  "RF1",
+  "RF2",
+  "RF3",
+  "RF4",
+  "RF5",
+  "WSF_L1A",
+  "WSF_L1C",
+  "WSF_M1A",
+  "WSF_MH1B",
+  "WSF_ML1C",
+  "WSF_ML2A"
+ ],
+ "site_prefix_counts": {
+  "DSF": 1096,
+  "RF": 229,
+  "WSF": 182
+ },
+ "rows_with_ML2A": 29,
+ "site_ids_with_ML2A": [
+  "WSF_ML2A"
+ ],
+ "rows_with_WSL": 0,
+ "site_ids_with_WSL": [],
+ "raw_text_contains_WSL_ML2A": false,
+ "raw_text_contains_WSF_ML2A": true,
+ "dbh_columns": [
+  "dbh1",
+  "dbh2",
+  "dbh3",
+  "dbh4",
+  "dbh5",
+  "dbh6",
+  "dbh7",
+  "dbh8",
+  "dbh9",
+  "dbh10",
+  "dbh11"
+ ],
+ "columns_matching_coord_or_height": [
+  "stump_height_m"
+ ],
+ "all_columns": [
+  "site_id",
+  "quadrant_id",
+  "species",
+  "log_species",
+  "tag_id",
+  "dbh1",
+  "live_dead1",
+  "basal_scar1",
+  "dbh2",
+  "live_dead2",
+  "fire_scar2",
+  "dbh3",
+  "live_dead3",
+  "fire_scar3",
+  "dbh4",
+  "live_dead4",
+  "fire_scar4",
+  "dbh5",
+  "live_dead5",
+  "fire_scar5",
+  "dbh6",
+  "live_dead6",
+  "fire_scar6",
+  "dbh7",
+  "live_dead7",
+  "fire_scar7",
+  "dbh8",
+  "live_dead8",
+  "fire_scar8",
+  "dbh9",
+  "live_dead9",
+  "fire_scar9",
+  "dbh10",
+  "live_dead10",
+  "fire_scar10",
+  "dbh11",
+  "live_dead11",
+  "fire_scar11",
+  "resprouting_epicormic",
+  "resprouting_basal",
+  "canopy_live_dead",
+  "canopy_percent_alive",
+  "n_stem_hollows",
+  "n_branch_hollows",
+  "stump_height_m",
+  "log_length_m",
+  "notes"
+ ],
+ "log_stump_exact_labels": {
+  "log": 42,
+  "stump": 34,
+  "stump log": 12
+ },
+ "log_stump_total": 88,
+ "log_stump_alt_regex_log_or_stump_anywhere": 88,
+ "stump_height_nonblank": 31,
+ "log_length_nonblank": 34,
+ "log_species_nonblank": 85,
+ "fern_labels": {
+  "Dicksonia antarctica": 30,
+  "Cyathea australis": 15
+ },
+ "fern_total": 45,
+ "climber_core_labels": {
+  "Apocissus hypoglauca": 7,
+  "Parsonsia straminea": 2,
+  "Cissus hypoglauca": 2
+ },
+ "climber_core_total": 11,
+ "climber_plus_celastrus_total": 12,
+ "ficus_rubiginosa": 2,
+ "species_blank": 0,
+ "quadrant_missing_site_linked": 52,
+ "quadrant_missing_all_rows": 53,
+ "quadrant_values": {
+  "SW": 379,
+  "SE": 366,
+  "NE": 358,
+  "NW": 352,
+  "MISSING": 52
+ },
+ "quadrant_missing_by_site": {
+  "DSF_M4A": 37,
+  "WSF_MH1B": 15
+ },
+ "tag_blank": 6,
+ "tag_no_tag": 115,
+ "tags_recurring_across_sites": 5,
+ "tags_recurring_detail": {
+  "1473": [
+   "DSF_ML1A",
+   "WSF_ML2A"
+  ],
+  "1474": [
+   "DSF_ML1A",
+   "WSF_ML2A"
+  ],
+  "1540": [
+   "DSF_L2A",
+   "DSF_ML2B"
+  ],
+  "1541": [
+   "DSF_L2A",
+   "DSF_ML2B"
+  ],
+  "1934": [
+   "RF2",
+   "RF3"
+  ]
+ },
+ "tags_recurring_across_sites_incl_no_tag": 6,
+ "tag_dup_within_site_pairs": 0,
+ "nonblank_dbh_nonnumeric": 0,
+ "nonLS_records": 1419,
+ "nonLS_with_numeric_dbh1": 1419,
+ "nonLS_dbh1_lt10": 11,
+ "nonLS_dbh1_ge10": 1408,
+ "nonLS_dbh1_lt10_values": [
+  9.5,
+  8.0,
+  9.8,
+  1.5,
+  9.0,
+  7.0,
+  9.9,
+  8.3,
+  7.8,
+  7.0,
+  6.3
+ ],
+ "nonLS_dbh1_min_median_max": [
+  1.5,
+  18.0,
+  196.0
+ ],
+ "stems_per_record": {
+  "0": 1,
+  "1": 1099,
+  "2": 231,
+  "3": 88,
+  "4": 41,
+  "5": 27,
+  "6": 11,
+  "7": 4,
+  "8": 3,
+  "9": 1,
+  "11": 1
+ }
+}

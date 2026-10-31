@@ -1,0 +1,45 @@
+Steps processing pipeline
+
+    Step 1.Preprocessing in RiSCAN PRO (Q-ForestLab) to a plot point cloud (filter, crop,
+         downsample)
+
+    Step 2.Run RayCloudTools (RCT) to segment the plot into individual trees
+    Step 3.Run script to extract those individual trees from the plot point cloud so you get a
+
+         "leftover" point cloud
+    Step 4.Correct the individual tree segmentation in CloudCompare
+
+This course practical actually goes through step 2 & 4:
+https://github.com/qforestlab/ARS_TLS_course
+
+Step 2. Run RCT:
+
+Manual to run RCT: https://github.com/qforestlab/rayextract-manual
+Notebook on these first steps:
+https://github.com/qforestlab/ARS_TLS_course/blob/main/notebooks/01_ARS_TLS_practical
+_RCT.ipynb
+
+     rayimport 2025-05-31_DSF_CP1B_1cm_30m_pcs.ply ray 0,0,-0.1 --max_intensity 0
+     rayextract terrain 2025-05-31_DSF_CP1B_1cm_30m_pcs_raycloud.ply --gradient 2
+     rayextract trees 2025-05-31_DSF_CP1B_1cm_30m_pcs_raycloud.ply
+
+         2025-05-31_DSF_CP1B_1cm_30m_pcs_raycloud_mesh.ply --max_diameter 0.9
+         --height_min 10
+     raysplit 2025-05-31_DSF_CP1B_1cm_30m_pcs_raycloud_segmented.ply
+         seg_colour
+     treesplit 2025-05-31_DSF_CP1B_1cm_30m_pcs_raycloud_trees.txt per-tree
+
+Parameters to check and optimise
+
+Step 3. Extract leftover point cloud
+
+Manual on how to do this: https://github.com/qforestlab/treeseg_propagation
+
+Step 4. Tree segmentation correction
+
+Manual & video on segmentation correction in CloudCompare
+https://github.com/qforestlab/segmentation_correction/tree/main/CloudCompare
+Manual on segmentation correction in CloudCompare:
+https://github.com/qforestlab/ARS_TLS_course/blob/main/notebooks/02_ARS_TLS_practical
+_CloudCompare.md
+

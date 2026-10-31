@@ -1,0 +1,89 @@
+MEASUREMENT NOTES AND FILE GUIDE
+30 October 2026, Australia/Sydney
+
+Scope and evidence
+The seven current PLYs were read from CloudCompare_review_v2 in the order
+074, 163, 103, 079, 069, 132, 139. This completes the six requested checks,
+including both alternatives in the final check. Original clouds, project BIN,
+existing measurements and field-tag assignments were not saved over or edited.
+CloudCompare was used for native viewing and rotation. Detailed inspection
+sheets and measurements were also generated directly from the same point data.
+source_manifest.csv records exact input filenames, point counts and SHA-256s.
+
+Coordinates and distances
+Original coordinates are EPSG:32756 metres per the source metadata. Directions
+refer to grid north/east. Horizontal distance = sqrt(deltaE² + deltaN²); this is
+not the 3D slope distance. A canopy centroid was never used as a trunk centre.
+Saved pipeline feet on leaning trees do not necessarily coincide with the base.
+For 074, 163, 103 and both 079 stems, provisional base centres were estimated
+from successive lower-bark section centres and their centreline intersection
+with the existing terrain mesh. Bark near the ground is partly missing; these
+are fitted estimates, not directly observed centres. Alternative height windows
+move these fits by about 4–10 cm, but this is only internal sensitivity. Terrain,
+base definition and bark coverage introduce larger uncertainty (several dm).
+On 069 and 132, ellipse extrapolation was unstable and rejected; their saved
+feet are retained. Spacing_measurements.csv preserves both saved-foot distances
+and provisional-base distances. Its decimals are for auditability, not accuracy.
+Final plan distances were calculated from fitted/saved coordinates, then
+verified with CloudCompare two-point picking in north-up top view on explicitly
+derived centre markers. Picked distances: 074–103 15.612823 m; 074–163
+4.015814 m; 074–079 nearer stem 14.344687 m; 074–069 11.411543 m.
+PLAN_CENTRES_ESTIMATED_Z0.ply contains DERIVED centres, not observed scan points,
+projected to Z=0 so the picked distance equals horizontal distance. Its CSV maps
+point indices to tree IDs. This verifies the distance arithmetic, not the base
+location accuracy. Raw bark picks would measure edges rather than centres.
+
+Trunk widths and breast-height convention
+Inspection sheets show 10 cm thick horizontal slices at the labelled heights,
+referenced to the saved ground elevation. Key clean rings were fitted as
+ellipses at 1.2, 1.3 and 1.4 m, with an extra section perpendicular to the local
+stem axis. For the strongly leaning trees, a horizontal ellipse's long axis is
+not a DBH. A provisional check 1.3 m along the fitted stem from its terrain
+intersection gives consistent broad estimates: 074 about 62 cm; 163 about
+83 cm; 103 about 78 cm; 079 southern about 77 cm and northern about 69 cm;
+139 about 46 cm. These are rounded scan estimates and depend on foot/ground.
+No measurement is field-validated. The first report's 1.3 m vertical bands and
+the 1.3 m along-stem sections are explicitly distinguished here.
+For an oval section, area-equivalent diameter = sqrt(major × minor).
+For two separate stems, combined basal-area equivalent = sqrt(d1² + d2²).
+This is a comparison statistic; it is not the physical span or one-tree DBH.
+
+Tree 079 discrepancy
+The earlier ellipse_key_trees.csv gives about 64 and 63 cm. The current complete
+southern ring is about 94 × 75 cm in a horizontal 1.3 m slice; its perpendicular
+section is approximately 89 × 73 cm (area equivalent about 81 cm). The northern
+ring is about 92 × 64 cm horizontally and 68 × 62 cm perpendicularly (about
+65 cm equivalent). Along-stem checking gives about 77 and 69 cm, respectively.
+The earlier script splits rings using grid components and trims using circular
+radius even when a ring is elliptical. Such trimming can select an incomplete
+ring and alter the dimensions. The current result merges both visible arcs of
+the southern ring and checks the perpendicular section. Treat 079 width as
+approximate (about 80 and 65–70 cm), and do not turn it into a confirmed tag.
+The two fitted bases are about 2.86 m apart. They remain visibly separated at
+0.1 and 0.6 m and at 1.3 m; no union below breast height is visible. Roots below
+the scan surface cannot be judged.
+
+Tree 069 neighbour search
+All 163 saved stem positions were checked for neighbours within 5 m. Only
+tree_079 is a plausible larger near neighbour: saved distance 3.031 m.
+The next saved stems are 152 at 4.62 m and 146 at 4.69 m, both much smaller.
+The 079 southern stem is about 2.98 m using its fitted base; 069 base uncertainty
+and rounding prevent a strict within-3-m claim. No other larger segmented trunk
+was found within the radius; unsegmented or missing stems cannot be excluded.
+
+Using this folder
+RESULTS.txt: completed response in the requested order.
+index.html: local report with image gallery; open in a browser.
+views/: original-data plots, four lower-stem projection angles, horizontal
+        slices, full-tree oblique views, a lean detail and a base-spacing map.
+CloudCompare_captures/: native application screenshots; these are distinct
+        from the plots in views/.
+CloudCompare_review_copies/: seven lower-stem PLYs and a combined colour cloud.
+        These contain actual observed points cropped to at most 4 m above
+        each saved ground, recoloured solely for identification, with local
+        XYZ = original XYZ − (261350, 6264460, 680). The comments record this
+        reversible translation. Full original clouds remain on the source drive.
+        Orange-yellow 074; magenta 163; blue 103; green 079; vermilion 069;
+        sky-blue 132; grey 139. These copies allow rotation from any angle.
+        PLAN_CENTRES_ESTIMATED_Z0.ply and its CSV are a separate derived plan
+        marker dataset: eight estimated centres, no original bark observations.

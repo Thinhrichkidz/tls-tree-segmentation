@@ -1,0 +1,8 @@
+tree_id,file,sha256,points,ground_source
+tree_074,D:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help\CloudCompare_review_v2\tree_074_AUTO_CANDIDATE.ply,cb2f91f02ea219fa3a625b67cc1d34daf2e38d2537103da6bd7cdd041e8a6649,463421,terrain_mesh at stem foot (actual triangle)
+tree_163,D:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help\CloudCompare_review_v2\tree_163_MANUAL_REVIEW.ply,c540dfae7b390d77297ce6f713fa7ce348aa516902d87fe6ec132f8a3abd7fc7,413343,terrain_mesh at lowest-observation XY (fallback foot; uncertain)
+tree_103,D:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help\CloudCompare_review_v2\tree_103_MANUAL_REVIEW.ply,b9f5c8e8ae731c69f8d6e03fcb6ef6a07fc0d5adc16f33453f34e92130506871,515249,terrain_mesh at corrected stem base (user-agreed)
+tree_079,D:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help\CloudCompare_review_v2\tree_079_AUTO_CANDIDATE.ply,e1ec496f5c5fb11808a6299b4c6e541a1a64c287e0e9b2212cd92aee920eee60,1284251,terrain_mesh at stem foot (actual triangle)
+tree_069,D:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help\CloudCompare_review_v2\tree_069_MANUAL_REVIEW.ply,649a5bc7edf928845fbf92f1d0939b34f38552d3d068161466ea08f8423bcf05,603246,terrain_mesh at stem foot (actual triangle)
+tree_132,D:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help\CloudCompare_review_v2\tree_132_MANUAL_REVIEW.ply,d93a133dda0bd08bc51347243a6ea156f65c3a4780ae0bbbf15fec6100e749a6,807111,terrain_mesh at stem foot (actual triangle)
+tree_139,D:\22083142\outputs\WSL_ML2A\55x55\3cm\Codex_help\CloudCompare_review_v2\tree_139_MANUAL_REVIEW.ply,e45782f1136a3b4b655770910fa1b82c09863d0fee28b2b8e5650b3ea90d3bf7,120909,terrain_mesh at lowest-observation XY (fallback foot; uncertain)

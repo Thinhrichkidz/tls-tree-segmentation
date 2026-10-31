@@ -1,0 +1,608 @@
+ Semi-Automated Individual-Tree Segmentation of Blue
+     Mountains TLS Point Clouds: From Automated
+
+  Extraction and Manual Refinement to Tree-Attribute
+                             Extraction
+
+            Tran Nguyen Gia Hung (Thomas) [To be completed: student ID]
+
+                         School of Computer, Data and Mathematical Sciences,
+                                         Western Sydney University
+
+         Abstract. Tree-level measurements from terrestrial laser scanning (TLS) require
+         each point to be assigned to an individual tree, and automated segmentation remains
+         unreliable where eucalypt crowns and branches overlap. I applied a semi-automated
+         workflow to a 1 cm TLS scan of Blue Mountains plot WSL_ML2A. A crop of about
+         65.7 m × 67.8 m was downsampled to 3 cm (45.4 million points). RayCloudTools
+         then segmented it into 162 trees, leaving 36.8% of points unassigned, and two
+         rounds of manual refinement in CloudCompare produced 163 tree point clouds.
+         I measured all 163 with the ITSMe package, applying explicit quality rules that
+         label each value VALID, REVIEW or not available. Heights were obtained for
+         all trees (53 VALID; VALID median 15.4 m), DBH for 80 (43 VALID; median
+         26.8 cm), and crown area and convex-hull volume for 156. Only 14 trees have all
+         four core metrics VALID; DBH was unavailable where no stem axis (28 trees) or
+         no acceptable breast-height fit (55) was found. No field inventory for the plot was
+         available, so the measurements have not been validated against field data; internal
+         checks show plausible height­diameter relations (Spearman  = 0.91 for VALID
+         pairs). The contribution is a documented, auditable workflow and a 163-tree
+         dataset with explicit uncertainty labels, not a demonstration of segmentation or
+         measurement accuracy.
+
+         Keywords: Terrestrial laser scanning · Individual-tree segmentation · Manual
+         refinement · ITSMe · Measurement quality
+
+1 Introduction
+
+Motivation. Conventional forest inventories record species and stem diameter at breast
+height (DBH), whereas TLS captures the surfaces of stems, branches and crowns, enabling
+measurements such as branch architecture and woody volume that are impractical in
+the field [1]. These tree-level products require each point to be assigned to one tree.
+Errors propagate: a merged crown inflates the attributes of one tree and removes those
+of another, and an omitted stem reduces completeness [1,2]. Segmentation remains the
+most challenging step to automate, and manual quality control is still needed, particularly
+in dense forests [2,3]. For the Blue Mountains monitoring network, the project team
+identified overlapping eucalypt crowns and complex branching as the main obstacles to
+  2
+
+  automation, and agreed a semi-automated approach: automated extraction followed by
+  manual correction [6,7]. My project applies, documents and measures the output of this
+  approach.
+
+  Research Questions and Objectives. The agreed minimum scope is a well-segmented
+  plot, or a substantial portion of one, with biomass/allometric analysis and documentation;
+  machine-learning automation, a second forest type and photogrammetry are stretch
+  goals [6]. I address three questions:
+
+RQ1 Which errors does automated Rayextract segmentation make in the selected area,
+       and what does manual refinement change?
+
+RQ2 How much manual effort does refinement require, and which error types account for
+       it?
+
+RQ3 How reliably can height, DBH and crown attributes be extracted from the refined
+       trees, and how closely do they agree with field measurements?
+
+  The objectives follow the workflow stages: (O1) prepare a tractable region of interest;
+  (O2) obtain an automated segmentation; (O3) refine it manually into individual-tree
+  point clouds; (O4) extract tree attributes with scripted, quality-controlled methods; and
+  (O5) compare them with field records. Biomass analysis remains part of the agreed scope
+  but was not attempted [To be completed: confirm with supervisor whether biomass is
+  deferred].
+
+  Contribution and Status. I used existing tools and did not develop their algo-
+  rithms [4,5,7]. My contributions are: (C1, completed) a 163-tree dataset produced
+  by automated segmentation and two rounds of manual refinement (Sects. 4.4 and 6.1);
+  (C2, completed) quality-labelled measurements of height, DBH and crown attributes
+  for every tree (Sects. 4.5 and 6.2); and (C3, completed) an audit of the supplied plot
+  inventory that defines what field matching would require (Sect. 6.3). Human approval of
+  individual trees, the before/after comparison and field validation remain open (Table 2).
+
+  2 Related Work
+
+  From Point Clouds to Tree-Level Measurements. Calders et al. [1] describe TLS
+  processing as a chain of registration, tree extraction and modelling, e.g. quantitative
+  structure models (QSMs). Most extraction methods grow detected stems bottom-up into
+  crowns and usually need manual correction of omission and commission errors, more so
+  in complex ecosystems where crowns interact. Downstream products inherit these errors:
+  QSM quality depends on input-cloud quality, circle- and cylinder-fitted diameters assume
+  circular stems, and converting volume to biomass adds wood-density uncertainty [1].
+
+  Automated Segmentation and Its Limits. Cherlet et al. [2] benchmark five methods
+  (Table 1) on 2,983 manually segmented trees in four forest types, retaining ground,
+  understory and unlabelled points so that methods face realistic clouds. The graph-
+  based Rayextract achieved the highest plot-level F1 on three of four plots and remained
+Semi-Automated Individual-Tree Segmentation of Blue Mountains TLS Data                 3
+
+Table 1. Segmentation methods compared by Cherlet et al. [2]. F1 range: plot-level F1 across their
+four test plots (their Table 2; deep-learning models fine-tuned on all plots).
+
+Method Principle                                Key dependency           F1 range
+
+Rayextract Shortest paths from                  Terrain mesh; height_min, 0.480­0.919
+              terrain-mesh roots,               max_diameter
+              agglomerated into trees
+                                                Ground and understory 0.042­0.473
+Treeiso Cut-pursuit graph clustering,           removed beforehand
+              then stem assignment              Ground removal and height 0.160­0.450
+                                                normalisation
+SSSC Superpoint graph with wood
+              probability; shortest paths to    Labelled training data   0.178­0.930
+              roots                             (in-domain fine-tuning)
+
+TreeLearn Sparse-convolution network            Labelled training data   0.247­0.905
+              predicting offsets to tree base,  (in-domain fine-tuning)
+              then clustering
+
+ForAINet Network with offset and
+              embedding branches, then
+              clustering
+
+competitive on the fourth, but every method degraded in the dense tropical plot. Point-
+level accuracy also fell with distance from the tree centre, which the authors attribute
+to interactions with neighbouring trees and small branches, and methods with similar
+scores made different kinds of errors; the authors therefore expect qualitative assessment
+to remain part of semi-automated pipelines [2].
+
+Manual Segmentation and Measurement Quality. Manual segmentation is regarded as
+the most accurate method, but it is labour-intensive, and operator bias remains in complex
+areas even after a second review pass [2]. Cushman et al. [3] describe it as a bottleneck in
+lidar studies of individual trees. They also note that DBH is usually fitted to a thin stem
+slice and degrades with low point density and occlusion, that ground-based TLS can
+underestimate height because tree tops are sparsely sampled, and that field measurements
+are themselves uncertain. ITSMe implements such single-tree measurements for TLS
+point clouds [5].
+
+Gap Addressed. No benchmark plot is a temperate sclerophyll eucalypt forest, and the
+benchmark leaves application-specific evaluation, such as inventory or biomass, to future
+work [2]. My project addresses this locally: it documents a complete semi-automated
+pipeline on Blue Mountains data and reports how many trees yield trustworthy attributes
+once explicit quality rules are applied.
+
+3 Data
+
+3.1 TLS Dataset and Region of Interest
+
+The meeting notes describe 36 monitoring plots in dry sclerophyll forest (DSF), wet
+sclerophyll forest (WSF) and rainforest (RF), of which approximately 34 were scanned
+4                       S2 Automated     S3 Manual     S4 Attribute  S5 Field
+                        segmentation     refinement     extraction   validation
+             S1 Data
+           preparation
+
+                        unedited output  Before/after                Plot field data
+                                         comparison                   (requested)
+
+Fig. 1. The five-stage semi-automated workflow. Thick border: completed; shaded: completed but
+human approval pending; dashed: planned or blocked. The unedited automated output is retained
+for a before/after comparison.
+
+by Ghent University collaborators [6]; the initial topic description refers to 35 plots [9]. I
+did not acquire the scans. I processed plot WSL_ML2A, scanned on 12 May 2025 at
+1 cm resolution according to the file name. The raw scan holds 355,462,232 points over
+a bounding box of about 450 m × 754 m (LAS header), in EPSG:32756 as recorded in
+the processing metadata. From WSL_ML2A I prepared two crops; only the crop named
+"55x55" was used. Its axis-aligned extent is 65.71 m × 67.84 m (about 0.45 ha), not 55 m
+× 55 m [To be completed: confirm the crop shape and whether a boundary file
+exists]. [To be completed: scanner model, scan positions and registration error].
+
+3.2 Field Reference Data
+
+No field inventory for WSL_ML2A was available during this project; I have requested
+the raw field measurements for the plot from the data custodians [To be completed: field
+data for WSL_ML2A, if supplied]. The inventory TreeData.csv [8] was provided
+at the start of the project to illustrate the structure of the network's field data; it covers
+other plots and does not include WSL_ML2A. I audited it (47 columns, 1,508 data rows)
+to establish what a field comparison would require, with a script that reads cells as
+trimmed strings, converts only dbh1­dbh11 to numbers, never imputes blanks, counts
+labels as written and keeps diameters in file units because the unit is undocumented
+[To be completed: DBH unit and protocol]. One empty row is excluded, leaving
+1,507 site-linked records across 37 sites. The file has no tree coordinates or heights, and
+numbered diameter columns describe multiple stems, not repeated censuses. Its records
+are not automatically segmentation targets: besides logs and stumps, the labels include
+tree ferns (Dicksonia, Cyathea; 45 records) and, on my reading, climbers (11 records), so
+any comparison must first define which growth forms count as trees [To be completed:
+agreed target definition].
+
+4 Methodology and Implementation
+
+4.1 Workflow Overview and Status
+
+Figure 1 and Table 2 summarise the five stages. They are deliberately separated so that
+each output can be inspected and its effect on the final measurements traced.
+       Semi-Automated Individual-Tree Segmentation of Blue Mountains TLS Data    5
+
+Table 2. Workflow stages, tools and status. "Prior" tools were developed by others and used without
+modification.
+
+Stage  Main operations           Tools                 Status
+                                                       Completed; method not
+S1 Preparation Crop, downsample to 3 cm, CloudCompare  recorded
+
+       PLY export                2.13.2 (per file      Completed: 162 trees;
+                                                       parameters not recorded
+                                 header)               163 trees; human
+                                                       approval pending
+S2 Automated Terrain mesh, tree  RayCloudTools
+                                                       Completed for 163 trees
+       extraction, per-tree split (prior) [4]
+                                                       Blocked: plot field data
+S3 Manual Leftover extraction, two CloudCompare;       requested
+
+       refinement rounds,        propagation
+
+       script-assisted audit     script [7]
+
+S4 Attributes Height, DBH, crown base, ITSMe 2.0.0
+
+       area, volume, indicators (prior) [5]; R and
+
+                                 Python scripts
+
+S5 Validation Matching to field records; Python
+
+       agreement statistics
+
+4.2 Stage 1: Data Preparation
+
+The crop was exported at full resolution (234,060,453 points) and downsampled to 2 cm
+and 3 cm; the 3 cm cloud (45,449,820 points, 19.4% of the full-resolution crop) was
+used for all later stages to keep processing tractable. Its header records CloudCompare
+2.13.2, but the downsampling method is not recorded [To be completed: downsampling
+method and filters]. Downsampling thins fine branches and thin stems, which can
+weaken both segmentation and DBH fitting, while uniform density supports consistent
+processing [1]; cropping creates artificial boundaries that degrade segmentation near
+edges [2].
+
+4.3 Stage 2: Automated Terrain and Tree Extraction
+
+RayCloudTools converted the 3 cm cloud to a ray cloud (rayimport), built a terrain mesh
+(rayextract terrain), segmented trees (rayextract trees) and split the result
+into per-tree files [7]. Rayextract roots shortest paths in the terrain mesh, favours paths
+with consistent direction and from tall trees, and penalises strong lateral movement [2],
+which suits upright stems but is a plausible source of error for long, interlocking eucalypt
+branches. The parameters used for WSL_ML2A were not recorded [To be completed:
+rayextract parameters and RayCloudTools version]. The pipeline's example settings,
+written for a different plot, are not evidence of the values used; they differ from the
+benchmark's in terrain gradient (2 versus default 1) and height_min (10 versus
+2­4.8) [2,7].
+
+4.4 Stage 3: Manual Refinement
+
+Why it is necessary. The automated output is a starting point, not a usable dataset.
+Overlapping crowns cause interlocking branches to be assigned to the wrong stem;
+6
+
+occlusion breaks the connection between branches and stems; understory and climbers
+attach to stems; and stray returns add noise [1,2,3,6]. Because errors concentrate in the
+outer crown [2], a tree can have a correct stem and a wrong crown, which would bias
+every crown attribute.
+
+    What was done. A propagation script (tree_extraction.py, distance threshold
+not recorded; default 0.01 m) produced per-tree clouds and a leftover cloud of unassigned
+points [7]. Working tree by tree in CloudCompare, I inspected each segment from several
+viewpoints, reassigned incorrectly assigned points, decided branch ownership by tracing
+branches to their stems, split merged trees, joined fragments and removed noise, unwanted
+vegetation and stray points. A first round produced 199 exports and was superseded; a
+second round produced 163 tree clouds. A script-assisted audit of point ownership then
+screened all 163 clouds and flagged four as candidates for automated point recovery.
+Each final cloud's SHA-256 hash is recorded with its measurements, so every result can
+be traced to an exact file.
+
+    How quality is controlled, and what is missing. Separating interlocking branches
+was the most demanding task. Two controls are still incomplete: no acceptance decision
+(accepted, uncertain or discarded) has been recorded, so human approval is pending for
+all 163 trees, and no time log was kept [To be completed: record per-tree acceptance
+using explicit criteria: continuous stem, no neighbour branches, no unexplained
+crown truncation, non-tree material removed]. Manual refinement also has inherent
+limits: it cannot recover unscanned structure, a single operator's decisions are subjective,
+and a reference derived by editing predictions may favour the automated baseline [2].
+
+4.5 Stage 4: Attribute Extraction
+
+All 163 trees were measured with ITSMe 2.0.0 [5] in R, with Python scripts for preparation,
+quality rules and reporting. Each cloud is translated so that the stem foot is at the origin
+and the ground at  = 0. Table 3 summarises the definitions and the rules that label
+each value VALID, REVIEW (usable with caution) or not available (N/A). Height is the
+highest point minus the terrain-mesh elevation at the stem foot,
+
+ = max ( ) - ground ( ,  ),        (1)
+
+where the foot is where a robust stem axis meets the terrain mesh; 27 trees use a
+fallback foot at the lowest observation and 2 a corrected base. DBH is fitted 1.3 m
+along the lean-corrected stem axis (fitted with RANSAC) to a 6 cm slice, after removing
+points whose nearest neighbour is more than 5 cm away, by a least-squares circle fit.
+A fit is accepted when 3 cm <  < 2 m, at least 60% of the circle is covered and
+RMSE  min(4 cm, max(1 cm, 0.1)); otherwise the median of accepted slices at 1.1­
+1.5 m is used and labelled REVIEW. Crown volume is a convex envelope that includes
+air gaps and is not woody volume. No tree age or biomass was estimated, because no
+validated method or wood-density data were applied.
+
+4.6 Stage 5: Validation Against Field Records (Blocked)
+
+Matching was designed to restrict candidates to the confirmed site and quadrant, compare
+stem configuration and diameter, solve a one-to-one assignment with a diameter cost
+      Semi-Automated Individual-Tree Segmentation of Blue Mountains TLS Data                   7
+
+Table 3. Attribute definitions and quality rules (from the measurement metadata and scripts).
+
+Attribute Definition                         REVIEW / N/A rule
+
+Height (m) Max. point minus terrain mesh at REVIEW if ground or top not
+
+             stem foot; 99th percentile and  locally supported, or axis­foot
+
+             supported top kept as alternatives offset > 0.25 m
+
+DBH (cm) Circle fit, 6 cm slice at 1.3 m along REVIEW if slice-median fallback;
+
+             lean-corrected axis             N/A if no axis or no accepted fit
+
+Crown base First 0.25 m layer above 1 m wider N/A if no crown is identified
+
+(m)          than max(3× trunk, 0.3× widest
+
+             layer), with  70% crown layers
+
+             above; or user choice
+
+Crown area Concave hull (concavity 3) of crown REVIEW if outside 5th­95th
+
+(m2)         points                          percentile
+
+Crown        3D convex hull of crown points  REVIEW if envelope / 1 m
+                                             slab-hull sum > 2, crown points
+volume (m3)
+
+                                             from fallback, or size outlier
+
+  = |^ -   |/ that allows unmatched records, and report accepted, ambiguous and
+unmatched matches. Because selecting pairs by diameter and then validating diameter is
+circular, agreement would be reported for independently identified pairs where possible.
+This stage is blocked until field measurements for WSL_ML2A are supplied (Sect. 6.3).
+
+4.7 Reproducibility and Data Availability
+
+The final measurements ran under R 4.5.2 (ITSMe 2.0.0, geometry 0.5.2)
+and Python 3.13.14 (NumPy 2.5.4, SciPy 1.18.1, Matplotlib 3.11.2) on Win-
+dows 10. Fifteen automated consistency checks passed, and an independent re-
+implementation re-fitted 24 trees [To be completed: agreement from indepen
+dent_verification.csv]. The results are released as tree_attributes.csv,
+methods.json, summary.json, outliers.csv and sensitivity.csv, with script
+hashes recorded in methods.json; the inventory audit (SHA-256 fb308df0...c44748)
+is reproduced by scripts/audit_inventory.py [To be completed: repository URL
+and release commit]. Scans and inventories were supplied privately; public release
+requires custodian permission [To be completed: confirm].
+
+5 Experimental Evaluation
+
+Automated versus Refined Segmentation (RQ1). The unedited automated trees
+are retained, so refined trees can be compared with them using the benchmark's
+procedure [2]: one-to-one matching by point-set intersection-over-union, a detection
+threshold of IoU  0.5, and
+
+       Precision  =               Recall  =         1  =  2    2       .         (2)
+                                                             +    +
+                      +  ,                    +  ,                   
+8
+     Table 4. Point counts through the workflow (LAS/PLY headers and processing records).
+
+Stage                                              Points or trees
+
+Raw 1 cm scan of WSL_ML2A (about 450 m × 754 m)    355,462,232
+
+"55x55" crop, full resolution (65.71 m × 67.84 m)  234,060,453
+
+Same crop, 2 cm / 3 cm (3 cm used)                 84,276,295 / 45,449,820
+
+Assigned to 162 automated trees / unassigned       28,708,304 / 16,741,516
+
+Refined tree clouds (two manual rounds)            163 trees
+
+Because file numbers in the refined set do not reliably correspond to automated tree
+numbers (67 of 163 differ in point count from the same-numbered automated file), pairing
+must use point overlap, not names. These scores would measure how much refinement
+changed the output, not independent accuracy. This comparison has not yet been run.
+
+Manual Effort (RQ2). Effort was to be measured from a contemporaneous log of active
+time and edit types. No log was kept, so RQ2 can be answered only qualitatively.
+
+Attribute Reliability and Field Agreement (RQ3). Without field data, reliability
+is assessed internally through the share of VALID values per metric, the reasons for
+REVIEW and N/A labels, the height-to-DBH ratio (REVIEW if outside 20­150), the
+Spearman correlation between height and DBH, an independent re-fit of 24 trees, and
+sensitivity tests on 8 trees (DBH slice 3, 5, 6 and 10 cm; circle versus hull diameter;
+maximum versus 99th-percentile height; envelope versus slab volume). Field agreement
+(bias, MAE and RMSE for matched pairs) remains the intended external test.
+
+6 Results
+
+6.1 Data Reduction and Segmentation
+
+Table 4 traces the data from the raw scan to the refined trees. Automated segmentation
+produced 162 trees containing 28,708,304 points and left 16,741,516 points (36.8%)
+unassigned to any tree, which shows how much of the plot cloud (ground, understory,
+fragments and missed crown material) required either exclusion or manual recovery.
+Refinement produced 163 tree clouds. In the point-ownership audit, 25 trees are labelled
+UNCHANGED, 134 MANUAL_REVIEW and 4 AUTO_CANDIDATE [To be com-
+pleted: confirm what each label means relative to the automated output]; these are
+screening labels, not acceptance decisions, and errors have not been counted by type.
+
+6.2 Tree Attributes
+
+Figure 2 and Table 5 summarise the measurements. Height was obtained for every tree
+but is VALID for only 53; notes in the results table cite uncertain ground references and
+tree tops needing review, and 46 trees are flagged as possibly truncated at the top. DBH
+was obtained for 80 trees (66 direct fits, 14 slice-median fallbacks) and is unavailable
+        Semi-Automated Individual-Tree Segmentation of Blue Mountains TLS Data         9
+
+                           VALID         REVIEW           N/A
+
+       Height          53                        110
+         DBH
+                  43                37                    83
+  Crown base
+  Crown area                             156
+Crown volume
+                                    131                                       25
+               0
+                               100                            56
+
+                           40            80           120                         163
+                               Number of trees (n = 163)
+
+            Fig. 2. Measurement status per metric for the 163 refined trees.
+
+Table 5. Attribute values by quality label: counts of trees, then medians (minimum­maximum) of
+VALID values and of all available (VALID + REVIEW) values.
+
+Metric            VALID REVIEW N/A VALID values               All values
+
+Height (m)        53       110 0 15.40 (10.31­27.18) 16.36 (9.39­27.18)
+                            37 83 26.79 (10.44­66.61) 25.38 (10.12­75.78)
+DBH (cm)          43          0 7 6.75 (1.00­19.00) ­
+                            25 7 14.55 (3.39­90.11) 15.02 (1.89­228.71)
+Crown base (m)    156       56 7 85.7 (5.5­972.7) 95.1 (3.4­2,426.6)
+
+Crown area (m2)   131
+
+Crown volume (m3) 100
+
+for 83: 28 trees had no stem axis and 55 had no acceptable slice. Crown base, area and
+volume were obtained for 156 trees; 7 have no live crown. Only 14 trees have height,
+DBH, crown area and crown volume all VALID (median height 16.5 m, DBH 19.9 cm,
+volume 80.7 m3); the summary files report 16 because that count was computed before
+the crown-size rule was applied.
+
+    Among the 80 trees with both height and DBH, the height-to-DBH ratio ranges from
+31.1 to 118.4 (median 67.6), so no tree breaches the 20­150 rule, and height and DBH
+are strongly rank-correlated (Spearman  = 0.83,  = 80;  = 0.91 for the 23 pairs in
+which both are VALID). Among VALID values, crown length has a median of 9.75 m
+and crown ratio 0.59 ( = 53), and the equivalent crown diameter has a median of 4.31 m
+( = 131). The largest crown values belong to REVIEW trees: tree_079 has the largest
+volume (2,426.6 m3) and area (228.7 m2). The outlier file lists 99 flags: 83 failed or
+missing DBH fits, 7 very large and 7 very small crowns, one tree with very low stem
+completeness and one crown touching the crop edge. Structural indicators show why
+stems are hard to measure: 63 trees have two or more point clusters within 1 m of the
+axis at 1.3 m, 41 are flagged for a fork near breast height and 17 lean by at least 10° (28
+not assessable). An independent re-fit and sensitivity tests were run [To be completed:
+report their numerical results].
+10
+
+    Figure placeholder. (a) Two refined trees in side view (tree_069, tree_146); (b) DBH
+     against height for VALID pairs. [To be completed: insert the existing figures from the
+
+                                        results visualisation folder].
+
+                    Fig. 3. Example refined trees (a) and DBH­height relation (b).
+
+6.3 Field Reference
+
+No field measurements for WSL_ML2A were available, so no tree-level validation was
+possible. The audit of TreeData.csv, which covers 37 other sites with 1,507 records,
+nevertheless shows what the requested field data must contain for a comparison to be
+meaningful. In that file, 88 records are logs or stumps, 52 lack a quadrant, five tag
+identifiers recur across sites, and there are no stem coordinates or heights; the diameter
+unit and inclusion threshold are undocumented (only 11 of 1,419 non-log/stump first
+diameters fall below 10 file units). If the WSL_ML2A data share this structure, matching
+will be limited to quadrant-level candidates and diameter, height cannot be validated,
+and the plot boundary relative to the 0.45 ha crop must be known before trees outside the
+inventory plot can be excluded. Stem coordinates or tag locations, heights, the diameter
+unit and measurement height, the inclusion threshold and the plot boundary are therefore
+the key items requested.
+
+7 Discussion
+
+Answers to the Research Questions. RQ1 is answered qualitatively: the automated
+output left 36.8% of points unassigned and required two refinement rounds, but the
+per-tree before/after comparison has not been run. RQ2 cannot be answered quantitatively
+because no effort log was kept; refinement was the most time-consuming stage, with
+branch ownership in interlocking crowns the hardest task. RQ3 is answered for extraction
+reliability (Table 5) but not for field agreement, which awaits a field inventory.
+
+What the Evidence Supports. Three conclusions are supported. First, the automated
+output could not be used directly: more than a third of the points were unassigned, and
+only 25 of 163 refined trees are labelled unchanged by the audit, consistent with the
+benchmark's finding that errors concentrate in interacting crowns [2]. Second, attribute
+extraction is the main source of remaining uncertainty: only 53 heights, 43 diameters
+and 14 complete trees are VALID. Third, the internal consistency of VALID values is
+plausible (ratios within bounds,  = 0.91), but this shows coherence, not accuracy.
+
+Why So Many Values Need Review. The quality labels point to specific mechanisms.
+DBH is unavailable where no stem axis was found (28 trees) or no slice met the fit
+criteria (55). Low point counts are a likely cause: several failed trees have fewer than ten
+points in the 6 cm slice, and at 3 cm spacing a thin stem yields few points per slice. Forks,
+Semi-Automated Individual-Tree Segmentation of Blue Mountains TLS Data  11
+
+multiple stems and occlusion near 1.3 m further degrade circle fits [1,3]. Hypothesis H1:
+refitting DBH on the full-resolution crop (234 million points) would recover many N/A
+diameters; this is testable because that cloud is retained. Height REVIEW labels mainly
+reflect uncertain ground under the stem foot and unsupported tops; ground-based TLS
+samples upper crowns sparsely, so heights may be underestimated [1,3]. Crown volumes
+are convex envelopes that include air gaps; they describe crown space, not wood, and the
+largest values are all labelled REVIEW.
+
+How Manual Refinement Contributes to Dataset Quality. Refinement changes what
+each file represents: from whatever the path-based algorithm grew from one root to an
+individual that has been inspected, with uncertain cases flagged. Because crown attributes,
+QSMs and biomass depend on crown membership [1], and a learned segmenter trained
+on these files would inherit their conventions [2], the value of the dataset depends on
+consistent, documented refinement as much as on the number of trees. The hash-linked
+results support this; the missing acceptance decisions and time log do not.
+
+Limitations. Field validation is blocked; human approval is pending for all trees;
+refinement effort and error frequencies were not recorded, so RQ2 is answered only
+qualitatively; the before/after comparison (RQ1) has not been run; downsampling,
+Rayextract and propagation settings were not recorded; the study covers one 0.45 ha
+crop of one plot; and the edge flags assume a rectangular crop. Four trees received
+script-proposed corrections that are not yet formally approved.
+
+Contribution and Potential Applications. The work contributes a documented semi-
+automated workflow, a 163-tree point-cloud dataset with quality-labelled height, DBH
+and crown attributes, and an explicit account of what limits each measurement. Once
+approved and validated, such data could support forest inventory and monitoring, structural
+analysis and QSM-based biomass modelling [1], and training of learned segmenters,
+whose benchmark gains depended on local labelled data [2]. These uses have not been
+demonstrated here.
+
+8 Conclusion and Future Work
+
+I applied a semi-automated workflow to plot WSL_ML2A: a 0.45 ha crop was downsam-
+pled to 3 cm, automatically segmented into 162 trees, manually refined into 163 tree point
+clouds and measured with ITSMe under explicit quality rules. Heights were obtained for
+all trees, DBH for 80 and crown attributes for 156, but only 53 heights, 43 diameters and
+14 complete trees meet the VALID criteria. The workflow therefore delivers a usable,
+auditable dataset with honest uncertainty labels, while showing that thin or occluded
+stems and unsupported ground and tree tops still limit automated measurement after
+manual refinement. No accuracy claim can be made until field data are available.
+
+    The next steps are to record acceptance decisions for every tree, compare refined and
+automated trees by point overlap, refit thin-stem DBH at full resolution, and validate
+against the requested WSL_ML2A field data once supplied. A second forest type, learned
+segmentation trained on the refined trees and QSM-based biomass remain future work.
+12
+
+Use of AI
+
+[To be completed: final declaration in the University's required wording. The subject
+outline requires that generative AI be used "only as a support tool" and "declared
+in the submitted assessment in accordance with the University's Academic Integrity
+Policy" [10]. Draft for confirmation: I used generative AI coding assistants to develop
+and run measurement, quality-control and visualisation scripts, to audit the refined
+point clouds and propose point recoveries, which I reviewed, and to summarise
+sources and edit and format this report. I performed the manual segmentation and
+verified the reported results.]
+
+References
+
+ 1. Calders, K., Adams, J., Armston, J., et al.: Terrestrial laser scanning in forest ecology: Expand-
+     ing the horizon. Remote Sens. Environ. 251, 112102 (2020). doi:10.1016/j.rse.2020.112102
+
+ 2. Cherlet, W., Dayal, K., Chen, S., et al.: Benchmarking tree instance segmentation of terrestrial
+     laser scanning point clouds. ISPRS J. Photogramm. Remote Sens. 231, 230­247 (2026).
+     doi:10.1016/j.isprsjprs.2025.10.033
+
+ 3. Cushman, K.C., Král, K., Almeyda Zambrano, A.M., et al.: A primer on forest structure mea-
+     surement with lidar for ecologists. Ecosphere 17(8), e70730 (2026). doi:10.1002/ecs2.70730
+
+ 4. Lowe, T.D., Stepanas, K.: RayCloudTools: A concise interface for analysis and manipulation
+     of ray clouds. IEEE Access 9, 79712­79724 (2021). doi:10.1109/ACCESS.2021.3084954
+     [VERIFY]
+
+ 5. Terryn, L., Calders, K., Åkerblom, M., et al.: Analysing individual 3D tree structure using the
+     R package ITSMe. Methods Ecol. Evol. 14, 231­241 (2023) [VERIFY]
+
+ 6. Meeting notes, INFO6003 tree segmentation project (organiser B. Choat). Unpublished (file
+     dated 3 August 2026)
+
+ 7. Steps processing pipeline (processing_pipeline.pdf). Unpublished [To be completed:
+     author, date]
+
+ 8. Blue Mountains plot inventory (TreeData.csv). Unpublished dataset [To be completed:
+     custodian, version]
+
+ 9. Research-topic description (Research-topic.txt). Unpublished [To be completed: docu-
+     ment to be re-checked]
+
+10. Western Sydney University: INFO6003 Postgraduate Research Project, Spring 2026 subject
+     outline, Sects. 1.3 and 3.2.3 (2026)
+

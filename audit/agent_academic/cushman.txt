@@ -1,0 +1,1672 @@
+Received: 24 October 2025  Revised: 29 March 2026  Accepted: 17 April 2026
+DOI: 10.1002/ecs2.70730
+
+SYNTHESIS & INTEGRATION
+
+Methods, Tools, and Technologies
+
+A primer on forest structure measurement with
+lidar for ecologists
+
+K. C. Cushman 1 | Kamil Kral 2 | Angelica M. Almeyda Zambrano 3 |
+Eben N. Broadbent 4 | Martin Kru° cek 2 | Alice Rosen 5 |
+Sean M. McMahon 6,7
+
+1Environmental Sciences Division, Oak Ridge National Laboratory, Oak Ridge, Tennessee, USA
+2Department of Forest Ecology, Landscape Research Institute, Brno, Czech Republic
+3Center for Latin American Studies, University of Florida, Gainesville, Florida, USA
+4School of Forest, Fisheries, and Geomatics Sciences, University of Florida, Gainesville, Florida, USA
+5Department of Biology, University of Oxford, Oxford, UK
+6Smithsonian Environmental Research Center, Edgewater, Maryland, USA
+7Forest Global Earth Observatory, Smithsonian Tropical Research Institute, Panama City, Panama
+
+Correspondence                         Abstract
+K. C. Cushman                          Light detection and ranging (lidar) technology has fundamentally advanced
+Email: cushmankc@ornl.gov              the way we measure forest structure, facilitating new insights into ecological
+                                       processes. Lidar for forest ecology applications is deployed on multiple types of
+Funding information                    platforms that operate from the ground, air, or space, and each has associated
+European Climate, Infrastructure and   strengths and limitations. Ideally, the choice of what kind of lidar to use in a
+Environment Executive Agency,          particular study should be guided by the ecological question of interest; how-
+Grant/Award Number: 101081177; Oak     ever, practical considerations of cost, data availability, and processing tools can
+Ridge National Laboratory, Laboratory  be equally important. This synthesis is a practical introduction to how different
+Directed Research and Development      lidar platforms characterize forest structure (e.g., tree size/location, wood vol-
+Program, Grant/Award Number:           ume, branching structure, aboveground biomass, leaf properties), designed for a
+DE-AC05-00OR22725; USDA                general audience of ecologists (not remote sensing scientists) seeking an accessi-
+McIntire-Stennis Program; Smithsonian  ble introduction to the use of lidar. We also provide examples of novel ecological
+Equipment Fund; SPEC Lab Internal      insights from recent lidar research and describe current limitations and areas of
+Research Funds                         expected improvement. Last, we include an appendix of data collected from ter-
+                                       restrial, mobile, unoccupied aerial system, airplane, and satellite lidar platforms
+Handling Editor: Sunshine A. Van Bael  within a common temperate forest area, with associated code to allow new lidar
+                                       users to visualize and manipulate data in R.
+
+                                       KEYWORDS
+                                       aboveground biomass, forest ecology, forest structure, lidar, remote sensing,
+                                       structural diversity
+
+This is an open access article under the terms of the Creative Commons Attribution License, which permits use, distribution and reproduction in any medium, provided
+the original work is properly cited.
+
+© 2026 UT-Battelle, LLC. Ecosphere published by Wiley Periodicals LLC on behalf of The Ecological Society of America. This article has been contributed to by U.S.
+Government employees and their work is in the public domain in the USA.
+
+Ecosphere. 2026;17:e70730.                                                  https://onlinelibrary.wiley.com/r/ecs2  1 of 30
+https://doi.org/10.1002/ecs2.70730
+2 of 30                                                                                                                                             CUSHMAN ET AL.  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+INTRODUCTION                                                      each with inherent strengths and limitations. For
+                                                                  researchers seeking to use lidar to quantify forest structure
+Forest structure and function combine to characterize             and change, it is important to understand what kinds of
+features of biodiversity, ecosystem processes, carbon fluxes      lidar data and algorithms are suitable for different tasks,
+and stocks, and habitats (Bohn & Huth, 2017; Shugart              including trade-offs between detail and spatial extent in
+et al., 2010; West et al., 2009). Forest structure refers to the  lidar platforms, and potential biases and uncertainties in
+location, in space, of the aboveground physical material          algorithms. This synthesis is intended to provide a basic
+that comprises a forest: the boles, branches, and leaves of       understanding of how different lidar platforms are used to
+plants that occupy three-dimensional (3D) space, and              characterize forest structure for ecologists who are not
+derived properties including biomass, canopy height, and          remote sensing experts. To accomplish this, our objectives
+gap fraction. Forest function refers to biological processes      are to:
+that continuously change in forests over time, including
+productivity, mortality, and regeneration. Importantly, for-      1. Provide an accessible, non-technical introduction to
+est structure can be an indicator of function, reflecting the         all commonly used lidar platforms.
+age of the forest (Kral et al., 2016), its disturbance regime
+(Jucker, 2022), or its health (Meng et al., 2022). Forest         2. Describe how different types of lidar enable ecological
+structure integrates processes that operate at short time             inference in common aspects of forest structure.
+intervals and are often difficult to measure at relevant
+scales in forests (e.g., xylogenesis, crown damage).              3. Provide examples of ecological insights enabled by
+                                                                      lidar technology.
+    Although forest structure promises a way to infer broad
+ecological processes, the quantification of structure is itself   4. Discuss current limitations and areas of anticipated
+challenging. Traditional ground-based measurements, such              advancement in the use of lidar for plant science.
+as those collected in inventories, are often limited in spatial
+extent (i.e., small samples represent landscapes due to the           As a supplement to this article, we also provide an
+time-intensive measurements) and detail (i.e., generally tree     open-access sample dataset where examples of all com-
+location, diameter, species, and maybe height). For some          mon lidar platforms were used to sample a focal area at
+structural metrics, such as tree height in dense forests,         the Smithsonian Environmental Research Center (SERC),
+ground-based observations can be error-prone (Larjavaara &        including code to perform basic data manipulation and
+Muller-Landau, 2013). For other structural metrics, such as       visualization in R (R Core Team, 2023). These data and
+total branch volume or leaf angle, ground-based observa-          code were used to produce all data figures in this synthe-
+tions can be nearly impossible for an entire tree or require      sis. We anticipate that improvements in the development
+labor-intensive destructive measurements. Remote sensing          and application of lidar systems will further advance forest
+tools are increasingly capable of providing ecologically          structure science, and we hope that this primer enables
+relevant estimates of forest structure that complement            broader participation in lidar research. Key terms throughout
+ground-based approaches. In particular, light detection           this piece are in italics, with definitions provided in Box 1.
+and ranging (lidar) has emerged as a standard for mea-
+suring structure due to its precision, scope, and flexibil-       LIDAR TECHNOLOGY
+ity in deployment (Béland et al., 2019; Guo et al., 2021;
+Lefsky et al., 2002; Lines et al., 2022). Unlike passive optical  All lidar systems function using the same straightforward
+remote sensing methods (e.g., RGB [red­green­blue] or             principle. Lidar instruments emit a laser towards an area
+multispectral imagery), lidar can penetrate the canopy sur-       of interest and record properties of the reflected light to
+face to characterize 3D forest structure. Lidar systems date      estimate the position of reflecting objects. Many sensors
+to the 1960s and use lasers to estimate the distance between      estimate structure using the time of flight for a laser pulse
+the sensor and a reflecting surface, with early applications      to reflect and return to the instrument--because the speed
+including military ranging, meteorology, and ground               of light is known, by measuring the time of flight, lidar
+surface mapping (Nelson, 2013). As lidar technologies             can reconstruct the distance to the reflecting object. Other
+matured, applications also developed in forest ecology            sensors use changes in the phase of reflected light instead
+(Nelson, 2013). Lidar is now deployed on a variety of plat-       of, or in addition to, time of flight (Lenoir et al., 2022).
+forms, from smartphones to satellites (Dubayah et al., 2022;      Lidar instruments can collect up to hundreds of thousands
+Tatsumi et al., 2023), facilitating the study of individual       of measurements per second to create 3D representations
+trees, forest stands, landscapes, and global ecoregions.          of forests. Data from lidar sensors are usually represented
+                                                                  as either point clouds that characterize the ground and
+    As the availability and variety of lidar data increase,       vegetation structure using many individual points in space
+so does the number of tools used to interpret those data,         (i.e., x, y, z coordinates that each integrates surfaces within
+ECOSPHERE  3 of 30                                                                                                    21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+BOX 1 Glossary of key terms
+
+Absolute geolocation accuracy: The quality of geolocation information with respect to a well-defined coordinate
+reference system.
+
+    Angular resolution: The smallest separation between two surfaces, measured as an angle, that can be distin-
+guished by a lidar sensor. In general, higher quality lidar sensors have finer angular resolution (i.e., can distin-
+guish finer features) than lower quality lidar sensors. Angular resolution may differ in the vertical and
+horizontal dimensions.
+
+    Beam divergence: All laser beams have a width, sometimes called the laser footprint. Beam divergence is the
+angle at which the laser beam width increases with distance. Beam divergence is a characteristic important for
+understanding the limitations of different sensors because lidar measurements close to the instrument reflect
+light from a smaller area than measurements far from the sensor (e.g., small beam divergence is needed to char-
+acterize fine features).
+
+    Canopy height model (CHM): A raster (gridded) product that describes the maximum height of trees above
+the ground. CHMs are created by subtracting the ground elevation from a digital terrain model from the abso-
+lute surface height in a digital surface model.
+
+    Digital surface model (DSM): A raster (gridded) product that describes the absolute maximum height of the
+canopy surface in an ecosystem, typically in units of elevation in a known coordinate reference system. The
+DSM height reflects both the height of trees and the elevation of the ground.
+
+    Digital terrain model (DTM): A raster (gridded) product that describes the ground elevation, typically in a
+known coordinate reference system.
+
+    Footprint: The laser footprint refers to the cross-sectional area of a laser beam, which depends on both beam
+divergence and the distance from the lidar instrument.
+
+    Instance segmentation: Instance segmentation is the process of identifying and delineating individual objects
+(e.g., trees) in a dataset (e.g., a lidar point cloud).
+
+    Intensity: The intensity of a lidar measurement is an estimate of the magnitude of reflected energy detected
+by the sensor. Intensity is determined by the reflectance of the reflecting surface in the wavelength of the lidar
+laser, and by observational properties like the distance from the sensor and the incidence angle. Some
+post-processing software accounts for those observational properties to estimate reflectance, in addition to
+intensity.
+
+    Leaf area index/density: The total one-sided amount of leaf area per unit ground area (leaf area index, LAI)
+or per unit volume (leaf area density, LAD).
+
+    Lidar: Light detection and ranging (lidar) is a remote sensing technology that uses lasers to characterize
+three-dimensional (3D) structure of objects (e.g., vegetation and ground) through properties of reflected light.
+
+    Mesh: Meshes use flexible geometries such as triangles to represent surfaces detected with lidar data.
+Meshes can enable volume estimation, visualization, and data size reduction compared to point clouds.
+
+    Occlusion: Occlusion is when objects (e.g., wood, leaves) obstruct the path of lasers such that some areas
+within a scene are not sampled in lidar data. Canopy occlusion is a concern for ground-based lidar platforms
+(terrestrial laser scanning, TLS; mobile laser scanning, MLS), and understory or ground occlusion for air- or
+spaceborne platforms (airborne laser scanning, ALS; unoccupied aerial system laser scanning, ULS; spaceborne
+laser scanning, SLS).
+
+    Plant area index/density: The total one-sided amount of plant area per unit ground area (plant area index,
+PAI) or per unit volume (plant area density, PAD). Unlike leaf area index (LAI)/leaf area density (LAD),
+PAI/PAD do not distinguish between leaf material and non-photosynthetic material.
+
+    Point cloud: Point clouds represent lidar data as a collection of discrete, three-dimensional (3D) coordinates
+in space where surfaces reflect laser energy. In some sensors, a single laser pulse can produce multiple points,
+called multiple returns. Each point in space integrates returned energy from within the laser footprint; where
+the footprint is large compared to reflecting objects, points' positions may not fall along the object surface in
+space. Some sensors collect data as waveforms but process data to point clouds to reduce data size and
+dimensionality.
+
+    Quantitative structure model: Quantitative structure models represent tree woody structure and volume
+using a series of geometric features (e.g., cylinders) fit to lidar point cloud data.
+4 of 30                                                        CUSHMAN ET AL.                                                21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+    Relative geolocation accuracy: The internal consistency of geolocation information within a dataset.
+    Relative height metrics: A simplified representation of waveform lidar data that describes the height below
+which a given percentile of returned lidar data originates. For example, the 50th relative height metrics (often
+called RH50) is the median height of returned energy above the ground.
+    Scan angle: The scan angle of a lidar measurement is the angle between the emitted laser pulse and nadir
+(the vertical direction perpendicular to the ground).
+    Semantic segmentation: Semantic segmentation is the process of assigning object classification labels
+(e.g., wood, leaves, ground) to units of data (e.g., lidar points).
+    Time of flight: Time of flight refers to the time between laser emission and detection of reflected laser energy
+by the lidar sensor. Time of flight lidars use this time, and the known speed of light, to infer the distance to
+reflecting objects. Distance, with the known sensor orientation in space, is then used to characterize
+three-dimensional (3D) positions in space.
+    Voxel: Voxels are rectangular prisms analogous to image pixels--where pixels are two-dimensional
+(2D) units on a plane, voxels are 3D units in space. Some analyses of forest structure estimate a property
+(e.g., leaf area) for all voxels in a scene.
+    Waveform: Waveforms represent lidar data as the distribution of reflected energy detected by the sensor as a
+function of time, where time is related to distance from the sensor. Waveforms are often depicted as continuous
+curves--in practice, lidar sensors sample the detected reflected energy at very fine time intervals to construct
+the waveform.
+
+an area of millimeters--tens of centimeters), or waveforms     differences among platforms. We emphasize that there is
+that represent the vertical variation in reflected light from  also variation in lidar sensor characteristics within a sin-
+the vegetation and ground within a larger area (e.g., a        gle type of platform--some important differences are men-
+25-m diameter sample) (Figure 1a,b; Béland et al., 2019;       tioned here, and we encourage readers to review more
+Guo et al., 2021).                                             technical references before acquiring an instrument to
+                                                               ensure that data are adequate to meet scientific objectives.
+    The variety of lidar sensors used in forest ecology has
+grown in recent years. Some early lidar measurements of        Terrestrial laser scanning
+forest structure used rangefinders designed for large ships
+to detect objects under poor visibility--the Portable          Terrestrial laser scanning (TLS) instruments, sometimes
+Canopy Lidar system simply required walking through a          called ground-based lidar, are usually tripod-mounted,
+forest and pointing such a rangefinder upwards (Parker         with a rotating laser that creates a dense point cloud of
+et al., 2004). Other early efforts characterized the above-    nearby structure. TLS samples are most precise near
+ground structure of trees and forests with airborne sys-       the instrument, capturing details as fine as bark texture
+tems (Reutebuch et al., 2005). Current lidar platforms for     (Rehush et al., 2018). Farther from the instrument,
+forest ecology exist along a spectrum with a trade-off         increasing laser beam size, decreasing sampling density
+between precision and level of detail on one side, and         in space, and occlusion--when objects block lasers from
+data acquisition speed per area on the other (Table 1,         sampling anything behind them--limit structural
+Figure 1e). Smaller lidar instruments can be operated          details that can be resolved in TLS data (Schneider
+from the ground or flown on battery-powered unoccu-            et al., 2019). In some applications, single TLS scans are
+pied aerial systems (UAS, i.e., drones), measuring forest      used to characterize overall stand structure (e.g., gap
+stands to landscapes (Figures 2 and 3) (Disney, 2019;          fraction, plant area index and its vertical variation;
+Kellner et al., 2019). Larger lidar instruments have been      Calders et al., 2023). For applications where occlusion
+deployed on airplanes and satellites including the             can bias results (e.g., measuring individual tree diame-
+International Space Station (ISS), measuring forests at        ters, heights), TLS scans are taken from multiple posi-
+regional or global scales (Dubayah et al., 2022; Wulder        tions in the forest (e.g., Wilkes et al., 2017 recommend a
+et al., 2012).                                                 10-m grid in dense forests, and Maeda et al., 2022 found
+                                                               that a 5-m grid was necessary in very complex tropical
+    Next, we review the most common types of lidar plat-       forests). TLS instruments are available at a wide range
+forms used in forest ecological research, in order from        of prices; more expensive instruments with higher laser
+the highest detail and smallest coverage to the lowest
+detail and widest coverage. This overview is intended to
+provide a broad characterization of the most important
+21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+5 of 30
+
+ECOSPHERE  F I G U R E 1 Legend on next page.
+6 of 30                                                                                            CUSHMAN ET AL.                                                      21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+T A B L E 1 Common light detection and ranging (lidar) platform types, scales of data that can be collected during a single day with good
+weather conditions, and associated data products that can be characterized using data from each platform type.
+
+                                  Stand-based estimates                      Tree-based estimates
+
+Platform  Typical scale  Canopy   LAI       Canopy            DTM     DBH     Tree    QSM    Crown    Leaf
+type       (ha day-1)    height           complexity                         height            size   angle
+                         ()        ()                                        ()        ()
+TLS            0.1­2               b, c      ()                 a      a, e            h, i  ()       ()
+                            a, b                d                              f, g   ()         e     j, k
+                                    m                                                  o, p
+MLS       1­10           ()                                                   ()              ()
+                             l                  n                l     ()    o, p, q           o, p
+ULS       10­1k                    s, t                               l, o,             x
+                                                                        p                      
+ALS       1k­10k            q, r                u              ()     ()      w, q               y
+                                  t, aa                          v    w, p
+                                                                                              ()
+                            r, z  ah, ai        ab            z, ac   ()a       ae            ae, af
+                                                                       ad
+                            ag                  aj            ag, ak
+SLS       >10k
+
+Note: Variation in scale estimates reflect differences among sensors and forest types. Estimates refer to data collection in a day; post-processing and
+analysis require additional time.  = high-quality estimates possible for most trees and ecosystems;  = high-quality estimates possible in
+low-density ecosystems or a subset of trees (i.e., only understory or canopy trees),  = estimates possible for some trees, but typically with lower
+quality. Marks in parentheses () indicate potential variation in these classifications among high-end and low-end systems within each platform type,
+or for ALS datasets with unusually high point density. We provide 1­3 references supporting each classification; references are not meant to be
+exhaustive, but to provide a starting place for readers seeking additional information. a, Brede et al. (2017); b, Armston et al. (2015); c, Béland and
+Kobayashi (2021); d, Penman et al. (2023); e, Terryn et al. (2022); f, Terryn et al. (2024); g, Wardius and Hein (2024); h, Calders et al. (2022); i,
+Gonzalez de Tanago et al. (2018); j, Stovall et al. (2021); k, Jiang et al. (2021); l, Bauwens et al. (2016); m, Reilly (2024); n, Neudam et al. (2022); o,
+Vandendaele et al. (2022); p, Qi et al. (2022); q, Tupinamba-Simões et al. (2025); r, Zhang, Fischer, et al. (2024); s, Rudic et al. (2020); t, Vincent et al.
+(2023); u, Scheeres et al. (2023); v, Stroner et al. (2023); w, Kru° cek et al. (2020); x, Brede et al. (2022); y, Rudge et al. (2021); z, Fischer et al. (2024); aa,
+Detto et al. (2015); ab, Wang, Choi, et al. (2024); ac, Caeanu and Ciubotaru (2021); ad, Jucker et al. (2017); ae, Battison et al. (2024); af, Aubry-Kientz
+et al. (2019); ag, Liu et al. (2021); ah, Tang, Brolly, et al. (2014), Tang, Dubayah, et al. (2014); ai, Liang et al. (2025); aj, de Conto et al. (2024); ak,
+Urbazaev et al. (2022).
+Abbreviations: ALS, airborne laser scanning; DTM, digital terrain model; LAI, leaf area index; MLS, mobile laser scanning; QSM, quantitative structure model;
+SLS, spaceborne laser scanning; TLS, terrestrial laser scanning; ULS, Unoccupied aerial system laser scanning.
+adbh estimated from ALS differs from other platforms in that it is typically indirectly estimated from crown dimensions rather than directly from lidar point clouds.
+
+power (i.e., energy emitted by the lidar per unit time),      (Calders et al., 2020; Disney, 2019; Malhi et al., 2018;
+smaller beam divergence, and higher maximum returns           O'Sullivan et al., 2021).
+per laser pulse (i.e., whether a single laser pulse can cre-
+ate multiple points in a point cloud) can reach longer        Mobile laser scanning
+distances with increased precision (i.e., able to resolve
+small differences in distance/structure, sometimes char-      Mobile laser scanning (MLS) is also ground-based, but
+acterized as angular resolution) and accuracy (i.e., able     point clouds are collected from a moving instrument. In
+to correctly represent forest structure). Several reviews     forests, MLS usually involves an operator carrying a lidar
+cover the use of TLS, specifically, in forest ecology
+
+F I G U R E 1 Data characteristics of light detection and ranging (lidar) data represented as (a) point clouds or (b) waveforms; common
+lidar-derived products describing (c) the canopy and ground height or (d) individual tree woody structure; and (e) an overview of common
+structural metrics that can be estimated with lidar across different scales, shown above the lidar platforms typically used to derive those
+metrics. The lidar platforms named at the bottom of each panel indicate the platforms typically capable of producing that data type. The
+most relevant platform types (ALS, airborne laser scanning; MLS, mobile laser scanning; SLS, spaceborne laser scanning; TLS, terrestrial
+laser scanning; ULS, unoccupied aerial system laser scanning) for each type of data or application are denoted at the bottom of each panel.
+Illustration credit: A. Rosen (original digital art).
+ECOSPHERE  7 of 30                                                                                                                             21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+F I G U R E 2 Side-on view of data collected from a common 80 × 5 m transect with four different discrete return light detection and
+ranging (lidar) platforms: (a) terrestrial laser scanning (TLS), (b) mobile laser scanning (MLS), (c) unoccupied aerial system laser scanning
+(ULS), or (d) airborne laser scanning (ALS) during the growing season of 2021 (2022 for ULS data). Data have been normalized (ground
+height subtracted) using a common digital terrain model based on ALS data.
+
+F I G U R E 3 Pictures of data collection using the (a) terrestrial laser scanning (TLS), (b) mobile laser scanning (MLS), (c) unoccupied
+aerial system laser scanning (ULS) systems used to collect data for Figure 2. Platform and data collection details are provided in
+Appendix S1: Section S1; images here are from locations other than the case study area presented here. Photo credits: (a) P. Samonil,
+(b) H.C. Muller-Landau, and (c) E. Broadbent; also courtesy of (a) B. Kobosilova, (b) L. F. Gomez-Correa, and (c) Todd Bagley.
+8 of 30                                                                                      CUSHMAN ET AL.                              21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+through the understory, but MLS sensors can also be               creating flight paths that follow terrain to collect consis-
+deployed on vehicles (MLS instruments carried by a                tent data within altitude limits in areas with complex
+human operator are also called personal laser scanning,           topography (Ren et al., 2024). Some less expensive ULS
+PLS; Mokros et al., 2021). MLS is a newer technology              instruments lack the power to reach the ground in
+than TLS, and sensors vary widely in price and quality,           dense/tall forest stands, especially if flight altitude must
+from smartphone and tablet sensors with short (<10 m)             be high in areas with complex topography (Table 1).
+ranges to more powerful surveying instruments (D'hont             ULS point clouds can have high scan angles­the angle
+et al., 2024; Tatsumi et al., 2023). Compared to TLS, MLS         of the laser pulse compared to perpendicular from the
+can measure areas in less time (Tatsumi et al., 2023) and         ground­resulting in more points along tree trunks but
+reduce occlusion near the ground from constantly changing         potentially higher position uncertainty (Zhang, Kral,
+viewing angles (Bauwens et al., 2016). However, MLS has           et al., 2024). In open forest stands, UAS has been flown
+lower precision (i.e., the accuracy of x, y, z coordinates) than  below the canopy to collect more data from trunks and
+high-end TLS, including distortions in point cloud data           branches (Chisholm et al., 2021; Liang et al., 2024).
+from uncertainty in the sensor's trajectory geolocation, and
+increased canopy occlusion in common platforms, limiting          Airborne laser scanning
+the ability to reliably measure fine structures such as thin-
+ner branches compared to TLS (D'hont et al., 2024;                Airborne laser scanning (ALS) instruments mounted on
+Hyyppä, Yu, et al., 2020; Mokros et al., 2021; Figures 2 and      airplanes or helicopters were the earliest above-canopy
+4). MLS precision may improve with better computational           lidar systems, originally designed for terrain mapping
+methods (Hyyppä, Kukko, et al., 2020).                            (Reutebuch et al., 2005). ALS remains the most com-
+                                                                  monly used form of lidar due to its historical use in sur-
+Unoccupied aerial system laser scanning                           veying and forestry, with more mature and standardized
+                                                                  tools available compared to other lidar types. ALS data
+Unoccupied aerial system laser scanning (ULS) is increas-         are highly variable and typically are analyzed as either
+ingly common for collecting point clouds over scales from         point cloud or waveform data, although analyses using
+stands to landscapes. ULS platforms flying slowly and             point clouds remain more common (Wulder et al., 2012).
+close to the canopy (typically 10­100 m) can collect point        Sampling density depends on the lidar instrument and
+clouds with up to hundreds or thousands of measurements           flight plan, from less than one to tens or hundreds of
+per square meter, covering tens to hundreds of hectares in        measurements per square meter (Fischer et al., 2025).
+a day (Kellner et al., 2019). Point density depends on flight     Airplanes can collect data over larger areas than UAS,
+design (e.g., altitude; speed; number, spacing, and pattern       covering tens or hundreds of square kilometers in a sin-
+of flight lines) and sensor properties (e.g., measurement         gle day. ALS can also refer to UAS platforms; here we
+rate), and maximum flight time varies widely among plat-          refer to UAS-based lidar as ULS.
+forms, resulting in a range of maximum density/area cov-
+ered among ULS systems. For all systems, flight design            Spaceborne laser scanning
+faces a trade-off between point density and area covered.
+Flight design can be restricted by local regulations              Spaceborne laser scanning (SLS) has been included on satel-
+governing maximum flight altitude or requirements to              lite missions in the last 20 years, allowing widespread
+maintain line-of-sight with the UAS; tools can assist in
+
+         a. TLS                                                   b. MLS  c. ULS (leaf off)
+
+                          20 cm
+
+F I G U R E 4 A 3-cm thick cross-section through a tree trunk in (a) terrestrial laser scanning (TLS), (b) mobile laser scanning (MLS),
+(c) unoccupied aerial system laser scanning (ULS) data. The cross-section was taken approximately 30 cm above the ground. The ULS data
+are from leaf-off conditions as no clear trunks are apparent in leaf-on data (Figure 2; Appendix S1: Figure S1).
+ECOSPHERE                                                      9 of 30                                                                         21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+measurement of terrain and vegetation height from              More information on SLS sampling is provided in Box 2
+space. In all lidar platforms, laser pulse diameter, or foot-  (Figure 6). In addition to the full shape of the waveform
+print, increases with distance due to a phenomenon             for ICESat/GEDI SLS data (and ALS waveform data),
+called beam divergence. By the time SLS lasers reach the       waveforms can also be described by simplified relative
+Earth surface, their diameter is large, from approximately     height metrics describing the height from below which a
+12 m on the Ice, Cloud, and land Elevation Satellite-2         percentile of the total reflected energy originates
+(ICESat-2) to approximately 25 m on the Global Ecosystems      (Blair & Hofton, 1999; Duncanson et al., 2022).
+Dynamics Investigation (GEDI) and approximately 70 m on
+ICESat (Dubayah et al., 2022; Neuenschwander et al., 2008;     Accuracy
+Neuenschwander & Magruder, 2019). ICESat and GEDI
+produce a waveform within each footprint (Figure 1b),          Along with the effects of occlusion discussed for each
+while ICESat-2 uses a less common photon-counting              platform type and depicted in Figure 1a, geolocation
+detector (Neuenschwander & Pitts, 2019). SLS platforms         is also fundamental to the accuracy of lidar data.
+use a sampling approach where individual measure-              Geolocation accuracy refers to the fidelity of location
+ments can be separated by large spaces (Figure 5); SLS         data either relative to other measurements in a
+data are also more affected by clouds than closer range        scan (relative geolocation accuracy) or with respect to
+platforms that are typically operated under cloud layers       position in a geographic coordinate system (i.e., lati-
+(ULS and ALS data can also be affected by clouds,              tude/longitude or Universal Transverse Mercator
+depending on the flight altitude and local conditions).
+
+F I G U R E 5 Availability of Global Ecosystem Dynamics Investigation (GEDI) samples over the Smithsonian Environmental Research
+Center from the initial deployment of GEDI on the International Space Station from 2019 to 2023. Points show the location of samples but
+are not drawn to the scale of GEDI footprint diameters. Data are progressively filtered using GEDI's data quality flags from (a) all data, to
+(b) good-quality data, to (c) good-quality leaf-on (growing season) data, to (d) only good-quality leaf-on data from 2021.
+10 of 30                                                              CUSHMAN ET AL.                                                21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+BOX 2 Lidar sampling from space
+
+Spaceborne laser scanning (SLS) data are different from other lidar types presented here in important ways.
+While other platforms collect wall-to-wall data that completely cover the sampled area (besides occlusion),
+existing SLS instruments are sampling platforms, observing a subset of the Earth's surface. For example, Global
+Ecosystems Dynamics Investigation (GEDI) collects measurements along eight tracks, with 60 m separating
+waveforms along the same track, and 600 m between adjacent tracks. The spatial distribution of GEDI tracks is
+also influenced by the altitude and path of the International Space Station (ISS). Because SLS instruments are
+above the atmosphere and clouds absorb light in the wavelengths of SLS lasers, clouds reduce data quality and
+availability in some areas (Potapov et al., 2021). Geolocation accuracy for SLS footprints can also complicate
+comparison to other high-resolution datasets or analyses of change over time (Roy et al., 2021)­for example,
+the Version 1 geolocation accuracy for GEDI footprints is 10 m (Luthcke et al., 2019), but is expected to
+improve in future versions. SLS is undoubtedly a powerful tool to quantify forest structure over broad scales,
+however, due to these sampling and quality considerations, there is a limit to the spatial and temporal scales
+that can be reliably resolved with SLS data. Robust characterization of these limits is an area of ongoing
+research.
+
+    To illustrate this issue, we present data from the initial approximately 4-year deployment of GEDI on the
+ISS. During that time, GEDI collected 33,239 samples over the 109 km2 Smithsonian Environmental Research
+Center (SERC) NEON site (Figure 5). Of those, 41% (13,670) samples were classified as high quality according
+to the GEDI level 2A quality flag, and 13% (4247) were high quality and collected during the growing season,
+for which biomass and leaf area models were developed. In 1 ha of the SERC plot containing the transect
+shown in Figure 2, GEDI collected six waveforms, including two high quality waveforms (Figure 6,
+Appendix S1: Figure S2). This example demonstrates the strength of GEDI for characterizing structure and
+structural variability at the landscape level, and potential limitations for characterizing structure and structural
+change over individual small plots. The next generation of SLS platforms will likely have even higher potential
+to cover the Earth's surface at high spatial and temporal resolution. For example, a proposed SLS mission called
+the Earth Dynamics Geodetic Explorer (EDGE) would collect nearly wall-to-wall data (NewsGram 2024).
+
+F I G U R E 6 (a) Example of full Global Ecosystem Dynamics           example in Figure 4, relative geolocation accuracy reflects
+Investigation (GEDI) waveform and (b) unoccupied aerial system        whether the lidar points correctly describe the surface/
+laser scanning (ULS) light detection and ranging (lidar) point cloud  shape of the tree trunk whereas absolute geolocation accu-
+corresponding to a GEDI footprint location in the Smithsonian         racy reflects whether the tree's overall position is known.
+Environmental Research Center ForestGEO plot. Horizontal blue
+lines show the location of the ground and top of the canopy for the       Relative geolocation accuracy is influenced by sen-
+GEDI waveform.                                                        sor properties, such as beam divergence and the algo-
+                                                                      rithms used to create data products from the raw signal
+(U; absolute geolocation accuracy). High relative and                 of reflected energy, and for MLS/ULS/ALS/SLS by the
+absolute accuracy are both important to inference in                  quality of Inertial Measurement Units (IMU; IMUs are
+different ways (Popescu & Iordan, 2016). Using the                    often integrated with GPS for moving platforms to describe
+                                                                      3D acceleration and position; Dreier et al., 2021). Relative
+                                                                      geolocation accuracy is often assessed by comparing the
+                                                                      consistency of forest structure among overlapping measure-
+                                                                      ments (e.g., from different flight lines in ULS/ALS data, or
+                                                                      overlapping waveforms in SLS data; Hofton et al., 2002;
+                                                                      Latypov, 2002), and/or by comparing data to well-known
+                                                                      reference objects in a lidar scene such as flat surfaces
+                                                                      (Dreier et al., 2021). Real-time kinematic correction (RTK),
+                                                                      post-processed kinematic correction (PPK), and precise
+                                                                      point positioning (PPP) trajectory processing can all
+                                                                      improve relative geolocation accuracy using a separate
+                                                                      GPS base station, when post-processing software is com-
+                                                                      patible (Pöppl et al., 2023).
+ECOSPHERE                                                      11 of 30                                                       21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+    Absolute geolocation accuracy is determined by the         estimates from ULS or ALS can be underestimated if the
+quality of associated GPS sensors--some TLS or MLS sys-        ground is not accurately measured due to understory
+tems have no built-in GPS, and when present the accu-          occlusion (Gatziolis et al., 2010).
+racy of GPS sensors varies widely. Absolute accuracy is
+characterized by comparing lidar positions to an indepen-          A true strength of lidar is the ability to quantify 3D
+dent well-known reference like a professional ground ele-      characteristics that are not possible from traditional
+vation survey (Hofton et al., 2002) or a different lidar       inventory observations. Two notable examples are wood
+sensor of known accuracy (Dreier et al., 2021). For sen-       volume/topology and crown geometry. Models of wood
+sors with a GPS, RTK, PPK, or PPP can also improve             volume are fit to high-quality TLS wood point clouds
+absolute geolocation accuracy (Alkan et al., 2020); how-       (i.e., no leaf points), either as meshes with flexible geome-
+ever, not all sensors/software have this capability.           try to describe the wood surface or as quantitative struc-
+                                                               ture models (QSMs) that use fixed geometries such as
+CHARACTERIZING FOREST                                          cylinders to approximate tree shape and topology
+STRUCTURE WITH LIDAR                                           (e.g., branch orders and connections in 3D space; Disney
+                                                               et al., 2018; Hartley et al., 2024; Raumonen et al., 2013;
+Tree size and mapping                                          Yang, Wilkes, et al., 2024; Figure 1d). Meshes can be
+                                                               more accurate for irregular shapes but have high data
+The size and location of trees are foundational measure-       quality requirements and computational cost. QSMs have
+ments for understanding stand structure and develop-           also been created from ULS and MLS data (Brede
+ment, habitat, and carbon storage. For at least 170 years,     et al., 2022; Qi et al., 2022; Ye et al., 2019), but further
+forest inventory plots have been the standard method to        work is needed to characterize the accuracy of this
+characterize tree size and position (Sebkova et al., 2011).    approach with different sensors and forest types. In addi-
+Lidar point clouds are increasingly used to complement         tion to realistic representations of wood volume/topology,
+traditional approaches.                                        a number of more abstracted crown structural variables
+                                                               can be estimated from individual tree point clouds, such
+    The diameter at breast height (dbh), usually collected     as crown depth and width, height of the crown base,
+with diameter measurement tape or calipers, has long           crown shape, convex and concave hull, centroid, sur-
+been the key metric representing individual tree structure     face area, volume, projected area, volume of crown
+in forest plots. It is also derivable from TLS, MLS, or ULS    intersections, and others (Bayer et al., 2013; Cardenas
+point clouds using a narrow slice of the stem                  et al., 2022; Kru° cek et al., 2019; Trochta et al., 2017).
+(e.g., 3­10 cm, Figure 4), using one of various algorithms     Compared to QSMs, these metrics are less dependent
+that fit circles to stem points and remove noise/outliers      on high precision data and are therefore accessible
+(Olofsson et al., 2014; Trochta et al., 2017), or by fitting   with TLS, MLS, ULS, and ALS point clouds. ALS mea-
+non-circular shapes that are more comparable to man-           surements are limited to canopy trees or structurally
+ual measurements (Wardius & Hein, 2024; You                    simple forests (Cao et al., 2023), and metrics describing
+et al., 2016). Like any measurement, the accuracy of           the entire crown volume require point density higher
+lidar-based dbh depends on data quality in addition to         than typically collected.
+algorithm choice. Results from high-quality TLS with
+high point density and point accuracy can be comparable            Another important feature of lidar instruments is the
+to field measurements (which are themselves subject to         collection of spatially explicit 3D information. Lidar sur-
+uncertainty), but noisy data, low point density, and occlu-    veys can be designed to achieve near-complete sampling
+sion can cause bias, particularly for understory trees in      of forest stands (Zhang, Kral, et al., 2024). By knowing
+ULS data (Bruggisser et al., 2020; Ravaglia et al., 2019).     the size and 3D location of trees in forests, lidar is useful
+                                                               for higher-level ecological inference such as community
+    Tree height is another straightforward size metric deriv-  competition or facilitation (Metz et al., 2013), canopy
+able from TLS, MLS, ULS, and ALS lidar point clouds.           space occupancy by different tree species and sizes (Hess
+Height is usually calculated as the total height difference    et al., 2018), and crown asymmetry and neighbor avoid-
+between the tallest and lowest points within a tree, or as     ance as an effect of aboveground competition for light
+the longest distance between two points within a tree (also    and space (Kru° cek et al., 2019; Seidel et al., 2011).
+called tree length; Trochta et al., 2017). Ground-based
+TLS and MLS can underestimate tree heights due to                  All tree-level measurements discussed here face a
+sparse sampling of tree tops, especially in leaf-on states     common challenge of accurate instance segmentation,
+(Figure 2). In contrast, above-canopy ULS or ALS plat-         which refers to dividing a single large point cloud of a
+forms sample the canopy surface well, but tree height          forest into separate point clouds for each individual tree.
+                                                               Automatic segmentation algorithms are developing rap-
+                                                               idly for TLS, MLS, ULS, and ALS (Ferraz et al., 2020;
+12 of 30                                                         CUSHMAN ET AL.                                                      21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+Lowe & Pinskier, 2022; Lowe & Stepanas, 2021; Wielgosz           density without the need for diameter or diameter-height
+et al., 2023, 2024; Wilkes et al., 2023), but currently have     based allometries (Calders et al., 2022). QSMs generally
+limitations, particularly in dense systems that do not           reduce tree-level biomass uncertainty compared to allome-
+have fully deciduous states like moist tropical forests.         tries, especially for large trees for which allometries are par-
+Manual segmentation, including the benchmarking needed           ticularly uncertain and bias in QSM small branch
+to support automated segmentation algorithm development          reconstruction does not significantly affect volume
+and use, is time intensive and can be a bottleneck in            (Brede et al., 2022; Burt et al., 2020, 2021; Demol
+lidar-based studies of individual trees. See recent references   et al., 2022; Disney et al., 2019; Gonzalez de Tanago
+for more detailed comparison of different segmentation           et al., 2018; Qi et al., 2022; Ruhan et al., 2023; Vandendaele
+approaches (Cao et al., 2023; Straker et al., 2023; Wielgosz     et al., 2024). Like allometric estimates, QSM biomass accu-
+et al., 2024). While lidar provides clear advantages over typi-  racy is affected by wood density variation--density is often
+cal visual remote sensing platforms in penetrating canopy        retrieved from a database (Chave et al., 2006; Kattge
+layers, occlusion limits the accuracy of upper canopy            et al., 2020) but can vary within species and trees (Demol
+instance segmentation in TLS and MLS data, and the accu-         et al., 2021; Sarmiento et al., 2011). Other tree-based
+racy of detection/segmentation of understory trees in ULS        approaches with TLS, MLS, ULS, or ALS use simpler
+and ALS data (Cao et al., 2023; Fraser et al., 2025; Hamraz      descriptors such as trunk diameter, crown shape/size, or
+et al., 2017; Kru° cek et al., 2020; Muhojoki et al., 2024).     tree height (Battison et al., 2024; Dalponte et al., 2016;
+Fusion of above- and below-canopy lidar sensors can help         Jucker et al., 2017; Kru° cek et al., 2020; Stovall et al., 2017),
+overcome this limitation to characterize all layers in a forest  mirroring traditional forest field inventory methods. In
+(Zhang et al., 2025). Some approaches bypass the need for        some workflows, height or crown size descriptors are
+explicit segmentation to estimate stand-level tree size distri-  used to predict tree diameter in an intermediate step
+butions (Stark et al., 2015) or community diameter-height        before biomass estimation, leveraging existing
+allometries (Fischer et al., 2020).                              diameter-biomass allometries (Jucker et al., 2017). As
+                                                                 described above, all tree-based approaches are limited by
+    In addition to instance segmentation, wood volume            challenges of instance segmentation and occlusion
+models for lidar data collected when leaves are present          (Hamraz et al., 2017).
+often require semantic segmentation, the classification of
+points within a point cloud to differentiate object types            Area-based approaches use lidar-derived metrics that
+(for this application, leaves vs. wood). Multiple semantic       describe forest structure averaged over a forest stand
+segmentation algorithms exist for TLS and MLS data,              (e.g., in hundreds of square meters) to predict biomass
+including recent efforts using artificial neural networks        (Scaranello et al., 2019; Wulder et al., 2012). These models
+and machine learning (Arrizza et al., 2024; Krisanski            are most common for ULS, ALS, or SLS data, and are usu-
+et al., 2021; Shen et al., 2024). Importantly, these algo-       ally created by comparing lidar metrics with biomass esti-
+rithms have variable performance, which can influence            mated from inventory plots (Gregoire et al., 2016; White
+derived wood volume model quality (Chen et al., 2025).           et al., 2013). Common lidar metrics for biomass estimation
+                                                                 include mean and percentiles of the lidar data height dis-
+Tree volume, aboveground biomass, and                            tribution, canopy cover (often the percent of an area with
+deadwood                                                         height above a threshold), and metrics related to canopy
+                                                                 density like penetration rates (Fatoyinbo et al., 2021;
+Estimating forest biomass has become a critical goal in          Næsset, 2002; Vastaranta et al., 2014). Metrics can either
+assessing and predicting how environmental, biogeo-              be calculated from derived products such as gridded can-
+graphic, and anthropogenic factors influence the global          opy height models (CHMs, the difference between a digital
+carbon cycle. Broadly, lidar data indicate the volume of         surface model describing absolute canopy elevation and a
+aboveground material in forests and can be used to esti-         digital terrain model describing the ground elevation;
+mate the aboveground biomass of living trees and dead-           Figure 1c), or directly from lidar data represented as point
+wood (Disney et al., 2019; Dubayah et al., 2022; Marchi          clouds or waveforms. CHMs are generally more consistent
+et al., 2018; Wulder et al., 2012). However, this requires       across platforms than metrics derived directly from point
+algorithms and interpretation to quantify biomass from           clouds, and recent work provides recommendations for
+lidar. Methods to derive forest biomass from lidar can be        robust CHM estimation from ULS and ALS (Fischer
+divided broadly into tree- or area-based approaches.             et al., 2024). For GEDI SLS data, models were developed
+                                                                 to predict biomass for individual waveforms from relative
+    In tree-based approaches, biomass is estimated from          height metrics (Duncanson et al., 2022). Biomass products
+segmented point clouds of individual trees. Biomass can be       are available for each waveform, and in a gridded format
+calculated from QSMs as the product of wood volume and           that uses hybrid inference to predict biomass from
+ECOSPHERE                                                                                                                                                     13 of 30  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+multiple waveforms within 1-km2 pixels (Dubayah                 difficult to characterize due to large tree stature, high spa-
+et al., 2022; Patterson et al., 2019). Notable causes of error  tial heterogeneity, and complex structures of branches and
+or uncertainty in area-based approaches are poor ground         leaves. Direct measurement of leaves is time-consuming
+characterization (e.g., no apparent ground signal, or mistak-   and logistically challenging, and indirect measurements
+ing low vegetation for ground in dense systems) which           such as hemispherical images or canopy analyzers are
+translates to inaccurate estimates of height (Goulden           influenced by a number of factors including viewing
+et al., 2017), geolocation errors in either lidar or inven-     angle, light conditions, occlusion, and the difficulty of
+tory data (Hernandez-Stefanoni et al., 2018), and spatial       distinguishing leaf and non-leaf material (Bréda, 2003).
+autocorrelation in model error (Cushman et al., 2023).          Lidar platforms provide another indirect method for esti-
+                                                                mating leaf area and structural properties, and can offer
+    Besides QSMs, all lidar biomass estimation approaches       advantages over other indirect approaches due to the
+rely on allometric equations and are therefore limited by       potential for measuring large areas with active penetration
+allometry quality and representativeness (Clark &               through the canopy and rapid sampling from multiple
+Kellner, 2012; Næsset & Gobakken, 2008). Historically,          angles (Calders et al., 2018).
+allometries were developed using destructively harvested
+and weighed trees and are biased towards smaller trees              Many lidar-based estimates of leaf area use a model
+that are easier to harvest (Burt et al., 2020). Because most    to describe how leaves affect the amount of laser energy
+biomass is stored in large trees (Lutz et al., 2018), this      that is reflected versus transmitted through the canopy
+can bias data used to train lidar models and therefore          (Parker, 2020). Algorithms exist to separate point clouds
+lidar-based biomass estimates. QSMs from high-precision         into points from leaves and wood (Tian & Li, 2022; Xi
+TLS data can estimate large tree biomass with reduced           et al., 2023). In dense forests, these are error-prone even
+bias (Burt et al., 2021; Demol et al., 2022), which will not    for high resolution TLS data, but in structurally simpler
+only improve biomass estimates at the small scales mea-         systems fusion with RGB imagery is a promising develop-
+surable with TLS but can also improve large-scale               ment to improve leaf classification (Norberto et al., 2024).
+area-based biomass estimates by using QSMs to refine or         However, most leaf area estimates from lidar do not
+bypass allometric equations (Calders et al., 2022; Demol        inherently distinguish between leaf and wood material;
+et al., 2024; Stovall et al., 2018).                            such estimates are generally referred to as plant area
+                                                                index (PAI, per unit ground) or plant area density (PAD,
+    Lidar structural metrics used to estimate                   per unit volume) which include the surface area of both
+biomass­usually related to wood volume (QSMs) or                leaves and wood, as opposed to leaf area index (LAI, per
+forest height (area-based or SLS metrics)­generally do not      unit ground) or leaf area density (LAD, per unit volume)
+inherently distinguish between living trees and dead trees.     which refer to only the area of leaves (Fang et al., 2019).
+However, there is potential to predict the proportion of liv-   Some methods have been developed for both TLS and
+ing and dead aboveground biomass using lidar (Marchi            ALS/ULS to estimate LAI by accounting for the proportion
+et al., 2018). For example, plots with higher proportions of    of wood to total area (Ma et al., 2016; Zhu et al., 2020); here,
+deadwood can have higher variability of lidar-derived can-      we use the term leaf area generally to reflect methods that
+opy height (Bater et al., 2009), or lower average lidar data    could be used to characterize PAI, PAD, LAI, or LAD
+intensity (a measure of how much laser energy is reflected      depending on further processing of results. Multiple leaf
+by a surface) because leaves have higher reflectance than       area algorithms exist for TLS (Béland & Kobayashi, 2021;
+deadwood in near-infrared wavelengths (Kim et al., 2009).       Calders et al., 2018), ALS/ULS (Almeida et al., 2019; Detto
+Machine learning methods can also identify fallen dead-         et al., 2015; Kamoske et al., 2019), and SLS (García et al.,
+wood from high-resolution TLS or ULS data (Shokirov             2012; Luo et al., 2013; Tang, Brolly, et al., 2014; Tang,
+et al., 2021). Importantly, these methods have variable per-    Dubayah, et al., 2014) that essentially expand the classic
+formance among forest types and are unlikely to general-        field sampling framework introduced by MacArthur
+ize well across ecosystems and lidar data types, requiring      and Horn (MacArthur & Horn, 1969), or the Beer­Lambert
+ground observations for model calibration and validation        law that describes how materials absorb light and allows
+(Maltamo et al., 2014).                                         leaf area estimation through characterization of gap
+                                                                fraction (Shabanov & Gastellu-Etchegorry, 2018; Wang &
+Leaves                                                          Fang, 2020). ALS, ULS, and SLS leaf area estimates are pos-
+                                                                sible at the resolution of forest stands, while denser TLS
+The amount, arrangement, and dynamics of leaves in for-         data allow voxelized estimates at smaller scales (1 m3, a
+ests reflect ecological processes including trees' photosyn-    voxel is a 3D pixel; Béland et al., 2011). Important consider-
+thetic capacity, light capture, transpiration, and phenology    ations that influence leaf area estimation from lidar are sen-
+(Parker, 2020). The total leaf area of a tree or forest is      sor characteristics such as laser beam diameter and power
+14 of 30                                                                     CUSHMAN ET AL.                                        21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+(Kamoske et al., 2019; Shao et al., 2019), the choice of         Validation
+voxel size, vegetation clumping (Jiang et al., 2022; Zhao
+et al., 2012), and leaf angle distributions (Yin et al., 2022).  Fundamentally, lidar sensors measure reflected laser
+                                                                 energy, and all lidar-based methods to measure forest
+    Leaf angle distributions, in turn, can also be estimated     structure are derived estimates that require indepen-
+from TLS. Some algorithms calculate the angle of the sur-        dent reference data for calibration, validation, and
+face around groups of lidar points (Stovall et al., 2021;        uncertainty estimation. For example: TLS-derived estimates
+Vicari et al., 2019), requiring good leaf representation in      of biomass from QSMs can be compared with destructively
+high-density data without wind interference, while others        harvested trees to understand how factors such as occlusion,
+use probabilistic methods that jointly solve for leaf area       sampling density, and footprint size influence the accuracy of
+and angle distributions (Zhao et al., 2015).                     volume estimates (Gonzalez de Tanago et al., 2018; Morhart
+                                                                 et al., 2024); area-based biomass estimates (including large
+Structural diversity                                             footprint ALS/SLS) are usually calibrated using forest inven-
+                                                                 tory plot measurements of diameter, species, and sometimes
+Ecologists have long been interested in the relationship         height (Asner & Mascaro, 2014; Cushman et al., 2023;
+between biodiversity and ecosystem functioning, and for-         Duncanson et al., 2022); and ground-based indirect leaf area
+est ecosystem research has expanded this idea to include         estimates (e.g., hemispherical photos, plant canopy analyzers)
+structural diversity (Atkins et al., 2023). Structural diver-    are useful for calibration and validation of lidar-derived esti-
+sity is defined as the total volume occupied by organisms,       mates (Hopkinson et al., 2013; Rudic et al., 2020; Tang, Brolly,
+the spatial arrangement of biological components within          et al., 2014; Tang, Dubayah, et al., 2014).
+that volume, and the traits of those components (LaRue
+et al., 2023). Structural diversity is expected to be ecologi-       Whether or not independent reference data is
+cally relevant because it reflects physical niche space          needed for calibration or validation is an important con-
+related to trees' access to resources and exposure to distur-    sideration for any lidar study, depending on factors such
+bance (LaRue et al., 2023). In addition to trees, structural     as whether the method has been validated for a specific
+diversity also creates micro habitats influencing the type       sensor (especially for new or lower-cost TLS/MLS/ULS,
+and densities of other organisms that inhabit forests. For       which may be compared to a known reliable sensor;
+example, birds use physical properties of forest structure       Brede et al., 2022; Stovall & Atkins, 2021), or in a spe-
+for nesting, foraging, or safety (Dehaudt et al., 2024;          cific ecosystem type (Zolkos et al., 2013). In some cases,
+McNeil et al., 2023). The idea of structural diversity pre-      even within an ecosystem type, the relationship between
+dates lidar, but lidar has spurred a renewed interest in this    lidar-derived metrics and biomass can vary among sites
+topic because it allows efficient measurement of structure       (Asner & Mascaro, 2014; Cushman et al., 2023). This
+across scales (de Conto et al., 2024; Rosen et al., 2024).       can be important for understanding uncertainty in
+                                                                 global products from SLS, which often have an uneven
+    Like other axes of diversity, structural diversity can be    distribution of calibration/validation data (Kellner
+assessed using a suite of metrics. Plot-level metrics from dis-  et al., 2022). A number of recent benchmarking datasets will
+crete return TLS, MLS, ULS, or ALS can broadly be catego-        facilitate the development and validation of new methods
+rized into four groups describing canopy openness/gaps,          without time-consuming production of new validation
+mean canopy height, spatial heterogeneity of canopy height,      data, including for instance and semantic segmentation in
+or vertical heterogeneity of vegetation or leaf area density     TLS and ULS (Cherlet et al., 2026; Laino et al., 2026; Puliti
+(LaRue et al., 2019). Some metrics are calculated from           et al., 2023), and tree species classification in TLS (Puliti
+derived lidar products (e.g., CHMs, leaf area), while others     et al., 2025).
+are calculated directly from lidar points or pulses (Atkins,
+Bohrer, et al., 2018). TLS allows more detailed measurement      ECOLOGICAL INSIGHTS
+of within-canopy metrics, including individual trunk or          FROM LIDAR
+branch structure (Hildebrand et al., 2021), while ALS facili-
+tates measurement over larger scales. Waveform lidar is          The increasing availability of lidar platforms and data
+well-suited to measure metrics related to canopy height or       has led valuable contributions to our understanding of
+vertical heterogeneity. SLS products from GEDI include a         forest ecology. Recent lidar studies are too numerous to
+measure of foliage height diversity (Dubayah et al., 2021;       exhaustively review, but here we highlight notable areas
+Schneider et al., 2020), and a Waveform Structural               where lidar is uniquely poised to provide insight into for-
+Complexity Index encompassing vertical and horizontal            est ecology.
+structural diversity (de Conto et al., 2024).
+ECOSPHERE                                                                                                                                                      15 of 30  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+Wood volume and carbon stocks                                    tallest trees among communities (Gorgens et al., 2021).
+                                                                 GEDI SLS enabled a similar global study of tropical tree
+Wood volume estimates from TLS reveal that tree-level            height, demonstrating the influence of climate, soils, and
+structural variation can bias biomass estimates derived          topography on canopy height (Liu et al., 2025).
+from standard allometric models. For example, many
+national forest inventories rely on allometries, an              Forest productivity
+approach that underestimates carbon sequestration in
+both United Kingdom forests and African miombo                   Structure from lidar also provides insight into patterns of
+woodlands due to systematic differences between trees            forest productivity. In temperate forests, structural
+used to develop allometries and typical trees in those           diversity is a better predictor of woody productivity than
+regions (Calders et al., 2022; Demol et al., 2024). In           total plant area or species diversity (Gough et al., 2019;
+tropical forests, both liana infestation and edge effects        LaRue et al., 2019), likely driven by increased light
+reduce tree biomass (Blanchard et al., 2023; Cao et al., 2025;   absorption in structurally diverse stands (Atkins, Fahey,
+Krishna Moorthy et al., 2020; Nunes et al., 2023; Ordway &       et al., 2018). In tropical forests, vertical leaf area and
+Asner, 2020), resulting in biomass overestimation using for-     light absorption profiles from ALS predict tree size dis-
+est inventories if allometric models were not developed with     tributions, size-specific demographic rates, and above-
+trees representing those conditions. TLS offers an important     ground productivity among plots and sites (Cushman &
+path forward for refining allometries that are necessary for     Kellner, 2019; Stark et al., 2012, 2015). Among tropical
+leveraging historical inventory data, and for calibration/       and temperate forests, the 3D distribution of leaves is
+validation of larger scale lidar models (Stovall et al., 2018).  more important than leaf optical properties (related to
+                                                                 pigment concentrations and physical properties like
+    Notwithstanding allometric uncertainties, ALS and            thickness) for explaining light availability within a for-
+SLS are instrumental for understanding how land use              est (Kükenbrink et al., 2021). Combined with seasonal
+influences forest carbon stocks over broad spatial scales.       changes of solar geometry, variation in light availability
+For example, logging and fire across the Amazon signifi-         through the canopy alters stand-level light use efficiency
+cantly reduce forest biomass, and these reductions can per-      (Morton et al., 2016).
+sist for decades (Longo et al., 2016; Sato et al., 2016). In
+the Amazonian Arc of Deforestation, these kinds of degra-        Leaf phenology
+dation caused more recent biomass loss than clear-cutting
+(Csillik et al., 2024). Another recent study used GEDI           Lidar time series data are well-suited for characterizing
+to show that global tropical forest degradation is more          leaf phenology. Multi-temporal lidar indicates that under-
+prevalent than previous estimates (Bourgoin et al., 2024).       story and canopy leaves have asynchronous phenology
+Lidar can also evaluate policies to protect forest carbon        in Amazonian forests, indicating that understory plants
+emissions­comparisons inside and outside protected areas         can capitalize on increased light availability when canopy
+indicate these areas are effective at preventing biomass         trees have lower leaf area (Oliveira & Zhang, 2025; Smith
+loss from land use (Duncanson et al., 2023).                     et al., 2019; Tang & Dubayah, 2017). Lidar time series
+                                                                 across temperate forest sites revealed differences in spring
+Tree architecture                                                phenology associated with species variation and demon-
+                                                                 strated biases in optical satellite phenology products
+Individual tree data from TLS reveal how a tree's envi-          (Calders, Schenkels, et al., 2015). A recent effort, StrucNet,
+ronment shapes its architecture. In experimental diver-          established a standardized protocol for monitoring struc-
+sity plots, trees in more diverse stands have increased          ture using TLS and will allow widespread comparison of
+crown and branch complementarity in space, and                   phenology among sites (Calders et al., 2023).
+increased allocation to branches, potentially promoting
+light capture and productivity (Hildebrand et al., 2021;         Disturbance and recovery
+Kunz et al., 2019). Similar changes in branch allocation
+and architecture drive biomass overyielding in a tropical        Changing disturbance regimes have important conse-
+forest diversity experiment (Guillemot et al., 2020).            quences for forest carbon dynamics, and lidar time
+Differences in crown shape and branch allocation also            series are also a powerful tool for studying disturbances.
+influence vulnerability to damage from wind (Jackson,            ALS/ULS can reveal tree-level patterns, such as increased
+Shenkin, Kalyan, et al., 2019). At larger spatial scales,
+ALS samples across the Amazon demonstrated that dis-
+turbance and resource availability limit the height of the
+16 of 30                                                          CUSHMAN ET AL.                                                  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+vulnerability to drought in tall trees of conifer-dominated       ecological uncertainties that can be reduced by increased
+forests of the western United States (Stovall et al., 2019) or    data availability, limitations that will be largely overcome
+drought-induced increases in both sublethal branch loss and       by increasing computational power and more advanced
+canopy mortality in tropical forests (Leitold et al., 2018), and  algorithms, and fundamental problems that may not be
+stand-level biomass dynamics, such as substantial biomass         solvable. As the community continues to invest in
+loss from even small windthrow events in tropical forests         lidar-based research and promises certain results, the pit-
+(Cushman et al., 2021). As the volume of data from GEDI           falls and potential of research goals should be explicitly
+increases, SLS can also reveal disturbance dynamics               addressed. Here we discuss some of the most apparent
+over broad areas, such as across the Amazon basin                 challenges and discuss how they might be overcome
+(Holcomb et al., 2024). Terrestrial lidar can also track          (or not).
+the fate of deadwood following disturbance events,
+demonstrating that species vary in the decay rates of             Instrument cost and quality
+standing dead trees, with consequences for carbon
+emissions following large mortality events (Putman                Different lidar instruments operate over vastly different
+et al., 2018).                                                    scales (Table 1), and all methods of lidar collection have
+                                                                  costs in terms of time and money. Ecological questions of
+Biodiversity and habitat                                          interest should be the primary determinant of which kind
+                                                                  of instrument to use, but cost constraints are an unavoid-
+By capturing 3D metrics like canopy height and cover,             able reality. Increased commercial availability and reduced
+vertical stratification, and horizontal heterogeneity, lidar      cost of instruments make new lidar collections with TLS,
+allows ecologists to use vegetation structure to predict          MLS, and ULS, in particular, more widely accessible.
+species diversity of other taxa (Acebes et al., 2021).            Importantly, researchers purchasing TLS, MLS, or ULS
+Compared to traditional structural metrics, 3D metrics            instrumentation are currently faced with a variety of com-
+from lidar directly relate to levels and variability of can-      mercial options across a range of prices. Less expensive
+opy and surface irradiance (Kükenbrink et al., 2021;              systems, in general, suffer a trade-off with data quality due
+Zhao et al., 2024), providing light to vascular plants, heat      to factors including laser power, beam divergence, and
+to arthropods, and enabling trophic cascades such as phy-         on-board signal processing. These factors mean that not
+tophagous insects and mites feeding on light-demanding            all sensors are capable of the high point coverage and pre-
+tree species (Brändle & Brandl, 2001; Zeller et al., 2023).       cision needed for some applications, like QSM generation.
+Insights from lidar studies in this area have included            Differences among instruments are pronounced in ecosys-
+small-scale observations of microhabitats within individ-         tems that are dense, tall, or evergreen, where penetrating
+ual trees or predictions of local plant richness from TLS         to the upper canopy (TLS, MLS) or ground (ULS) may not
+(Anderson et al., 2021; Rehush et al., 2018), larger scale        be possible for some options. Newer high-end instruments
+regional relationships between forest structure and bee or        still cost at least tens of thousands of dollars (USD), creat-
+bird diversity and abundance from ALS (Chase et al., 2025;        ing unequal access across institutions. Fortunately, the
+Davison et al., 2023), and even broader assessment of wild-       performance of lower cost instruments also continues to
+life habitat across Southeast Asia using SLS and camera trap      improve (Výbostok et al., 2026).
+data (Brodie et al., 2023; Burns et al., 2025).
+                                                                      Improved algorithms are also reducing the time cost
+    These studies and themes are only a sample of the             of data collection for high-resolution tree-level data from
+insights into forest ecology provided by lidar. Others are        MLS and TLS (detailed in following text). However, there
+described in a review focusing on ecological applications         is also a potential time penalty to the advancement of
+of lidar (Lines et al., 2022), and we expect contributions        ULS, MLS, and TLS technologies. ULS/TLS/MLS systems
+to additional themes as the lidar research community              in particular can easily collect large data volumes without
+grows and diversifies.                                            any direct link to advances in processing those data into
+                                                                  ecologically relevant units. A UAV pilot's license can
+REMAINING CHALLENGES AND                                          allow a non-professional to use a relatively inexpensive
+OPPORTUNITIES                                                     drone to collect terabytes of data, but that does not address
+                                                                  the time or computational resources needed to process
+Challenges faced by lidar studies can be classified into          the data. Because segmentation algorithms still struggle to
+several categories: issues that will be solved or signifi-        identify trees in dense forests (see following text), human
+cantly minimized by advancing instrument technology,              hours of processing data can far exceed that of data collec-
+                                                                  tion for that application.
+ECOSPHERE                                                        17 of 30                                                       21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+    ALS and SLS platforms are less likely to have substan-       most physiologically active, but where TLS/MLS suffer
+tial reductions in cost due to the fixed large expense of        most from occlusion. Biases in trunk/branch reconstruc-
+airplane or satellite operation. Although ULS is increas-        tion are also possible from laser diameter variation,
+ingly being used in ecological research in lieu of ALS,          particularly for ULS data (Kru° cek et al., 2020). Multiple
+ALS will likely continue to have a strong role in land-          scattering (when a laser reflects off multiple surfaces
+scape to regional-scale efforts because of increasing regu-      before being reflected back to the lidar instrument) can
+lations and limited flight time of UAVs. SLS missions            also complicate the interpretation of larger footprint lidar
+have high total cost, but many federally funded platforms        measurements (Yang, Wang, et al., 2024).
+(e.g., ICESat, ICESat-2, GEDI) provide data to users at no
+cost, making SLS data an excellent resource for large-scale      Algorithms
+investigations of ecosystem structure (see Box 2 for SLS
+sampling considerations).                                        Computational methods are rapidly advancing in all fields.
+                                                                 Two trends in algorithm development that we expect to
+Deployment                                                       yield improvements in lidar algorithms are the increased
+                                                                 use of deep learning and artificial intelligence, and data
+Every lidar tool must estimate the instrument position           fusion to augment lidar with information from other
+from which lasers are sent and received. The geolocation         sources. For example, studies show the promise in
+accuracy of SLS/ALS/ULS data is fundamentally driven             using deep learning to correct individual tree data with
+by the quality of associated GPS/IMU sensors (Popescu &          spatial gaps from occlusion (Bornand et al., 2024) or to
+Iordan, 2016). Recent advances in automatic co-registration      classify tree species from multi-source lidar (Vahrenhold
+in some TLS and MLS sensors also leverage GPS/IMU tech-          et al., 2025). Over broad spatial scales, fusion of GEDI SLS
+nology, in addition to new algorithms (Pöppl et al., 2023).      and synthetic aperture radar satellite data improves tropi-
+Because these technologies are also used in many other           cal forest canopy height estimates where cloud cover limits
+applications (both related to lidar, such as self-driving cars,  data availability (Qi et al., 2019, 2025). As the number
+or otherwise), it is likely that improved GPS/IMU technology     of algorithms grows, datasets for consistent validation
+will improve future deployment across all lidar platforms.       will be important for evaluating performance, such as a
+                                                                 recent contribution for species classification in TLS
+Sampling limitations                                             (Puliti et al., 2025).
+
+Like all other forms of measurement, lidar is subject                Efforts to compare multiple algorithms across forest
+to unavoidable sampling limitations. For detailed                types will be widely useful for the community, like the
+ground-based lidar collection (TLS, MLS), a major chal-          recent evaluation of canopy height model production from
+lenge is wind, which causes trees to move (Jackson,              ULS and ALS (Fischer et al., 2024). As previously noted,
+Shenkin, Wellpott, et al., 2019), complicating the recon-        segmenting MLS and TLS data into individual trees remains
+struction of fine-scale features such as branches and            a substantial barrier to using those technologies at larger
+leaves from different views (Seidel et al., 2012). Ideally,      scales. We anticipate increased adoption of these tools as
+data collection occurs without wind, but this can be             segmentation algorithms improve, facilitating effective
+complicated by logistical constraints given the rarity of        and reliable segmentation of a larger proportion of trees
+truly windless conditions. Occlusion also remains a funda-       in an automated way. Applying improved algorithms to
+mental challenge for all lidar platforms. For TLS/MLS,           existing lidar datasets will also enhance the value of his-
+occlusion causes omissions in branch structure or underes-       torical lidar data.
+timation of tree height, while for ULS/ALS/SLS, occlusion
+limits measurement of understory vegetation and terrain              Sophisticated algorithms can present a barrier to
+(Schneider et al., 2019). Higher sampling intensity from         entry for some users. As featured in our case study
+either more scanning angles or higher laser power                data vignette, R packages exist to easily process ULS/ALS
+can reduce occlusion (Zhang, Kral, et al., 2024) and will        data (e.g., "lidR"; Mohan et al., 2021; Roussel et al., 2020)
+be facilitated by improvements in sensor technology.             and GEDI SLS data (e.g., "rGEDI") (Silva et al., 2020), ren-
+However, it is impossible to completely overcome occlu-          dering those datasets relatively accessible for many ecolo-
+sion in some situations, such as woody vines completely          gists who commonly use R (R Core Team, 2023). Other
+encasing tree trunks in tropical forests or densely clustered    tools are available in python, particularly for processing
+leaves, especially at the top of the canopy where leaves are     TLS data (Armston et al., 2015; Calders, Armston,
+                                                                 et al., 2015; Krisanski et al., 2021; Tian & Li, 2022;
+                                                                 Wang, Proctor, et al., 2024; Wilkes et al., 2023). More
+                                                                 sophisticated processing methods, especially for large
+18 of 30                                                       CUSHMAN ET AL.                                                 21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+TLS or global SLS efforts, can require advanced comput-        of open benchmarking datasets will facilitate validation
+ing knowledge and resources. Fortunately, tools such           comparisons across algorithms and forest types (Cherlet
+as web-based platforms and contained docker environ-           et al., 2026; Laino et al., 2026; Puliti et al., 2023, 2025).
+ments can make more advanced algorithms accessible             Lidar-based uncertainty will never reach zero, but we
+to a greater audience­two examples are the ForestSens          anticipate significant improvements in estimating uncer-
+cloud-based AI tools (SmartForest, 2022) and the               tainties across platforms and scales.
+RayCloudTools C++ library accessible through a docker
+image (Lowe & Stepanas, 2021).                                 CONCLUSIONS
+
+Uncertainty and validation                                     Lidar technology is increasingly available in forest ecol-
+                                                               ogy research, allowing this powerful tool to be used by
+Uncertainty enters lidar analyses through a combina-           scientists and groups who are not experts in remote sens-
+tion of factors including instrument specifications,           ing or sensor technology. Improvements in sensors, data,
+physical properties of trees and forests, algorithms,          and algorithms will drive exciting advances in our under-
+environmental conditions, platform deployment, and             standing of ecosystem structure and function across
+geolocation. Some of these uncertainties simply reduce         scales, but understanding the fundamental strengths and
+the precision of measurements, but others create               limitations of each type of platform remains crucial for
+biases that systematically misrepresent forest structure       appropriate use of lidar data. Key considerations for new
+(Gatziolis et al., 2010). A fundamental challenge to           users are:
+validating lidar-derived estimates is that, often, forest
+structural properties from lidar are difficult to mea-         1. Some tree-level measurements of forest structure are
+sure with precision and accuracy in other ways. Common             possible with TLS, MLS, ULS, and ALS platforms.
+ground-based methods to measure tree height, biomass,              However, reliable estimates of fine details (smaller
+and leaf area are themselves subject to substantial uncer-         branches, QSMs) are currently limited to high-end
+tainty and bias, making it difficult to diagnose the source        TLS instruments, particularly in tall evergreen ecosys-
+of discrepancies between ground-based and lidar-based              tems such as tropical forests. MLS platforms also have
+estimates (Clark & Kellner, 2012; Larjavaara &                     a wide variety in cost and quality--instruments are
+Muller-Landau, 2013; Parker, 2020). For example, while             rapidly improving but still do not match the capability
+TLS can underestimate tree height due to canopy occlu-             of high-end TLS. ULS and ALS data, with sufficient
+sion, traditional field-based diameter-height allometries          point density, can be used to characterize coarser
+have even greater underestimation of tree height in                tree-level structural attributes such as crown area
+many tropical forests (Terryn et al., 2024). Other quanti-         and height for canopy trees.
+ties, like leaf or branching angle, are extraordinarily dif-
+ficult to measure at the scale of an entire canopy tree,       2. Consequently, before purchasing a new TLS, MLS, or
+making direct validation impractical.                              ULS system, we recommend confirming that data qual-
+                                                                   ity will be sufficient for the desired task by reviewing
+    Some recent efforts offer systematic approaches                literature with the same system, contacting existing
+to characterize uncertainty in forest structure from               users, and/or working with sample data from a similar
+lidar. One is GEO-TREES, a collaboration of inventory              system.
+plot networks, Earth observation agencies, and
+researchers that combines inventory protocols, TLS,            3. The volume of publicly available lidar data continues
+and landscape-scale ULS/ALS to improve calibration and             to grow through monitoring networks such as NEON
+validation of space-borne biomass estimates (including             (NEON, 2022); federally funded SLS platforms
+SLS and other kinds of satellites; The GEO-TREES                   including GEDI (Dubayah et al., 2022); efforts to
+Consortium, 2024). This ambitious effort will build                compile data from different projects such as the
+transparent workflows using established community                  FOR-species20K dataset (Puliti et al., 2024, 2025),
+best practices (Duncanson et al., 2021). Another promising         the Global TLS Database (Stovall, 2023), and the
+approach involves using simulated lidar data for virtual           OpenTopography Facility (Krishnan et al., 2011);
+trees with precisely known properties to evaluate algo-            group-specific sites such as the BlueCat Data Pool
+rithm performance (Jiang et al., 2021; Ravaglia et al., 2019;      (Kru° cek, 2025); and national efforts like the US
+Vicari et al., 2019); future efforts should ensure that simu-      Geological Service 3D Elevation Program (U.S.
+lated data encompass the range of tree architectures found         Geological Survey, 2023). These resources are pow-
+in real-world ecosystems. Finally, the increased availability      erful tools for understanding stand-level structure
+                                                                   across broad spatial extents, but users should
+ECOSPHERE                                                     19 of 30                                                                    21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+    understand how potential differences in data collection   comments on the manuscript, and Jess Shue and Helene
+    and sensor characteristics influence occlusion and spa-   Muller-Landau for support of SERC data collection.
+    tial precision. While SLS users should also understand
+    how sampling patterns, geolocation uncertainty, and       CONFLICT OF INTEREST STATEMENT
+    cloud cover affect data, new products from fusion with    The authors declare no conflicts of interest.
+    wall-to-wall imagery and SAR data increase the cover-
+    age of ecosystem structure and dynamics data informed     DATA AVAILABILITY STATEMENT
+    by near-global SLS sampling.                              Lidar data and associated R code (Cushman et al., 2026)
+4. Robust, open-source software is increasingly available     are available from the Oak Ridge National Laboratory
+    for processing lidar data from all platform types.        Constellation repository: https://doi.org/10.13139/
+    Instance segmentation of individual trees in point        ORNLNCCS/2477966.
+    cloud data remains a challenge for high-throughput
+    analysis of tree-level information, still requiring con-  ORCID
+    siderable time for manual quality control and correc-     K. C. Cushman https://orcid.org/0000-0002-3464-1151
+    tion, particularly in denser ecosystems.                  Kamil Kral https://orcid.org/0000-0002-3848-2119
+5. The lidar community should continue to standardize         Angelica M. Almeyda Zambrano https://orcid.org/
+    approaches for uncertainty estimation. Freely available   0000-0001-5081-9936
+    benchmarking datasets, including both real and simu-      Eben N. Broadbent https://orcid.org/0000-0002-4488-
+    lated data, are helpful for comparing the performance of  4237
+    new algorithms. Further efforts should develop robust     Martin Kru° cek https://orcid.org/0000-0002-3137-2259
+    methods to characterize uncertainty of derived estimates  Alice Rosen https://orcid.org/0000-0002-4808-8318
+    (e.g., biomass, leaf area) in new data collections.       Sean M. McMahon https://orcid.org/0000-0001-8302-
+                                                              6908
+AUTHOR CONTRIBUTIONS
+K. C. Cushman and Sean M. McMahon conceived of the            REFERENCES
+manuscript. All authors contributed to data collection;
+K. C. Cushman led data compilation and analysis. All          Acebes, P., P. Lillo, and C. Jaime-Gonzalez. 2021. "Disentangling LiDAR
+authors contributed to conceptual development of the                Contribution in Modelling Species­Habitat Structure Relationships
+manuscript; K. C. Cushman led writing of the manuscript             in Terrestrial Ecosystems Worldwide. A Systematic Review and
+with contributions from Sean M. McMahon, Kamil Kral,                Future Directions." Remote Sensing 13(17): 3447. https://doi.org/10.
+and Martin Kru° cek; and all authors contributed to manu-           3390/rs13173447.
+script revision. Alice Rosen designed and created
+Figure 1; K. C. Cushman created other visualizations.         Alkan, R. M., S. Erol, V. I_lçi, and I_. M. Ozulu. 2020. "Comparative
+                                                                    Analysis of Real-Time Kinematic and PPP Techniques in
+ACKNOWLEDGMENTS                                                     Dynamic Environment." Measurement 163: 107995. https://
+K. C. Cushman was supported by the Laboratory Directed              doi.org/10.1016/j.measurement.2020.107995.
+Research and Development Program of Oak Ridge
+National Laboratory (ORNL); ORNL is managed by the            Almeida, D. R. A. d., S. C. Stark, G. Shao, J. Schietti, B. W. Nelson,
+University of Tennessee-Battelle, LLC, under contract               C. A. Silva, E. B. Gorgens, R. Valbuena, D. d. A. Papa, and
+DE-AC05-00OR22725 with the U.S. Department of Energy.               P. H. S. Brancalion. 2019. "Optimizing the Remote Detection
+MLS data collection was supported by the Smithsonian                of Tropical Rainforest Structure With Airborne Lidar: Leaf
+Equipment Fund. GatorEye data were collected at SERC                Area Profile Sensitivity to Pulse Density and Spatial
+with support from the USDA McIntire-Stennis Program                 Sampling." Remote Sensing 11(1): 92. https://doi.org/10.3390/
+and SPEC Lab Internal Research Funds. Kamil Kral and                rs11010092.
+Martin Kru° cek were supported by the WILDCARD
+project funded by the European Climate, Infrastructure and    Anderson, C. T., S. L. Dietz, S. M. Pokswinski, A. M. Jenkins, M. J.
+Environment Executive Agency (CINEA) of the European                Kaeser, J. K. Hiers, and B. D. Pelc. 2021. "Traditional Field
+Union under Grant No. 101081177. The views and opinions             Metrics and Terrestrial LiDAR Predict Plant Richness in
+expressed are however those of the authors only and do              Southern Pine Forests." Forest Ecology and Management 491:
+not necessarily reflect those of the funders. Neither the           119118. https://doi.org/10.1016/j.foreco.2021.119118.
+European Union nor the granting authorities can be held
+responsible for them. We thank Jeff Warren for helpful        Armston, J., P. Bunting, N. Flood, and S. Gillingham. 2015.
+                                                                    "PyLidar." https://www.pylidar.org.
+
+                                                              Arrizza, S., S. Marras, R. Ferrara, and G. Pellizzaro. 2024. "Terrestrial
+                                                                    Laser Scanning (TLS) for Tree Structure Studies: A Review of
+                                                                    Methods for Wood-Leaf Classifications from 3D Point Clouds."
+                                                                    Remote Sensing Applications: Society and Environment 36:
+                                                                    101364. https://doi.org/10.1016/j.rsase.2024.101364.
+
+                                                              Asner, G. P., and J. Mascaro. 2014. "Mapping Tropical Forest
+                                                                    Carbon: Calibrating Plot Estimates to a Simple LiDAR
+20 of 30                                                                                                                                                    CUSHMAN ET AL.  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+      Metric." Remote Sensing of Environment 140: 614­624. https://       Blanchard, G., N. Barbier, G. Vieilledent, T. Ibanez, V. Hequet, S.
+      doi.org/10.1016/j.rse.2013.09.023.                                        McCoy, and P. Birnbaum. 2023. "UAV-Lidar Reveals that
+Atkins, J. W., P. Bhatt, L. Carrasco, E. Francis, J. E. Garabedian,             Canopy Structure Mediates the Influence of Edge Effects on
+      C. R. Hakkenberg, B. S. Hardiman, et al. 2023. "Integrating               Forest Diversity, Function and Microclimate." The Journal of
+      Forest Structural Diversity Measurement into Ecological                   Ecology 111(7): 1411­27. https://doi.org/10.1111/1365-2745.14105.
+      Research." Ecosphere 14(9): e4633. https://doi.org/10.1002/
+      ecs2.4633.                                                          Bohn, F. J., and A. Huth. 2017. "The Importance of Forest Structure
+Atkins, J. W., G. Bohrer, R. T. Fahey, B. S. Hardiman, T. H. Morin,             to Biodiversity-Productivity Relationships." Royal Society Open
+      A. E. L. Stovall, N. Zimmerman, and C. M. Gough. 2018.                    Science 4(1): 160521. https://doi.org/10.1098/rsos.160521.
+      "Quantifying Vegetation and Canopy Structural Complexity
+      from Terrestrial LiDARdata Using Theforestr Rpackage."              Bornand, A., M. Abegg, F. Morsdorf, and N. Rehush. 2024.
+      Methods in Ecology and Evolution 9(10): 2057­66. https://doi.             "Completing 3D Point Clouds of Individual Trees Using Deep
+      org/10.1111/2041-210x.13061.                                              Learning." Methods in Ecology and Evolution 15(11): 2010­23.
+Atkins, J. W., R. T. Fahey, B. S. Hardiman, and C. M. Gough. 2018.              https://doi.org/10.1111/2041-210x.14412.
+      "Forest Canopy Structural Complexity and Light Absorption
+      Relationships at the Subcontinental Scale." Journal of Geophysical  Bourgoin, C., G. Ceccherini, M. Girardello, C. Vancutsem, V. Avitabile,
+      Research: Biogeosciences 123(4): 1387­1405. https://doi.org/10.           P. S. A. Beck, R. Beuchle, et al. 2024. "Human Degradation of
+      1002/2017jg004256.                                                        Tropical Moist Forests Is Greater than Previously Estimated." Nature
+Aubry-Kientz, M., R. Dutrieux, A. Ferraz, S. Saatchi, H. Hamraz, J.             631(8021): 570­76. https://doi.org/10.1038/s41586-024-07629-0.
+      Williams, D. Coomes, A. Piboule, and G. Vincent. 2019. "A
+      Comparative Assessment of the Performance of Individual             Brändle, M., and R. Brandl. 2001. "Species Richness of Insects
+      Tree Crowns Delineation Algorithms from ALS Data in                       and Mites on Trees: Expanding Southwood." Journal of
+      Tropical Forests." Remote Sensing 11(9): 1086. https://doi.org/           Animal Ecology 70(3): 491­504. https://doi.org/10.1046/j.
+      10.3390/rs11091086.                                                       1365-2656.2001.00506.x.
+Bater, C. W., N. C. Coops, S. E. Gergel, V. LeMay, and D. Collins.
+      2009. "Estimation of Standing Dead Tree Class Distributions         Bréda, N. J. J. 2003. "Ground-Based Measurements of Leaf Area
+      in Northwest Coastal Forests Using Lidar Remote Sensing."                 Index: A Review of Methods, Instruments and Current
+      Canadian Journal of Forest Research 39(6): 1080­91. https://              Controversies." Journal of Experimental Botany 54(392):
+      doi.org/10.1139/x09-030.                                                  2403­17. https://doi.org/10.1093/jxb/erg263.
+Battison, R., S. M. Prober, K. Zdunic, T. D. Jackson, F. J. Fischer,
+      and T. Jucker. 2024. "Tracking Tree Demography and Forest           Brede, B., A. Lau, H. M. Bartholomeus, and L. Kooistra. 2017.
+      Dynamics at Scale Using Remote Sensing." New Phytologist                  "Comparing RIEGL RiCOPTER UAV LiDAR Derived Canopy
+      244(6): 2251­66. https://doi.org/10.1111/nph.20199.                       Height and DBH with Terrestrial LiDAR." Sensors 17(10):
+Bauwens, S., H. Bartholomeus, K. Calders, and P. Lejeune. 2016.                 2371. https://doi.org/10.3390/s17102371.
+      "Forest Inventory with Terrestrial LiDAR: A Comparison of
+      Static and Hand-Held Mobile Laser Scanning." Forests 7(6):          Brede, B., L. Terryn, N. Barbier, H. M. Bartholomeus, R. Bartolo, K.
+      127. https://doi.org/10.3390/f7060127.                                    Calders, G. Derroire, et al. 2022. "Non-Destructive Estimation
+Bayer, D., S. Seifert, and H. Pretzsch. 2013. "Structural Crown                 of Individual Tree Biomass: Allometric Models, Terrestrial and
+      Properties of Norway Spruce (Picea abies [L.] Karst.) and                 UAV Laser Scanning." Remote Sensing of Environment 280:
+      European Beech (Fagus sylvatica [L.]) in Mixed Versus Pure                113180. https://doi.org/10.1016/j.rse.2022.113180.
+      Stands Revealed by Terrestrial Laser Scanning." Trees 27(4):
+      1035­47. https://doi.org/10.1007/s00468-013-0854-4.                 Brodie, J. F., J. Mohd-Azlan, C. Chen, O. R. Wearn, M. C. M. Deith,
+Béland, M., and H. Kobayashi. 2021. "Mapping Forest Leaf Area                   J. G. C. Ball, E. M. Slade, et al. 2023. "Landscape-Scale Benefits of
+      Density from Multiview Terrestrial Lidar." Methods in Ecology and         Protected Areas for Tropical Biodiversity." Nature 620(7975):
+      Evolution 12(4): 619­633. https://doi.org/10.1111/2041-210x.13550.        807­812. https://doi.org/10.1038/s41586-023-06410-z.
+Béland, M., G. Parker, B. Sparrow, D. Harding, L. Chasmer, S.
+      Phinn, A. Antonarakis, and A. Strahler. 2019. "On Promoting         Bruggisser, M., M. Hollaus, J. Otepka, and N. Pfeifer. 2020.
+      the Use of Lidar Systems in Forest Ecosystem Research."                   "Influence of ULS Acquisition Characteristics on Tree Stem
+      Forest Ecology and Management 450: 117484. https://doi.org/               Parameter Estimation." ISPRS Journal of Photogrammetry and
+      10.1016/j.foreco.2019.117484.                                             Remote Sensing 168: 28­40. https://doi.org/10.1016/j.isprsjprs.
+Béland, M., J.-L. Widlowski, R. A. Fournier, J.-F. Côté, and M. M.              2020.08.002.
+      Verstraete. 2011. "Estimating Leaf Area Distribution in Savanna
+      Trees from Terrestrial LiDAR Measurements." Agricultural and        Burns, P., Z. Kaszta, S. A. Cushman, J. F. Brodie, C. R. Hakkenberg,
+      Forest Meteorology 151(9): 1252­66. https://doi.org/10.1016/j.            P. Jantz, M. Deith, et al. 2025. "The Utility of Dynamic Forest
+      agrformet.2011.05.004.                                                    Structure from GEDI Lidar Fusion in Tropical Mammal
+Blair, J. B., and M. A. Hofton. 1999. "Modeling Laser Altimeter                 Species Distribution Models." Frontiers in Remote Sensing 6:
+      Return Waveforms over Complex Vegetation Using                            1563430. https://doi.org/10.3389/frsen.2025.1563430.
+      High-Resolution Elevation Data." Geophysical Research Letters
+      26(16): 2509­12. https://doi.org/10.1029/1999gl010484.              Burt, A., M. Boni Vicari, A. C. L. da Costa, I. Coughlin, P. Meir, L.
+                                                                                Rowland, and M. Disney. 2021. "New Insights into Large
+                                                                                Tropical Tree Mass and Structure from Direct Harvest and
+                                                                                Terrestrial Lidar." Royal Society Open Science 8(2): 201458.
+                                                                                https://doi.org/10.1098/rsos.201458.
+
+                                                                          Burt, A., K. Calders, A. Cuni-Sanchez, J. Gomez-Dans, P. Lewis,
+                                                                                S. L. Lewis, Y. Malhi, O. L. Phillips, and M. Disney. 2020.
+                                                                                "Assessment of Bias in Pan-Tropical Biomass Predictions."
+                                                                                Frontiers in Forests and Global Change 3: 12. https://doi.org/
+                                                                                10.3389/ffgc.2020.00012.
+
+                                                                          Calders, K., J. Adams, J. Armston, H. Bartholomeus, S. Bauwens,
+                                                                                L. P. Bentley, J. Chave, et al. 2020. "Terrestrial Laser Scanning
+ECOSPHERE                                                                                                                                                             21 of 30  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+      in Forest Ecology: Expanding the Horizon." Remote Sensing of            Species." Ecological Applications 16(6): 2356­67. https://doi.
+      Environment 251: 112102. https://doi.org/10.1016/j.rse.2020.            org/10.1890/1051-0761(2006)016[2356:rapvow]2.0.co;2.
+      112102.                                                           Chen, S., H. Verbeeck, L. Terryn, W. A. J. Van den Broeck, M. B.
+Calders, K., J. Armston, G. Newnham, M. Herold, and N. Goodwin.               Vicari, M. Disney, N. Origo, et al. 2025. "The Impact of
+      2015. "Implications of Sensor Configuration and Topography              Leaf-Wood Separation Algorithms on Aboveground Biomass
+      on Vertical Plant Profiles Derived from Terrestrial LiDAR."             Estimation from Terrestrial Laser Scanning." Remote Sensing of
+      Agricultural and Forest Meteorology 194: 104­117. https://doi.          Environment 318: 114581. https://doi.org/10.1016/j.rse.2024.
+      org/10.1016/j.agrformet.2014.03.022.                                    114581.
+Calders, K., B. Brede, G. Newnham, D. Culvenor, J. Armston, H.          Cherlet, W., K. Dayal, S. Chen, Z. Cooper, M. Disney, A. Hanzl, S.
+      Bartholomeus, A. Griebel, et al. 2023. "StrucNet: A Global              Levick, et al. 2026. "Benchmarking Tree Instance Segmentation
+      Network for Automated Vegetation Structure Monitoring."                 of Terrestrial Laser Scanning Point Clouds." ISPRS Journal of
+      Remote Sensing in Ecology and Conservation 9(5): 587­598.               Photogrammetry and Remote Sensing 231: 230­247. https://doi.
+      https://doi.org/10.1002/rse2.333.                                       org/10.1016/j.isprsjprs.2025.10.033.
+Calders, K., N. Origo, M. Disney, J. Nightingale, W. Woodgate, J.       Chisholm, R., M. Rodríguez-Ronderos, and F. Lin. 2021.
+      Armston, and P. Lewis. 2018. "Variability and Bias in Active            "Estimating Tree Diameters from an Autonomous
+      and Passive Ground-Based Measurements of Effective Plant,               Below-Canopy UAV with Mounted LiDAR." Remote Sensing
+      Wood and Leaf Area Index." Agricultural and Forest                      13(13): 2576. https://doi.org/10.3390/rs13132576.
+      Meteorology 252: 231­240. https://doi.org/10.1016/j.agrformet.    Clark, D. B., and J. R. Kellner. 2012. "Tropical Forest Biomass
+      2018.01.029.                                                            Estimation and the Fallacy of Misplaced Concreteness."
+Calders, K., T. Schenkels, H. Bartholomeus, J. Armston, J. Verbesselt,        Journal of Vegetation Science 23(6): 1191­96. https://doi.org/
+      and M. Herold. 2015. "Monitoring Spring Phenology with High             10.1111/j.1654-1103.2012.01471.x.
+      Temporal Resolution Terrestrial LiDAR Measurements."              Csillik, O., M. Keller, M. Longo, A. Ferraz, E. Rangel Pinagé, E. B.
+      Agricultural and Forest Meteorology 203: 158­168. https://doi.          Görgens, J. P. Ometto, et al. 2024. "A Large Net Carbon Loss
+      org/10.1016/j.agrformet.2015.01.009.                                    Attributed to Anthropogenic and Natural Disturbances in the
+Calders, K., H. Verbeeck, A. Burt, N. Origo, J. Nightingale, Y.               Amazon Arc of Deforestation." Proceedings of the National
+      Malhi, P. Wilkes, P. Raumonen, R. G. H. Bunce, and M.                   Academy of Sciences of the United States of America 121(33):
+      Disney. 2022. "Laser Scanning Reveals Potential                         e2310157121. https://doi.org/10.1073/pnas.2310157121.
+      Underestimation of Biomass Carbon in Temperate Forest."           Cushman, K., K. Kral, A. Almeyda Zambrano, E. Broadbent, M.
+      Ecological Solutions and Evidence 3(4): e12197. https://doi.org/        Kru° cek, A. Rosen, and S. McMahon. 2026. "Dataset for `A
+      10.1002/2688-8319.12197.                                                Primer on Forest Structure Measurement with Lidar for
+Cao, X., F. Van Coillie, S. M. Krishna Moorthy, K. Coppieters, B.             Ecologists'." Oak Ridge National Laboratory. https://doi.org/
+      D'hont, S. A. Schnitzer, G. van der Heijden, H. Verbeeck, and           10.13139/ORNLNCCS/2477966.
+      F. Meunier. 2025. "Lianas Reduce Tree Height with Negative        Cushman, K. C., J. T. Burley, B. Imbach, S. S. Saatchi, C. E. Silva,
+      Consequences for Carbon Storage and Growth Estimates."                  O. Vargas, C. Zgraggen, and J. R. Kellner. 2021. "Impact of a
+      Journal of Ecology 113(7): 1647­58. https://doi.org/10.1111/            Tropical Forest Blowdown on Aboveground Carbon Balance."
+      1365-2745.70050.                                                        Scientific Reports 11(1): 11279. https://doi.org/10.1038/s41598-
+Cao, Y., J. G. C. Ball, D. A. Coomes, L. Steinmeier, N. Knapp, P.             021-90576-x.
+      Wilkes, M. Disney, et al. 2023. "Benchmarking Airborne Laser      Cushman, K. C., and J. R. Kellner. 2019. "Prediction of Forest
+      Scanning Tree Segmentation Algorithms in Broadleaf Forests              Aboveground Net Primary Production from High-Resolution
+      Shows High Accuracy Only for Canopy Trees." International               Vertical Leaf-Area Profiles." Ecology Letters 22(3): 538­546.
+      Journal of Applied Earth Observation and Geoinformation 123:            https://doi.org/10.1111/ele.13214.
+      103490. https://doi.org/10.1016/j.jag.2023.103490.                Cushman, K. C., S. Saatchi, R. E. McRoberts, K. J.
+Cardenas, J. L., A. Lopez, C. J. Ogayar, F. R. Feito, and J. M.               Anderson-Teixeira, N. A. Bourg, B. Chapman, S. M. McMahon,
+      Jurado. 2022. "Reconstruction of Tree Branching Structures              and C. Mulverhill. 2023. "Small Field Plots Can Cause
+      from UAV-LiDAR Data." Frontiers in Environmental Science                Substantial Uncertainty in Gridded Aboveground Biomass
+      10: 960083. https://doi.org/10.3389/fenvs.2022.960083.                  Products from Airborne Lidar Data." Remote Sensing 15(14):
+Caeanu, M., and A. Ciubotaru. 2021. "The Effect of LiDAR                      3509. https://doi.org/10.3390/rs15143509.
+      Sampling Density on DTM Accuracy for Areas with Heavy             Dalponte, M., T. Jucker, D. F. R. P. Burslem, S. L. Lewis, R. Nilus,
+      Forest Cover." Forests 12(3): 265. https://doi.org/10.3390/             O. Phillips, L. Qie, and D. A. Coomes. 2016. "Aboveground
+      f12030265.                                                              Biomass Estimation in Tropical Forests at Single Tree Level
+Chase, M. H., A. Harmon-Threatt, S. F. Stickley, B. Charles, and              with ALS Data." In 2016 IEEE International Geoscience and
+      J. M. Fraterrigo. 2025. "Evaluating LiDAR-Derived Structural            Remote Sensing Symposium (IGARSS). https://doi.org/10.1109/
+      Metrics for Predicting Bee Assemblages in Managed Forests."             igarss.2016.7730390.
+      Ecology and Evolution 15(4): e71159. https://doi.org/10.1002/     Davison, C. W., J. J. Assmann, S. Normand, C. Rahbek, and N.
+      ece3.71159.                                                             Morueta-Holme. 2023. "Vegetation Structure from LiDAR
+Chave, J., H. C. Muller-Landau, T. R. Baker, T. A. Easdale, H. ter            Explains the Local Richness of Birds across Denmark." Journal
+      Steege, and C. O. Webb. 2006. "Regional and Phylogenetic                of Animal Ecology 92(7): 1332­44. https://doi.org/10.1111/1365-
+      Variation of Wood Density across 2456 Neotropical Tree                  2656.13945.
+22 of 30                                                                                                                                                  CUSHMAN ET AL.  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+de Conto, T., J. Armston, and R. Dubayah. 2024. "Characterizing the     Dubayah, R., H. Tang, J. Armston, S. Luthcke, M. Hofton, and J.
+      Structural Complexity of the Earth's Forests with Spaceborne            Blair. 2021. "GEDI L2B Canopy Cover and Vertical Profile
+      Lidar." Nature Communications 15(1): 8116. https://doi.org/10.          Metrics Data Global Footprint Level V002." https://doi.org/10.
+      1038/s41467-024-52468-2.                                                5067/GEDI/GEDI02_B.002.
+
+Dehaudt, B., T. Bruce, V. Deblauwe, A. Ferraz, B. Gardner, T. G.        Duncanson, L., J. Armston, M. Disney, V. Avitabile, N. Barbier, K.
+      `babs' Bibila, M. LeBreton, et al. 2024. "Divergent Seed                Calders, S. Carter, et al. 2021. "Aboveground Woody Biomass
+      Dispersal Outcomes: Interactions between Seed, Disperser, and           Product Validation Good Practices Protocol. Version 1.0." In
+      Forest Traits." Ecology 105(10): e4409. https://doi.org/10.1002/        Good Practices for Satellite-Derived and Product Validation,
+      ecy.4409.                                                               edited by L. Duncanson, M. Disney, J. Armston, J. Nickeson,
+                                                                              D. Minor, and F. Camacho. Greenbelt, MD: NASA Goddard
+Demol, M., N. Aguilar-Amuchastegui, G. Bernotaite, M. Disney, L.              Space Flight Center. 236 p. https://doi.org/10.5067/doc/
+      Duncanson, E. Elmendorp, A. Espejo, et al. 2024. "Multi-Scale           ceoswgcv/lpv/agb.001.
+      Lidar Measurements Suggest Miombo Woodlands Contain
+      Substantially More Carbon than Thought." Communications           Duncanson, L., J. R. Kellner, J. Armston, R. Dubayah, D. M.
+      Earth & Environment 5(1): 366. https://doi.org/10.1038/                 Minor, S. Hancock, S. P. Healey, et al. 2022. "Aboveground
+      s43247-024-01448-x.                                                     Biomass Density Models for NASA's Global Ecosystem
+                                                                              Dynamics Investigation (GEDI) Lidar Mission." Remote Sensing
+Demol, M., K. Calders, S. M. Krishna Moorthy, J. Van den Bulcke,              of Environment 270: 112845. https://doi.org/10.1016/j.rse.2021.
+      H. Verbeeck, and B. Gielen. 2021. "Consequences of Vertical             112845.
+      Basic Wood Density Variation on the Estimation of
+      Aboveground Biomass with Terrestrial Laser Scanning." Trees       Duncanson, L., M. Liang, V. Leitold, J. Armston, S. M. Krishna
+      35(2): 671­684. https://doi.org/10.1007/s00468-020-02067-7.             Moorthy, R. Dubayah, S. Costedoat, et al. 2023. "The
+                                                                              Effectiveness of Global Protected Areas for Climate Change
+Demol, M., H. Verbeeck, B. Gielen, J. Armston, A. Burt, M. Disney,            Mitigation." Nature Communications 14(1): 2908. https://doi.
+      L. Duncanson, et al. 2022. "Estimating Forest Above-Ground              org/10.1038/s41467-023-38073-9.
+      Biomass with Terrestrial Laser Scanning: Current Status and
+      Future Directions." Methods in Ecology and Evolution 13(8):       Fang, H., F. Baret, S. Plummer, and G. Schaepman-Strub. 2019.
+      1628­39. https://doi.org/10.1111/2041-210X.13906.                       "An Overview of Global Leaf Area Index (LAI): Methods,
+                                                                              Products, Validation, and Applications." Reviews of Geophysics
+Detto, M., G. P. Asner, H. C. Muller-Landau, and O. Sonnentag.                (Washington, D.C.: 1985) 57(3): 739­799. https://doi.org/10.
+      2015. "Spatial Variability in Tropical Forest Leaf Area Density         1029/2018rg000608.
+      from Multireturn Lidar and Modeling." Journal of Geophysical
+      Research: Biogeosciences 120(2): 294­309. https://doi.org/10.     Fatoyinbo, T., J. Armston, M. Simard, S. Saatchi, M. Denbina, M.
+      1002/2014jg002774.                                                      Lavalle, M. Hofton, et al. 2021. "The NASA AfriSAR Campaign:
+                                                                              Airborne SAR and Lidar Measurements of Tropical Forest
+D'hont, B., K. Calders, H. Bartholomeus, A. Lau, L. Terryn, T. E.             Structure and Biomass in Support of Current and Future Space
+      Verhelst, and H. Verbeeck. 2024. "Evaluating Airborne, Mobile           Missions." Remote Sensing of Environment 264: 112533. https://
+      and Terrestrial Laser Scanning for Urban Tree Inventories: A            doi.org/10.1016/j.rse.2021.112533.
+      Case Study in Ghent, Belgium." Urban Forestry & Urban
+      Greening 99: 128428. https://doi.org/10.1016/j.ufug.2024.         Ferraz, A., S. S. Saatchi, M. Longo, and D. B. Clark. 2020. "Tropical
+      128428.                                                                 Tree Size­Frequency Distributions from Airborne Lidar."
+                                                                              Ecological Applications 30(7): e02154. https://doi.org/10.1002/
+Disney, M. 2019. "Terrestrial LiDAR: A Three-Dimensional                      eap.2154.
+      Revolution in how we Look at Trees." New Phytologist 222(4):
+      1736­41. https://doi.org/10.1111/nph.15517.                       Fischer, F. J., T. Jackson, G. Vincent, and T. Jucker. 2024. "Robust
+                                                                              Characterisation of Forest Structure from Airborne Laser
+Disney, M., A. Burt, K. Calders, C. Schaaf, and A. Stovall. 2019.             Scanning--A Systematic Assessment and Sample Workflow
+      "Innovations in Ground and Airborne Technologies as                     for Ecologists." Methods in Ecology and Evolution 15: 1873­88.
+      Reference and for Training and Validation: Terrestrial Laser            https://doi.org/10.1111/2041-210x.14416.
+      Scanning (TLS)." Surveys in Geophysics 40(4): 937­958. https://
+      doi.org/10.1007/s10712-019-09527-x.                               Fischer, F. J., N. Labrière, G. Vincent, B. Hérault, A. Alonso, H.
+                                                                              Memiaghe, P. Bissiengou, D. Kenfack, S. Saatchi, and J.
+Disney, M. I., M. Boni Vicari, A. Burt, K. Calders, S. L. Lewis, P.           Chave. 2020. "A Simulation Method to Infer Tree Allometry
+      Raumonen, and P. Wilkes. 2018. "Weighing Trees with Lasers:             and Forest Structure from Airborne Laser Scanning and Forest
+      Advances, Challenges and Opportunities." Interface Focus                Inventories." Remote Sensing of Environment 251: 112056.
+      8(2): 20170048. https://doi.org/10.1098/rsfs.2017.0048.                 https://doi.org/10.1016/j.rse.2020.112056.
+
+Dreier, A., J. Janßen, H. Kuhlmann, and L. Klingbeil. 2021. "Quality    Fischer, F. J., B. Morgan, T. Jackson, J. Chave, D. Coomes, K. C.
+      Analysis of Direct Georeferencing in Aspects of Absolute                Cushman, R. Dalagnol, et al. 2025. "The Global Canopy Atlas:
+      Accuracy and Precision for a UAV-Based Laser Scanning                   Analysis-Ready Maps of 3D Structure for the World's Woody
+      System." Remote Sensing 13(18): 3564. https://doi.org/10.3390/          Ecosystems." https://doi.org/10.1101/2025.08.31.673375.
+      rs13183564.
+                                                                        Fraser, B. T., R. G. Congalton, and M. J. Ducey. 2025. "Quantifying
+Dubayah, R., J. Armston, S. P. Healey, J. M. Bruening, P. L.                  the Accuracy of UAS-Lidar Individual Tree Detection Methods
+      Patterson, J. R. Kellner, L. Duncanson, et al. 2022. "GEDI              across Height and Diameter at Breast Height Sizes in Complex
+      Launches a New Era of Biomass Inference from Space."                    Temperate Forests." Remote Sensing 17(6): 1010. https://doi.
+      Environmental Research Letters 17(9): 095001. https://doi.org/          org/10.3390/rs17061010.
+      10.1088/1748-9326/ac8694.
+ECOSPHERE                                                                                                                                                              23 of 30  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+Gatziolis, D., J. S. Fried, and V. S. Monleon. 2010. "Challenges to            Crown Complementarity: The Role of Functional Diversity and
+      Estimating Tree Height Via LiDAR in Closed-Canopy Forests:               Branch Traits for Canopy Packing." Basic and Applied Ecology
+      A Parable from Western Oregon." Forest Science 56(2):                    50: 217­227. https://doi.org/10.1016/j.baae.2020.12.003.
+      139­155. https://doi.org/10.1093/forestscience/56.2.139.           Hofton, M. A., L. E. Rocchio, J. B. Blair, and R. Dubayah. 2002.
+                                                                               "Validation of Vegetation Canopy Lidar Sub-Canopy
+Gonzalez de Tanago, J., A. Lau, H. Bartholomeus, M. Herold, V.                 Topography Measurements for a Dense Tropical Forest."
+      Avitabile, P. Raumonen, C. Martius, et al. 2018. "Estimation of          Journal of Geodynamics 34(3­4): 491­502. https://doi.org/10.
+      Above-Ground Biomass of Large Tropical Trees with                        1016/s0264-3707(02)00046-7.
+      Terrestrial LiDAR." Methods in Ecology and Evolution 9(2):         Holcomb, A., P. Burns, S. Keshav, and D. A. Coomes. 2024. "Repeat
+      223­234. https://doi.org/10.1111/2041-210x.12904.                        GEDI Footprints Measure the Effects of Tropical Forest
+                                                                               Disturbances." Remote Sensing of Environment 308: 114174.
+Gorgens, E. B., M. H. Nunes, T. Jackson, D. Coomes, M. Keller,                 https://doi.org/10.1016/j.rse.2024.114174.
+      C. R. Reis, R. Valbuena, et al. 2021. "Resource Availability and   Hopkinson, C., J. Lovell, L. Chasmer, D. Jupp, N. Kljun, and E. van
+      Disturbance Shape Maximum Tree Height across the                         Gorsel. 2013. "Integrating Terrestrial and Airborne Lidar to
+      Amazon." Global Change Biology 27(1): 177­189. https://doi.              Calibrate a 3D Canopy Model of Effective Leaf Area Index."
+      org/10.1111/gcb.15423.                                                   Remote Sensing of Environment 136: 301­314. https://doi.org/
+                                                                               10.1016/j.rse.2013.05.012.
+Gough, C. M., J. W. Atkins, R. T. Fahey, and B. S. Hardiman. 2019.       Hyyppä, E., A. Kukko, R. Kaijaluoto, J. C. White, M. A. Wulder, J.
+      "High Rates of Primary Production in Structurally Complex                Pyörälä, X. Liang, et al. 2020. "Accurate Derivation of Stem
+      Forests." Ecology 100(10): e02864. https://doi.org/10.1002/ecy.          Curve and Volume Using Backpack Mobile Laser Scanning."
+      2864.                                                                    ISPRS Journal of Photogrammetry and Remote Sensing 161:
+                                                                               246­262. https://doi.org/10.1016/j.isprsjprs.2020.01.018.
+Goulden, T., B. Hass, and N. Leisso. 2017. "Uncertainty in Lidar         Hyyppä, E., X. Yu, H. Kaartinen, T. Hakala, A. Kukko, M.
+      Derived Canopy Height Models in Three Unique Forest                      Vastaranta, and J. Hyyppä. 2020. "Comparison of Backpack,
+      Ecosystems." In 2017 IEEE International Geoscience and                   Handheld, Under-Canopy UAV, and Above-Canopy UAV
+      Remote Sensing Symposium (IGARSS). IEEE. https://doi.org/                Laser Scanning for Field Reference Data Collection in Boreal
+      10.1109/igarss.2017.8127592.                                             Forests." Remote Sensing 12(20): 3327. https://doi.org/10.3390/
+                                                                               rs12203327.
+Gregoire, T. G., E. Næsset, R. E. McRoberts, G. Ståhl, H.-E.             Jackson, T., A. Shenkin, B. Kalyan, J. Zionts, K. Calders, N. Origo, M.
+      Andersen, T. Gobakken, L. Ene, and R. Nelson. 2016.                      Disney, A. Burt, P. Raumonen, and Y. Malhi. 2019. "A New
+      "Statistical Rigor in LiDAR-Assisted Estimation of Aboveground           Architectural Perspective on Wind Damage in a Natural
+      Forest Biomass." Remote Sensing of Environment 173: 98­108.              Forest." Frontiers in Forests and Global Change 1: 417831.
+      https://doi.org/10.1016/j.rse.2015.11.012.                               https://doi.org/10.3389/ffgc.2018.00013.
+                                                                         Jackson, T., A. Shenkin, A. Wellpott, K. Calders, N. Origo, M.
+Guillemot, J., M. Kunz, F. Schnabel, A. Fichtner, C. P. Madsen, T.             Disney, A. Burt, et al. 2019. "Finite Element Analysis of
+      Gebauer, W. Härdtle, G. von Oheimb, and C. Potvin. 2020.                 Trees in the Wind Based on Terrestrial Laser Scanning Data."
+      "Neighbourhood-Mediated Shifts in Tree Biomass Allocation                Agricultural and Forest Meteorology 265: 137­144. https://doi.
+      Drive Overyielding in Tropical Species Mixtures." New                    org/10.1016/j.agrformet.2018.11.014.
+      Phytologist 228(4): 1256­68. https://doi.org/10.1111/nph.16722.    Jiang, H., S. Cheng, G. Yan, A. Kuusk, R. Hu, Y. Tong, X. Mu, et al.
+                                                                               2022. "Clumping Effects in Leaf Area Index Retrieval from
+Guo, Q., Y. Su, T. Hu, H. Guan, S. Jin, J. Zhang, X. Zhao, et al. 2021.        Large-Footprint Full-Waveform LiDAR." IEEE Transactions
+      "Lidar Boosts 3D Ecological Observations and Modelings: A                on Geoscience and Remote Sensing 60: 1­20. https://doi.org/10.
+      Review and Perspective." IEEE Geoscience and Remote Sensing              1109/TGRS.2021.3118925.
+      Magazine 9(1): 232­257. https://doi.org/10.1109/mgrs.2020.         Jiang, H., R. Hu, G. Yan, S. Cheng, F. Li, J. Qi, L. Li, D. Xie, and X.
+      3032713.                                                                 Mu. 2021. "Influencing Factors in Estimation of Leaf Angle
+                                                                               Distribution of an Individual Tree from Terrestrial Laser
+Hamraz, H., M. A. Contreras, and J. Zhang. 2017. "Forest Understory            Scanning Data." Remote Sensing 13(6): 1159. https://doi.org/
+      Trees Can be Segmented Accurately within Sufficiently Dense              10.3390/rs13061159.
+      Airborne Laser Scanning Point Clouds." Scientific Reports 7(1):    Jucker, T. 2022. "Deciphering the Fingerprint of Disturbance on the
+      6770. https://doi.org/10.1038/s41598-017-07200-0.                        Three-Dimensional Structure of the World's Forests." New
+                                                                               Phytologist 233(2): 612­17. https://doi.org/10.1111/nph.17729.
+Hartley, R. J. L., S. Jayathunga, J. Morgenroth, and G. D. Pearse.       Jucker, T., J. Caspersen, J. Chave, C. Antin, N. Barbier, F. Bongers,
+      2024. "Tree Branch Characterisation from Point Clouds: A                 M. Dalponte, et al. 2017. "Allometric Equations for Integrating
+      Comprehensive Review." Current Forestry Reports 10(5):                   Remote Sensing Imagery into Forest Monitoring Programmes."
+      360­385. https://doi.org/10.1007/s40725-024-00225-5.                     Global Change Biology 23(1): 177­190. https://doi.org/10.1111/
+                                                                               gcb.13388.
+Hernandez-Stefanoni, J. L., G. Reyes-Palomeque, M. A´ .                  Kamoske, A. G., K. M. Dahlin, S. C. Stark, and S. P. Serbin. 2019.
+      Castillo-Santiago, S. P. George-Chacon, A. H. Huechacona-Ruiz,           "Leaf Area Density from Airborne LiDAR: Comparing Sensors
+      F. Tun-Dzul, D. Rondon-Rivera, and J. M. Dupuy. 2018. "Effects of        and Resolutions in a Temperate Broadleaf Forest Ecosystem."
+      Sample Plot Size and GPS Location Errors on Aboveground
+      Biomass Estimates from LiDAR in Tropical Dry Forests." Remote
+      Sensing 10(10): 1586. https://doi.org/10.3390/rs10101586.
+
+Hess, C., W. Härdtle, M. Kunz, A. Fichtner, and G. von Oheimb.
+      2018. "A High-Resolution Approach for the Spatiotemporal
+      Analysis of Forest Canopy Space Using Terrestrial Laser
+      Scanning Data." Ecology and Evolution 8(13): 6800­6811.
+      https://doi.org/10.1002/ece3.4193.
+
+Hildebrand, M., M. D. Perles-Garcia, M. Kunz, W. Härdtle, G. von
+      Oheimb, and A. Fichtner. 2021. "Tree-Tree Interactions and
+24 of 30                                                                                                                                                       CUSHMAN ET AL.  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+      Forest Ecology and Management 433: 364­375. https://doi.org/                 Two Contrasting Forests." Agricultural and Forest Meteorology
+      10.1016/j.foreco.2018.11.017.                                                296: 108230. https://doi.org/10.1016/j.agrformet.2020.108230.
+Kattge, J., G. Bönisch, S. Díaz, S. Lavorel, I. C. Prentice, P. Leadley, S.  Kunz, M., A. Fichtner, W. Härdtle, P. Raumonen, H. Bruelheide,
+      Tautenhahn, et al. 2020. "TRY Plant Trait Database ­ Enhanced                and G. von Oheimb. 2019. "Neighbour Species Richness and
+      Coverage and Open Access." Global Change Biology 26(1):                      Local Structural Variability Modulate Aboveground Allocation
+      119­188. https://doi.org/10.1111/gcb.14904.                                  Patterns and Crown Morphology of Individual Trees:
+Kellner, J. R., J. Armston, M. Birrer, K. C. Cushman, L. Duncanson,                Structural Responses of Trees to Local Tree Diversity." Ecology
+      C. Eck, C. Falleger, et al. 2019. "New Opportunities for Forest              Letters 22(12): 2130­40. https://doi.org/10.1111/ele.13400.
+      Remote Sensing through Ultra-High-Density Drone Lidar."                Laino, D., C. Cabo, C. Ordoñez, R. Bolanos, R. Janvier, F. Giulioni,
+      Surveys in Geophysics 40(4): 959­977. https://doi.org/10.1007/               M. Herrmann, A. Hudak, R. Parsons, and C. Santin. 2026.
+      s10712-019-09529-9.                                                          "SegmentedForests: A Labelled Dataset of Terrestrial LiDAR
+Kellner, J. R., J. Armston, and L. Duncanson. 2022. "Algorithm                     Point Clouds for Semantic Segmentation of Forests." Forestry:
+      Theoretical Basis Document for GEDI Footprint Aboveground                    An International Journal of Forest Research 99(2): cpaf062.
+      Biomass Density." Earth and Space Science (Hoboken, N.J.) 10:                https://doi.org/10.1093/forestry/cpaf062.
+      e2022EA002516. https://doi.org/10.1029/2022ea002516.                   Larjavaara, M., and H. C. Muller-Landau. 2013. "Measuring Tree
+Kim, Y., Z. Yang, W. B. Cohen, D. Pflugmacher, C. L. Lauver, and                   Height: A Quantitative Comparison of Two Common Field
+      J. L. Vankat. 2009. "Distinguishing between Live and Dead                    Methods in a Moist Tropical Forest." Methods in Ecology and
+      Standing Tree Biomass on the North Rim of Grand Canyon                       Evolution 4(9): 793­801. https://doi.org/10.1111/2041-210X.12071.
+      National Park, USA Using Small-Footprint Lidar Data."                  LaRue, E. A., R. T. Fahey, B. C. Alveshere, J. W. Atkins, P. Bhatt, B.
+      Remote Sensing of Environment 113(11): 2499­2510. https://                   Buma, A. Chen, et al. 2023. "A Theoretical Framework for the
+      doi.org/10.1016/j.rse.2009.07.010.                                           Ecological Role of Three-Dimensional Structural Diversity."
+Kral, K., J. Shue, T. Vrska, E. B. Gonzalez-Akre, G. G. Parker, W. J.              Frontiers in Ecology and the Environment 21(1): 4­13. https://
+      McShea, and S. M. McMahon. 2016. "Fine-Scale Patch Mosaic                    doi.org/10.1002/fee.2587.
+      of Developmental Stages in Northeast American Secondary                LaRue, E. A., B. S. Hardiman, J. M. Elliott, and S. Fei. 2019.
+      Temperate Forests: The European Perspective." European                       "Structural Diversity as a Predictor of Ecosystem Function."
+      Journal of Forest Research 135(5): 981­996. https://doi.org/10.              Environmental Research Letters 14(11): 114011. https://doi.org/
+      1007/s10342-016-0988-1.                                                      10.1088/1748-9326/ab49bb.
+Krisanski, S., M. S. Taskhiri, S. Gonzalez Aracil, D. Herries, and P.        Latypov, D. 2002. "Estimating Relative Lidar Accuracy
+      Turner. 2021. "Sensor Agnostic Semantic Segmentation of                      Information from Overlapping Flight Lines." ISPRS Journal
+      Structurally Diverse and Complex Forest Point Clouds Using                   of Photogrammetry and Remote Sensing 56(4): 236­245.
+      Deep Learning." Remote Sensing 13(8): 1413. https://doi.org/                 https://doi.org/10.1016/s0924-2716(02)00047-3.
+      10.3390/rs13081413.                                                    Lefsky, M. A., W. B. Cohen, G. G. Parker, and D. J. Harding. 2002.
+Krishna Moorthy, S. M., P. Raumonen, J. Van den Bulcke, K.                         "Lidar Remote Sensing for Ecosystem Studies: Lidar, an
+      Calders, and H. Verbeeck. 2020. "Terrestrial Laser Scanning                  Emerging Remote Sensing Technology that Directly Measures
+      for Non-Destructive Estimates of Liana Stem Biomass." Forest                 the Three-Dimensional Distribution of Plant Canopies, Can
+      Ecology and Management 456: 117751. https://doi.org/10.1016/                 Accurately Estimate Vegetation Structural Attributes and
+      j.foreco.2019.117751.                                                        Should be of Particular Interest to Forest, Landscape,
+Krishnan, S., C. Crosby, V. Nandigam, M. Phan, C. Cowart, C. Baru,                 and Global Ecologists." BioScience 52(1): 19­30. https://doi.
+      and R. Arrowsmith. 2011. "OpenTopography: A Services Oriented                org/10.1641/0006-3568(2002)052[0019:LRSFES]2.0.CO;2.
+      Architecture for Community Access to LIDAR Topography." In             Leitold, V., D. C. Morton, M. Longo, M. N. dos-Santos, M. Keller,
+      Proceedings of the 2nd International Conference on Computing for             and M. Scaranello. 2018. "El Niño Drought Increased Canopy
+      Geospatial Research & Applications. https://doi.org/10.1145/                 Turnover in Amazon Forests." New Phytologist 219(3): 959­971.
+      1999320.1999327.                                                             https://doi.org/10.1111/nph.15110.
+Kru° cek, M. 2025. "BlueCat Data Pool." https://github.com/VUKOZ-            Lenoir, J., E. Gril, S. Durrieu, H. Horen, M. Laslier, J. J. Lembrechts, F.
+      OEL/bluecat-data-pool/blob/main/REMOTE_SENSING/                              Zellweger, et al. 2022. "Unveil the Unseen: Using LiDAR to
+      readme.md.                                                                   Capture Time-Lag Dynamics in the Herbaceous Layer of
+Kru° cek, M., K. Kral, K. C. Cushman, A. Missarov, and J. R. Kellner.              European Temperate Forests." Journal of Ecology 110(2): 282­300.
+      2020. "Supervised Segmentation of Ultra-High-Density Drone                   https://doi.org/10.1111/1365-2745.13837.
+      Lidar for Large-Area Mapping of Individual Trees." Remote              Liang, L., R. Shang, J. M. Chen, M. Xu, and H. Zeng. 2025.
+      Sensing 12(19): 3260. https://doi.org/10.3390/rs12193260.                    "Improved Estimation of the Underestimated GEDI Footprint
+Kru° cek, M., J. Trochta, M. Cibulka, and K. Kral. 2019. "Beyond the               LAI in Dense Forests." Geo-spatial Information Science 28(1):
+      Cones: How Crown Shape Plasticity Alters Aboveground                         49­64. https://doi.org/10.1080/10095020.2023.2286377.
+      Competition for Space and Light--Evidence from Terrestrial             Liang, X., H. Yao, H. Qi, and X. Wang. 2024. "Forest In Situ
+      Laser Scanning." Agricultural and Forest Meteorology 264:                    Observations through a Fully Automated Under-Canopy
+      188­199. https://doi.org/10.1016/j.agrformet.2018.09.016.                    Unmanned Aerial Vehicle." Geo-Spatial Information Science
+Kükenbrink, D., F. D. Schneider, B. Schmid, J.-P.                                  27(4): 983­999. https://doi.org/10.1080/10095020.2024.2322765.
+      Gastellu-Etchegorry, M. E. Schaepman, and F. Morsdorf. 2021.           Lines, E. R., F. J. Fischer, H. J. F. Owen, and T. Jucker. 2022. "The
+      "Modelling of Three-Dimensional, Diurnal Light Extinction in                 Shape of Trees: Reimagining Forest Ecology in Three
+ECOSPHERE                                                                                                                                                             25 of 30  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+      Dimensions with Remote Sensing." Journal of Ecology 110(8):       Marchi, N., F. Pirotti, and E. Lingua. 2018. "Airborne and Terrestrial
+      1730­45. https://doi.org/10.1111/1365-2745.13944.                       Laser Scanning Data for the Assessment of Standing and Lying
+Liu, A., X. Cheng, and Z. Chen. 2021. "Performance Evaluation of              Deadwood: Current Situation and New Perspectives." Remote
+      GEDI and ICESat-2 Laser Altimeter Data for Terrain and                  Sensing 10(9): 1356. https://doi.org/10.3390/rs10091356.
+      Canopy Height Retrievals." Remote Sensing of Environment
+      264: 112571. https://doi.org/10.1016/j.rse.2021.112571.           McNeil, D. J., G. Fisher, C. J. Fiss, A. J. Elmore, M. C.
+Liu, S., O. Csillik, E. M. Ordway, L.-L. Chang, M. Longo, M.                  Fitzpatrick, J. W. Atkins, J. Cohen, and J. L. Larkin. 2023.
+      Keller, and P. R. Moorcroft. 2025. "Environmental Drivers               "Using Aerial LiDAR to Assess Regional Availability of
+      of Spatial Variation in Tropical Forest Canopy Height:                  Potential Habitat for a Conservation Dependent Forest
+      Insights from NASA's GEDI Spaceborne LiDAR."                            Bird." Forest Ecology and Management 540: 121002. https://
+      Proceedings of the National Academy of Sciences of the                  doi.org/10.1016/j.foreco.2023.121002.
+      United States of America 122(10): e2401755122. https://doi.
+      org/10.1073/pnas.2401755122.                                      Meng, P., H. Wang, S. Qin, X. Li, Z. Song, Y. Wang, Y. Yang, and J.
+Longo, M., M. Keller, M. N. dos-Santos, V. Leitold, E. R. Pinagé, A.          Gao. 2022. "Health Assessment of Plantations Based on
+      Baccini, S. Saatchi, E. M. Nogueira, M. Batistella, and D. C.           LiDAR Canopy Spatial Structure Parameters." International
+      Morton. 2016. "Aboveground Biomass Variability across Intact            Journal of Digital Earth 15(1): 712­729. https://doi.org/10.
+      and Degraded Forests in the Brazilian Amazon." Global                   1080/17538947.2022.2059114.
+      Biogeochemical Cycles 30(11): 1639­60. https://doi.org/10.1002/
+      2016GB005465.                                                     Metz, J., D. Seidel, P. Schall, D. Scheffer, E.-D. Schulze, and C.
+Lowe, T., and J. Pinskier. 2022. "Tree Reconstruction Using                   Ammer. 2013. "Crown Modeling by Terrestrial Laser Scanning
+      Topology Optimisation." Remote Sensing 15(1): 172. https://             as an Approach to Assess the Effect of Aboveground Intra- and
+      doi.org/10.3390/rs15010172.                                             Interspecific Competition on Tree Growth." Forest Ecology and
+Lowe, T. D., and K. Stepanas. 2021. "RayCloudTools: A Concise                 Management 310: 275­288. https://doi.org/10.1016/j.foreco.
+      Interface for Analysis and Manipulation of Ray Clouds." IEEE            2013.08.014.
+      Access 9: 79712­24. https://doi.org/10.1109/access.2021.3084954.
+Luthcke, S. B., T. Rebold, T. Thomas, and T. Pennington. 2019.          Mohan, M., R. V. Leite, E. N. Broadbent, W. S. Wan Mohd Jaafar, S.
+      Algorithm Theoretical Basis Document (ATBD) for GEDI                    Srinivasan, S. Bajaj, A. P. Dalla Corte, et al. 2021. "Individual
+      Waveform Geolocation for L1 and L2 Products Version 1.0.                Tree Detection Using UAV-Lidar and UAV-SfM Data: A
+      Sioux Falls, SD: NASA Land Processes Distributed Active                 Tutorial for Beginners." Open Geosciences 13(1): 1028­39.
+      Archive Center (LP DAAC).                                               https://doi.org/10.1515/geo-2020-0290.
+Lutz, J. A., T. J. Furniss, D. J. Johnson, S. J. Davies, D. Allen, A.
+      Alonso, K. J. Anderson-Teixeira, et al. 2018. "Global             Mokros, M., T. Mikita, A. Singh, J. Tomastík, J. Chuda, P. Wyk, K.
+      Importance of Large-Diameter Trees." Global Ecology and                 Kuzelka, et al. 2021. "Novel Low-Cost Mobile Mapping Systems
+      Biogeography 27(7): 849­864. https://doi.org/10.1111/geb.12747.         for Forest Inventories as Terrestrial Laser Scanning
+Ma, L., G. Zheng, J. U. H. Eitel, T. S. Magney, and L. M. Moskal.             Alternatives." International Journal of Applied Earth
+      2016. "Determining Woody-to-Total Area Ratio Using                      Observation and Geoinformation 104: 102512. https://doi.org/
+      Terrestrial Laser Scanning (TLS)." Agricultural and Forest              10.1016/j.jag.2021.102512.
+      Meteorology 228­229: 217­228. https://doi.org/10.1016/j.
+      agrformet.2016.06.021.                                            Morhart, C., Z. Schindler, J. Frey, J. P. Sheppard, K. Calders, M.
+MacArthur, R. H., and H. S. Horn. 1969. "Foliage Profile by Vertical          Disney, F. Morsdorf, P. Raumonen, and T. Seifert. 2024.
+      Measurements." Ecology 50(5): 802­4. https://doi.org/10.2307/           "Limitations of Estimating Branch Volume from Terrestrial
+      1933693.                                                                Laser Scanning." European Journal of Forest Research 143(2):
+Maeda, E. E., M. H. Nunes, K. Calders, Y. M. d. Moura, P.                     687­702. https://doi.org/10.1007/s10342-023-01651-z.
+      Raumonen, H. Tuomisto, P. Verley, G. Vincent, G. Zuquim,
+      and J. L. Camargo. 2022. "Shifts in Structural Diversity of       Morton, D. C., J. Rubio, B. D. Cook, J.-P. Gastellu-Etchegorry, M.
+      Amazonian Forest Edges Detected Using Terrestrial Laser                 Longo, H. Choi, M. Hunter, and M. Keller. 2016. "Amazon
+      Scanning." Remote Sensing of Environment 271: 112895.                   Forest Structure Generates Diurnal and Seasonal Variability in
+      https://doi.org/10.1016/j.rse.2022.112895.                              Light Utilization." Biogeosciences 13(7): 2195­2206. https://doi.
+Malhi, Y., T. Jackson, L. Patrick Bentley, A. Lau, A. Shenkin, M.             org/10.5194/bg-13-2195-2016.
+      Herold, K. Calders, H. Bartholomeus, and M. I. Disney.
+      2018. "New Perspectives on the Ecology of Tree Structure          Muhojoki, J., D. Tavi, E. Hyyppä, M. Lehtomäki, T. Faitli, H.
+      and Tree Communities through Terrestrial Laser Scanning."               Kaartinen, A. Kukko, T. Hakala, and J. Hyyppä. 2024.
+      Interface Focus 8(2): 20170052. https://doi.org/10.1098/rsfs.           "Benchmarking Under- and Above-Canopy Laser Scanning
+      2017.0052.                                                              Solutions for Deriving Stem Curve and Volume in Easy and
+Maltamo, M., E. Kallio, O. M. Bollandsås, E. Næsset, T. Gobakken,             Difficult Boreal Forest Conditions." Remote Sensing 16(10):
+      and A. Pesonen. 2014. "Assessing Dead Wood by Airborne                  1721. https://doi.org/10.3390/rs16101721.
+      Laser Scanning." In Forestry Applications of Airborne Laser
+      Scanning 375­395. Dordrecht: Springer Netherlands. https://       Næsset, E. 2002. "Predicting Forest Stand Characteristics with
+      doi.org/10.1007/978-94-017-8663-8_19.                                   Airborne Scanning Laser Using a Practical Two-Stage
+                                                                              Procedure and Field Data." Remote Sensing of Environment
+                                                                              80(1): 88­99. https://doi.org/10.1016/S0034-4257(01)00290-5.
+
+                                                                        Næsset, E., and T. Gobakken. 2008. "Estimation of Above- and
+                                                                              Below-Ground Biomass across Regions of the Boreal Forest
+                                                                              Zone Using Airborne Laser." Remote Sensing of Environment
+                                                                              112(6): 3079­90. https://doi.org/10.1016/j.rse.2008.03.004.
+
+                                                                        Nelson, R. 2013. "How Did We Get Here? An Early History of
+                                                                              Forestry Lidar." Canadian Journal of Remote Sensing 39(sup1):
+                                                                              S6­S17. https://doi.org/10.5589/m13-011.
+26 of 30                                                                                                                                                   CUSHMAN ET AL.  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+NEON. 2022. Discrete Return LiDAR Point Cloud (DP1.30003.001).                 of Hybrid Estimators Proposed for GEDI--NASA's Global
+      Boulder, CO: National Ecological Observatory Network                     Ecosystem Dynamics Investigation." Environmental Research
+      (NEON). https://doi.org/10.48443/CA22-1N03.                              Letters 14(6): 065007. https://doi.org/10.1088/1748-9326/ab18df.
+                                                                         Penman, S., P. Lentini, B. Law, and A. York. 2023. "An Instructional
+Neudam, L., P. Annighöfer, and D. Seidel. 2022. "Exploring the                 Workflow for Using Terrestrial Laser Scanning (TLS) to
+      Potential of Mobile Laser Scanning to Quantify Forest                    Quantify Vegetation Structure for Wildlife Studies." Forest
+      Structural Complexity." Frontiers in Remote Sensing 3: 861337.           Ecology and Management 548: 121405. https://doi.org/10.1016/
+      https://doi.org/10.3389/frsen.2022.861337.                               j.foreco.2023.121405.
+                                                                         Popescu, G., and D. Iordan. 2016. "The Geolocation Accuracy of
+Neuenschwander, A., and K. Pitts. 2019. "The ATL08 Land and                    LiDAR Footprint." Universal Journal of Agricultural Research
+      Vegetation Product for the ICESat-2 Mission." Remote                     4(4): 143­150. https://doi.org/10.13189/ujar.2016.040405.
+      Sensing of Environment 221: 247­259. https://doi.org/10.           Pöppl, F., G. Mandlburger, and N. Pfeifer. 2023. "Evaluation of a
+      1016/j.rse.2018.11.005.                                                  GNSS/IMU/LIDAR-Integration for Airborne Laser Scanning Using
+                                                                               RTKLIB PPK and PPP GNSS Solutions." ISPRS ­ International
+Neuenschwander, A. L., and L. A. Magruder. 2019. "Canopy and                   Archives of the Photogrammetry, Remote Sensing and Spatial
+      Terrain Height Retrievals with ICESat-2: A First Look."                  Information Sciences XLVIII-1/W3-2023: 161­66. https://doi.org/10.
+      Remote Sensing 11(14): 1721. https://doi.org/10.3390/                    5194/isprs-archives-xlviii-1-w3-2023-161-2023.
+      rs11141721.                                                        Potapov, P., X. Li, A. Hernandez-Serna, A. Tyukavina, M. C.
+                                                                               Hansen, A. Kommareddy, A. Pickens, et al. 2021. "Mapping
+Neuenschwander, A. L., T. J. Urban, R. Gutierrez, and B. E. Schutz.            Global Forest Canopy Height through Integration of GEDI and
+      2008. "Characterization of ICESat/GLAS Waveforms over                    Landsat Data." Remote Sensing of Environment 253: 112165.
+      Terrestrial Ecosystems: Implications for Vegetation Mapping."            https://doi.org/10.1016/j.rse.2020.112165.
+      Journal of Geophysical Research: Biogeosciences 113: G02S03.       Puliti, S., E. Lines, J. Müllerova, J. Frey, Z. Schindler, A. Straker,
+      https://doi.org/10.1029/2007JG000557.                                    M. J. Allen, et al. 2024. "FOR-species20K Dataset." Zenodo.
+                                                                               https://doi.org/10.5281/zenodo.13255198.
+Norberto, I. S., C. S. Faria Junior, A. M. G. Tommaselli, M. H.          Puliti, S., E. R. Lines, J. Müllerova, J. Frey, Z. Schindler, A. Straker,
+      Shimabukuro, R. P. Martins-Neto, N. N. Imai, and M. F. da                M. J. Allen, et al. 2025. "Benchmarking Tree Species
+      Silva. 2024. "Leaf Identification in High-Density LiDAR-RGB              Classification from Proximally Sensed Laser Scanning Data:
+      Data." ISPRS Annals of the Photogrammetry, Remote Sensing                Introducing the FOR-species20K Dataset." Methods in Ecology
+      and Spatial Information Sciences X-3-2024: 269­276. https://             and Evolution 16(4): 801­818. https://doi.org/10.1111/2041-210x.
+      doi.org/10.5194/isprs-annals-X-3-2024-269-2024.                          14503.
+                                                                         Puliti, S., G. Pearse, P. Surový, L. Wallace, M. Hollaus, M. Wielgosz,
+Nunes, M. H., M. C. Vaz, J. L. C. Camargo, W. F. Laurance, A. de               and R. Astrup. 2023. "FOR-Instance: A UAV Laser Scanning
+      Andrade, A. Vicentini, S. Laurance, et al. 2023. "Edge Effects on        Benchmark Dataset for Semantic and Instance Segmentation
+      Tree Architecture Exacerbate Biomass Loss of Fragmented                  of Individual Trees." https://doi.org/10.48550/ARXIV.2309.
+      Amazonian Forests." Nature Communications 14(1): 8129.                   01279.
+      https://doi.org/10.1038/s41467-023-44004-5.                        Putman, E. B., S. C. Popescu, M. Eriksson, T. Zhou, P. Klockow, J.
+                                                                               Vogel, and G. W. Moore. 2018. "Detecting and Quantifying
+Oliveira, P. V. C., and X. Zhang. 2025. "Upper Canopy and                      Standing Dead Tree Structural Loss with Reconstructed
+      Understory Phenology of Brazilian Amazon Forests Seen by                 Tree Models Using Voxelized Terrestrial Lidar Data." Remote
+      GEDI Lasers." Environmental Research Letters 20(4): 044015.              Sensing of Environment 209: 52­65. https://doi.org/10.1016/j.
+      https://doi.org/10.1088/1748-9326/adbfad.                                rse.2018.02.028.
+                                                                         Qi, W., J. Armston, C. Choi, A. Stovall, S. Saarela, M. Pardini, L.
+Olofsson, K., J. Holmgren, and H. Olsson. 2014. "Tree Stem and                 Fatoyinbo, K. Papathanassiou, A. Pascual, and R. Dubayah.
+      Height Measurements Using Terrestrial Laser Scanning                     2025. "Mapping Large-Scale Pantropical Forest Canopy Height
+      and the RANSAC Algorithm." Remote Sensing 6(5): 4323­44.                 by Integrating GEDI Lidar and TanDEM-X InSAR Data."
+      https://doi.org/10.3390/rs6054323.                                       Remote Sensing of Environment 318: 114534. https://doi.org/10.
+                                                                               1016/j.rse.2024.114534.
+Ordway, E. M., and G. P. Asner. 2020. "Carbon Declines along             Qi, W., S.-K. Lee, S. Hancock, S. Luthcke, H. Tang, J. Armston, and
+      Tropical Forest Edges Correspond to Heterogeneous Effects on             R. Dubayah. 2019. "Improved Forest Height Estimation by
+      Canopy Structure and Function." Proceedings of the National              Fusion of Simulated GEDI Lidar Data and TanDEM-X InSAR
+      Academy of Sciences of the United States of America 117(14):             Data." Remote Sensing of Environment 221: 621­634. https://
+      7863­70. https://doi.org/10.1073/pnas.1914420117.                        doi.org/10.1016/j.rse.2018.11.035.
+                                                                         Qi, Y., N. C. Coops, L. D. Daniels, and C. R. Butson. 2022.
+O'Sullivan, H., P. Raumonen, P. Kaitaniemi, J. Perttunen, and R.               "Comparing Tree Attributes Derived from Quantitative
+      Sievänen. 2021. "Integrating Terrestrial Laser Scanning with             Structure Models Based on Drone and Mobile Laser Scanning
+      Functional­Structural Plant Models to Investigate Ecological             Point Clouds across Varying Canopy Cover Conditions." ISPRS
+      and Evolutionary Processes of Forest Communities." Annals of             Journal of Photogrammetry and Remote Sensing 192: 49­65.
+      Botany 128(6): 663­684. https://doi.org/10.1093/aob/mcab120.             https://doi.org/10.1016/j.isprsjprs.2022.07.021.
+
+Parker, G. G. 2020. "Tamm Review: Leaf Area Index (LAI) Is both a
+      Determinant and a Consequence of Important Processes in
+      Vegetation Canopies." Forest Ecology and Management 477:
+      118496. https://doi.org/10.1016/j.foreco.2020.118496.
+
+Parker, G. G., D. J. Harding, and M. L. Berger. 2004. "A Portable
+      LIDAR System for Rapid Determination of Forest Canopy
+      Structure." The Journal of Applied Ecology 41(4): 755­767.
+      https://doi.org/10.1111/j.0021-8901.2004.00925.x.
+
+Patterson, P. L., S. P. Healey, G. Ståhl, S. Saarela, S. Holm, H.-E.
+      Andersen, R. O. Dubayah, et al. 2019. "Statistical Properties
+ECOSPHERE                                                                                                                                                             27 of 30  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+R Core Team. 2023. R: A Language and Environment for Statistical              Journal of Botany 98(1): 140­49. https://doi.org/10.3732/ajb.
+      Computing. Vienna: R Foundation for Statistical Computing.              1000034.
+                                                                        Sato, L. Y., V. C. Gomes, Y. E. Shimabukuro, M. Keller, E. Arai,
+Raumonen, P., M. Kaasalainen, M. Åkerblom, S. Kaasalainen, H.                 M. N. Dos-Santos, I. F. Brown, and L. E. Araga~o. 2016.
+      Kaartinen, M. Vastaranta, M. Holopainen, M. Disney, and P.              "Post-Fire Changes in Forest Biomass Retrieved by Airborne
+      Lewis. 2013. "Fast Automatic Precision Tree Models from                 LiDAR in Amazonia." Remote Sensing 8(10): 839. https://doi.
+      Terrestrial Laser Scanner Data." Remote Sensing 5(2): 491­520.          org/10.3390/rs8100839.
+      https://doi.org/10.3390/rs5020491.                                Scaranello, M. A. S., M. Keller, M. Longo, M. N. dos-Santos, V.
+                                                                              Leitold, D. C. Morton, E. R. Pinagé, and F. D. B.
+Ravaglia, J., R. A. Fournier, A. Bac, C. Véga, J.-F. Côté, A. Piboule,        Espírito-Santo. 2019. "Estimation of Coarse Dead Wood Stocks
+      and U. Rémillard. 2019. "Comparison of Three Algorithms to              in Intact and Degraded Forests in the Brazilian Amazon Using
+      Estimate Tree Stem Diameter from Terrestrial Laser Scanner              Airborne Lidar." Biogeosciences 16(17): 3457­74. https://doi.
+      Data." Forests 10(7): 599. https://doi.org/10.3390/f10070599.           org/10.5194/bg-16-3457-2019.
+                                                                        Scheeres, J., J. de Jong, B. Brede, P. H. S. Brancalion, E. N.
+Rehush, N., M. Abegg, L. T. Waser, and U.-B. Brändli. 2018.                   Broadbent, A. M. A. Zambrano, E. B. Gorgens, et al. 2023.
+      "Identifying Tree-Related Microhabitats in TLS Point Clouds             "Distinguishing Forest Types in Restored Tropical Landscapes
+      Using Machine Learning." Remote Sensing 10(11): 1735. https://          with UAV-Borne LIDAR." Remote Sensing of Environment 290:
+      doi.org/10.3390/rs10111735.                                             113533. https://doi.org/10.1016/j.rse.2023.113533.
+                                                                        Schneider, F. D., A. Ferraz, S. Hancock, L. I. Duncanson, R. O.
+Reilly, S. 2024. Assessing the Capacity of Unoccupied Aerial Systems          Dubayah, R. P. Pavlick, and D. S. Schimel. 2020. "Towards
+      Structure-From-Motion (UAS-SfM) for Monitoring Forest and               Mapping the Diversity of Canopy Structure from Space with
+      Fuel Attributes in California, USA for Improved Fire Hazard             GEDI." Environmental Research Letters 15(11): 115006. https://
+      Land Management. PhD Thesis., University of Oxford. Oxford,             doi.org/10.1088/1748-9326/ab9e99.
+      UK. https://doi.org/10.5287/ORA-ZBX0A5MVE.                        Schneider, F. D., D. Kükenbrink, M. E. Schaepman, D. S. Schimel,
+                                                                              and F. Morsdorf. 2019. "Quantifying 3D Structure and
+Ren, Y., H. Guan, H. Yang, Y. Su, S. Tao, K. Cheng, W. Li, et al.             Occlusion in Dense Tropical and Temperate Forests Using
+      2024. "Discovering and Measuring Giant Trees through the                Close-Range LiDAR." Agricultural and Forest Meteorology 268:
+      Integration of Multi-Platform Lidar Data." Methods in Ecology           249­257. https://doi.org/10.1016/j.agrformet.2019.01.033.
+      and Evolution 15(10): 1889­1905. https://doi.org/10.1111/2041-    Sebkova, B., P. Samonil, D. Janík, D. Adam, K. Kral, T. Vrska, L. Hort,
+      210x.14401.                                                             and P. Unar. 2011. "Spatial and Volume Patterns of an Unmanaged
+                                                                              Submontane Mixed Forest in Central Europe: 160 Years of
+Reutebuch, S. E., H.-E. Andersen, and R. J. McGaughey. 2005. "Light           Spontaneous Dynamics." Forest Ecology and Management 262(5):
+      Detection and Ranging (LIDAR): An Emerging Tool for                     873­885. https://doi.org/10.1016/j.foreco.2011.05.028.
+      Multiple Resource Inventory." Journal of Forestry 103(6):         Seidel, D., S. Fleck, and C. Leuschner. 2012. "Analyzing Forest
+      286­292. https://doi.org/10.1093/jof/103.6.286.                         Canopies with Ground-Based Laser Scanning: A Comparison
+                                                                              with Hemispherical Photography." Agricultural and Forest
+Rosen, A., F. Jörg Fischer, D. A. Coomes, T. D. Jackson, G. P. Asner,         Meteorology 154­155: 1­8. https://doi.org/10.1016/j.agrformet.
+      and T. Jucker. 2024. "Tracking Shifts in Forest Structural              2011.10.006.
+      Complexity through Space and Time in Human-Modified               Seidel, D., C. Leuschner, A. Müller, and B. Krause. 2011. "Crown
+      Tropical Landscapes." Ecography 2024(11): e07377. https://              Plasticity in Mixed Forests--Quantifying Asymmetry as a
+      doi.org/10.1111/ecog.07377.                                             Measure of Competition Using Terrestrial Laser Scanning."
+                                                                              Forest Ecology and Management 261(11): 2123­32. https://doi.
+Roussel, J.-R., D. Auty, N. C. Coops, P. Tompalski, T. R. H.                  org/10.1016/j.foreco.2011.03.008.
+      Goodbody, A. S. Meador, J.-F. Bourdon, F. de Boissieu, and A.     Shabanov, N., and J.-P. Gastellu-Etchegorry. 2018. "The Stochastic
+      Achim. 2020. "lidR: An R Package for Analysis of Airborne               Beer­Lambert­Bouguer Law for Discontinuous Vegetation
+      Laser Scanning (ALS) Data." Remote Sensing of Environment               Canopies." Journal of Quantitative Spectroscopy & Radiative
+      251: 112061. https://doi.org/10.1016/j.rse.2020.112061.                 Transfer 214: 18­32. https://doi.org/10.1016/j.jqsrt.2018.04.021.
+                                                                        Shao, G., S. C. Stark, D. R. A. de Almeida, and M. N. Smith. 2019.
+Roy, D. P., H. B. Kashongwe, and J. Armston. 2021. "The Impact of             "Towards High Throughput Assessment of Canopy Dynamics:
+      Geolocation Uncertainty on GEDI Tropical Forest Canopy                  The Estimation of Leaf Area Structure in Amazonian Forests
+      Height Estimation and Change Monitoring." Science of Remote             with Multitemporal Multi-Sensor Airborne Lidar." Remote
+      Sensing 4: 100024. https://doi.org/10.1016/j.srs.2021.100024.           Sensing of Environment 221: 1­13. https://doi.org/10.1016/j.
+                                                                              rse.2018.10.035.
+Rudge, M. L. M., S. R. Levick, R. E. Bartolo, and P. D. Erskine.        Shen, Y., S. Ji, J. Wang, W. Liu, J. Wang, Y. Chen, Z. Deng, S. Fu,
+      2021. "Modelling the Diameter Distribution of Savanna Trees             and D. Chen. 2024. "Coarse-to-Fine Separation of Wood and
+      with Drone-Based LiDAR." Remote Sensing 13(7): 1266. https://           Leaf from MLS Street Tree Point Clouds Using Branch Tilt
+      doi.org/10.3390/rs13071266.                                             Prior and Enhanced Shortest Path Tracing." IEEE Transactions
+                                                                              on Geoscience and Remote Sensing 62: 1­18. https://doi.org/10.
+Rudic, T. E., L. A. McCulloch, and K. C. Cushman. 2020.                       1109/tgrs.2024.3488696.
+      "Comparison of Smartphone and Drone Lidar Methods for
+      Characterizing Spatial Variation in PAI in a Tropical Forest."
+      Remote Sensing 12(11): 1765. https://doi.org/10.3390/rs12111765.
+
+Ruhan, A., W. Du, H. Ying, B. Wei, Y. Shan, and H. Dai. 2023.
+      "Estimation of Aboveground Biomass of Individual Trees by
+      Backpack LiDAR Based on Parameter-Optimized Quantitative
+      Structural Models (AdQSM)." Forests 14(3): 475. https://doi.
+      org/10.3390/f14030475.
+
+Sarmiento, C., S. Patiño, C. E. T. Paine, J. Beauchêne, A. Thibaut,
+      and C. Baraloto. 2011. "Within-Individual Variation of Trunk
+      and Branch Xylem Density in Tropical Trees." American
+28 of 30                                                                    CUSHMAN ET AL.                                                          21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+Shokirov, S., M. Schaefer, S. R. Levick, T. Jucker, J. Borevitz, I.               Remote Sensing 9: 100045. https://doi.org/10.1016/j.ophoto.
+      Abdurahmanov, and K. Youngentob. 2021. "Multi-Platform                      2023.100045.
+      LiDAR Approach for Detecting Coarse Woody Debris in a                 Stroner, M., R. Urban, T. Kremen, and J. Braun. 2023. "UAV DTM
+      Landscape with Varied Ground Cover." International Journal                  Acquisition in a Forested Area ­ Comparison of Low-Cost
+      of Remote Sensing 42(24): 9324­50. https://doi.org/10.1080/                 Photogrammetry (DJI Zenmuse P1) and LiDAR Solutions (DJI
+      01431161.2021.1995072.                                                      Zenmuse L1)." European Journal of Remote Sensing 56(1):
+                                                                                  2179942. https://doi.org/10.1080/22797254.2023.2179942.
+Shugart, H. H., S. Saatchi, and F. G. Hall. 2010. "Importance of            Tang, H., M. Brolly, F. Zhao, A. H. Strahler, C. L. Schaaf, S.
+      Structure and its Measurement in Quantifying Function of Forest             Ganguly, G. Zhang, and R. Dubayah. 2014. "Deriving and
+      Ecosystems." Journal of Geophysical Research: Biogeosciences                Validating Leaf Area Index (LAI) at Multiple Spatial Scales
+      115(G2): G00E13. https://doi.org/10.1029/2009JG000993.                      through Lidar Remote Sensing: A Case Study in Sierra National
+                                                                                  Forest, CA." Remote Sensing of Environment 143: 131­141.
+Silva, C., C. Hamamura, R. Valbuena, S. Hancock, A. Cardil, E.                    https://doi.org/10.1016/j.rse.2013.12.007.
+      Broadbent, D. Almeida, C. Silva Junior, and C. Klauberg. 2020.        Tang, H., and R. Dubayah. 2017. "Light-Driven Growth in Amazon
+      "rGEDI: NASA's Global Ecosystem Dynamics Investigation                      Evergreen Forests Explained by Seasonal Variations of
+      (GEDI) Data Visualization and Processing." R package version                Vertical Canopy Structure." Proceedings of the National
+      0.5.7, https://github.com/carlos-alberto-silva/rGEDI.                       Academy of Sciences of the United States of America 114(10):
+                                                                                  2640­44. https://doi.org/10.1073/pnas.1616943114.
+SmartForest. 2022. "ForestSens." https://forestsens.com/.                   Tang, H., R. Dubayah, M. Brolly, S. Ganguly, and G. Zhang. 2014.
+Smith, M. N., S. C. Stark, T. C. Taylor, M. L. Ferreira, E. de                    "Large-Scale Retrieval of Leaf Area Index and Vertical Foliage
+                                                                                  Profile from the Spaceborne Waveform Lidar (GLAS/ICESat)."
+      Oliveira, N. Restrepo-Coupe, S. Chen, et al. 2019. "Seasonal                Remote Sensing of Environment 154: 8­18. https://doi.org/10.
+      and Drought-Related Changes in Leaf Area Profiles Depend                    1016/j.rse.2014.08.007.
+      on Height and Light Environment in an Amazon Forest." New             Tatsumi, S., K. Yamaguchi, and N. Furuya. 2023. "ForestScanner: A
+      Phytologist 222(3): 1284­97. https://doi.org/10.1111/nph.15726.             Mobile Application for Measuring and Mapping Trees with
+Stark, S. C., B. J. Enquist, S. R. Saleska, V. Leitold, J. Schietti, M.           LiDAR-Equipped iPhone and iPad." Methods in Ecology and
+      Longo, L. F. Alves, P. B. Camargo, and R. C. Oliveira. 2015.                Evolution 14(7): 1603­9. https://doi.org/10.1111/2041-210X.
+      "Linking Canopy Leaf Area and Light Environments with                       13900.
+      Tree Size Distributions to Explain Amazon Forest                      Terryn, L., K. Calders, H. Bartholomeus, R. E. Bartolo, B. Brede, B.
+      Demography." Ecology Letters 18(7): 636­645. https://doi.org/               D'hont, M. Disney, et al. 2022. "Quantifying Tropical Forest
+      10.1111/ele.12440.                                                          Structure through Terrestrial and UAV Laser Scanning Fusion
+Stark, S. C., V. Leitold, J. L. Wu, M. O. Hunter, C. V. de Castilho,              in Australian Rainforests." Remote Sensing of Environment
+      F. R. C. Costa, S. M. McMahon, et al. 2012. "Amazon Forest                  271: 112912. https://doi.org/10.1016/j.rse.2022.112912.
+      Carbon Dynamics Predicted by Profiles of Canopy Leaf Area             Terryn, L., K. Calders, F. Meunier, M. Bauters, P. Boeckx, B. Brede,
+      and Light Environment." Ecology Letters 15(12): 1406­14.                    A. Burt, et al. 2024. "New Tree Height Allometries Derived
+      https://doi.org/10.1111/j.1461-0248.2012.01864.x.                           from Terrestrial Laser Scanning Reveal Substantial Discrepancies
+Stovall, A. 2023. "Global TLS Database." https://www.global-tls.                  with Forest Inventory Methods in Tropical Rainforests." Global
+      net/.                                                                       Change Biology 30(8): e17473. https://doi.org/10.1111/gcb.17473.
+Stovall, A. E. L., K. J. Anderson-Teixeira, and H. H. Shugart. 2018.        The GEO-TREES Consortium. 2024. "GEO-TREES: A Network of
+      "Assessing Terrestrial Laser Scanning for Developing Non-Destructive        Biomass Reference Measurement Sites." https://geo-trees.org/.
+      Biomass Allometry." Forest Ecology and Management 427: 217­229.       Tian, Z., and S. Li. 2022. "Graph-Based Leaf­Wood Separation
+      https://doi.org/10.1016/j.foreco.2018.06.004.                               Method for Individual Trees Using Terrestrial Lidar Point
+Stovall, A. E. L., and J. W. Atkins. 2021. "Assessing Low-Cost                    Clouds." IEEE Transactions on Geoscience and Remote Sensing
+      Terrestrial Laser Scanners for Deriving Forest Structure                    60: 1­11. https://doi.org/10.1109/tgrs.2022.3218603.
+      Parameters." https://doi.org/10.20944/preprints202107.0690.v1.        Trochta, J., M. Kru° cek, T. Vrska, and K. Kral. 2017. "3D Forest: An
+Stovall, A. E. L., B. Masters, L. Fatoyinbo, and X. Yang. 2021.                   Application for Descriptions of Three-Dimensional Forest
+      "TLSLeAF: Automatic Leaf Angle Estimates from Single-Scan                   Structures Using Terrestrial LiDAR." PLoS One 12(5):
+      Terrestrial Laser Scanning." New Phytologist 232(4): 1876­92.               e0176871. https://doi.org/10.1371/journal.pone.0176871.
+      https://doi.org/10.1111/nph.17548.                                    Tupinamba-Simões, F., A. Pascual, J. Guerra-Hernandez, C. Ordoñez,
+Stovall, A. E. L., H. Shugart, and X. Yang. 2019. "Tree Height                    S. Barreiro, and F. Bravo. 2025. "Combining Hand-Held and
+      Explains Mortality Risk during an Intense Drought." Nature                  Drone-Based Lidar for Forest Carbon Monitoring: Insights from
+      Communications 10(1): 4385. https://doi.org/10.1038/s41467-                 a Mediterranean Mixed Forest in Central Portugal." European
+      019-12380-6.                                                                Journal of Forest Research 144(4): 925­940. https://doi.org/10.
+Stovall, A. E. L., A. G. Vorster, R. S. Anderson, P. H. Evangelista,              1007/s10342-025-01772-7.
+      and H. H. Shugart. 2017. "Non-Destructive Aboveground                 U.S. Geological Survey. 2023. "3D Elevation Program." https://
+      Biomass Estimation of Coniferous Trees Using Terrestrial                    www.usgs.gov/3d-elevation-program.
+      LiDAR." Remote Sensing of Environment 200: 31­42. https://            Urbazaev, M., L. L. Hess, S. Hancock, L. Y. Sato, J. P. Ometto, C.
+      doi.org/10.1016/j.rse.2017.08.013.                                          Thiel, C. Dubois, et al. 2022. "Assessment of Terrain Elevation
+Straker, A., S. Puliti, J. Breidenbach, C. Kleinn, G. Pearse, R.                  Estimates from ICESat-2 and GEDI Spaceborne LiDAR
+      Astrup, and P. Magdon. 2023. "Instance Segmentation of
+      Individual Tree Crowns with YOLOv5: A Comparison
+      of Approaches Using the ForInstance Benchmark LiDAR
+      Dataset." ISPRS Open Journal of Photogrammetry and
+ECOSPHERE                                                                                                                                                             29 of 30  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+      Missions across Different Land Cover and Forest Types."                 European Journal of Forest Research 143(2): 635­649. https://
+      Science of Remote Sensing 6: 100067. https://doi.org/10.1016/           doi.org/10.1007/s10342-023-01641-1.
+      j.srs.2022.100067.                                                West, G. B., B. J. Enquist, and J. H. Brown. 2009. "A General
+Vahrenhold, J. R., M. Brandmeier, and M. S. Müller. 2025.                     Quantitative Theory of Forest Structure and Dynamics."
+      "MMTSCNet: Multimodal Tree Species Classification Network               Proceedings of the National Academy of Sciences of the
+      for Classification of Multi-Source, Single-Tree LiDAR Point             United States of America 106(17): 7040­45. https://doi.org/10.
+      Clouds." Remote Sensing 17(7): 1304. https://doi.org/10.3390/           1073/pnas.0812294106.
+      rs17071304.                                                       White, J. C., M. A. Wulder, A. Varhola, M. Vastaranta, N. C. Coops,
+Vandendaele, B., O. Martin-Ducup, R. A. Fournier, and G. Pelletier.           B. D. Cook, D. Pitt, and M. Woods. 2013. "A Best Practices
+      2024. "Evaluation of Mobile Laser Scanning Acquisition                  Guide for Generating Forest Inventory Attributes from
+      Scenarios for Automated Wood Volume Estimation in a                     Airborne Laser Scanning Data Using an Area-Based
+      Temperate Hardwood Forest Using Quantitative Structural                 Approach." Forestry Chronicle 89(6): 722­23. https://doi.org/
+      Models." Canadian Journal of Forest Research 54(7): 774­792.            10.5558/tfc2013-132.
+      https://doi.org/10.1139/cjfr-2023-0202.                           Wielgosz, M., S. Puliti, P. Wilkes, and R. Astrup. 2023. "Point2Tree
+Vandendaele, B., O. Martin-Ducup, R. A. Fournier, G. Pelletier,               (P2T)--Framework for Parameter Tuning of Semantic and
+      and P. Lejeune. 2022. "Mobile Laser Scanning for                        Instance Segmentation Used with Mobile Laser Scanning Data
+      Estimating Tree Structural Attributes in a Temperate                    in Coniferous Forest." Remote Sensing 15(15): 3737. https://
+      Hardwood Forest." Remote Sensing 14(18): 4522. https://                 doi.org/10.3390/rs15153737.
+      doi.org/10.3390/rs14184522.                                       Wielgosz, M., S. Puliti, B. Xiang, K. Schindler, and R. Astrup. 2024.
+Vastaranta, M., M. Holopainen, M. Karjalainen, V. Kankare, J.                 "SegmentAnyTree: A Sensor and Platform Agnostic Deep
+      Hyyppa, and S. Kaasalainen. 2014. "TerraSAR-X Stereo                    Learning Model for Tree Segmentation Using Laser Scanning
+      Radargrammetry and Airborne Scanning LiDAR Height                       Data." Remote Sensing of Environment 313: 114367. https://doi.
+      Metrics in Imputation of Forest Aboveground Biomass and                 org/10.1016/j.rse.2024.114367.
+      Stem Volume." IEEE Transactions on Geoscience and                 Wilkes, P., A. Lau, M. Disney, K. Calders, A. Burt, J. Gonzalez de
+      Remote Sensing 52(2): 1197­1204. https://doi.org/10.1109/               Tanago, H. Bartholomeus, B. Brede, and M. Herold. 2017.
+      tgrs.2013.2248370.                                                      "Data acquisition considerations for Terrestrial Laser
+Vicari, M. B., J. Pisek, and M. Disney. 2019. "New Estimates of Leaf          Scanning of forest plots." Remote Sensing of Environment 196,
+      Angle Distribution from Terrestrial LiDAR: Comparison with              140­153. https://doi.org/10.1016/j.rse.2017.04.030.
+      Measured and Modelled Estimates from Nine Broadleaf Tree          Wilkes, P., M. Disney, J. Armston, H. Bartholomeus, L. Bentley, B. Brede,
+      Species." Agricultural and Forest Meteorology 264: 322­333.             A. Burt, et al. 2023. "TLS2trees: A Scalable Tree Segmentation
+      https://doi.org/10.1016/j.agrformet.2018.10.021.                        Pipeline for TLS Data." Methods in Ecology and Evolution 14(12):
+Vincent, G., P. Verley, B. Brede, G. Delaitre, E. Maurent, J. Ball, I.        3083­99. https://doi.org/10.1111/2041-210X.14233.
+      Clocher, and N. Barbier. 2023. "Multi-Sensor Airborne Lidar       Wulder, M. A., J. C. White, R. F. Nelson, E. Næsset, H. O. Ørka,
+      Requires Intercalibration for Consistent Estimation of Light            N. C. Coops, T. Hilker, C. W. Bater, and T. Gobakken. 2012.
+      Attenuation and Plant Area Density." Remote Sensing of                  "Lidar Sampling for Large-Area Forest Characterization: A
+      Environment 286: 113442. https://doi.org/10.1016/j.rse.2022.            Review." Remote Sensing of Environment 121: 196­209. https://
+      113442.                                                                 doi.org/10.1016/j.rse.2012.02.001.
+Výbostok, J., J. Chuda, D. Tomcík, M. Skladan, A. Singh, R.             Xi, Z., L. Chasmer, and C. Hopkinson. 2023. "Delineating and
+      Kadlecík, F. Chudý, D. Kükenbrink, M. Mokros, and J.                    Reconstructing 3D Forest Fuel Components and Volumes with
+      Bedkowski. 2026. "Low-Cost Mobile Laser Scanning for Urban              Terrestrial Laser Scanning." Remote Sensing 15(19): 4778.
+      Tree Assessment: Accuracy Evaluation and Application                    https://doi.org/10.3390/rs15194778.
+      Potential." Frontiers in Remote Sensing 7: 1774149. https://doi.  Yang, W., P. Wilkes, M. B. Vicari, K. Hand, K. Calders, and M.
+      org/10.3389/frsen.2026.1774149.                                         Disney. 2024. "Treegraph: Tree Architecture from Terrestrial
+Wang, B., C. Proctor, Z. Yao, N. Li, Q. Chen, W. Liu, S. Ma, et al.           Laser Scanning Point Clouds." Remote Sensing in Ecology and
+      2024. "FLApy: A Python Package for Evaluating the 3D Light              Conservation 10(6): 755­774. https://doi.org/10.1002/rse2.399.
+      Availability Heterogeneity within Forest Communities."            Yang, X., C. Wang, X. Xi, Z. Niu, D. Li, S. Nie, K. Bi, and R. Wang.
+      Methods in Ecology and Evolution 15(9): 1540­52. https://doi.           2024. "Assessment of Multiple Scattering in LiDAR Canopy
+      org/10.1111/2041-210x.14382.                                            Waveform." IEEE Journal of Selected Topics in Applied Earth
+Wang, J., D. H. Choi, E. LaRue, J. W. Atkins, J. R. Foster, J. H.             Observations and Remote Sensing 17: 14394­407. https://doi.
+      Matthes, R. T. Fahey, S. Fei, and B. S. Hardiman. 2024.                 org/10.1109/jstars.2024.3443348.
+      "NEON-SD: A 30-m Structural Diversity Product Derived from        Ye, N., L. van Leeuwen, and P. Nyktas. 2019. "Analysing the
+      the NEON Discrete-Return LiDAR Point Cloud." Scientific                 Potential of UAV Point Cloud as Input in Quantitative
+      Data 11(1): 1174. https://doi.org/10.1038/s41597-024-04018-0.           Structure Modelling for Assessment of Woody Biomass of
+Wang, Y., and H. Fang. 2020. "Estimation of LAI with the LiDAR                Single Trees." International Journal of Applied Earth
+      Technology: A Review." Remote Sensing 12(20): 3457. https://            Observation and Geoinformation 81: 47­57. https://doi.org/10.
+      doi.org/10.3390/rs12203457.                                             1016/j.jag.2019.05.010.
+Wardius, Y., and S. Hein. 2024. "Terrestrial Laser Scanning             Yin, T., B. D. Cook, and D. C. Morton. 2022. "Three-Dimensional
+      Vs. Manual Methods for Assessing Complex Forest Stand                   Estimation of Deciduous Forest Canopy Structure and Leaf
+      Structure: A Comparative Analysis on Plenter Forests."                  Area Using Multi-Directional, Leaf-on and Leaf-off Airborne
+30 of 30                                                                                                                                                  CUSHMAN ET AL.  21508925, 2026, 8, Downloaded from https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecs2.70730 by Western Sydney University, Wiley Online Library on [19/08/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+      Lidar Data." Agricultural and Forest Meteorology 314: 108781.           Forests: Maximum Likelihood Estimates of Canopy Profile,
+      https://doi.org/10.1016/j.agrformet.2021.108781.                        Leaf Area Index, and Leaf Angle Distribution." Agricultural
+You, L., S. Tang, X. Song, Y. Lei, H. Zang, M. Lou, and C. Zhuang.            and Forest Meteorology 209­210: 100­113. https://doi.org/10.
+      2016. "Precise Measurement of Stem Diameter by Simulating               1016/j.agrformet.2015.03.008.
+      the Path of Diameter Tape from Terrestrial Laser Scanning         Zhao, X., C. Liu, J. Qi, L. Yuan, Z. Yu, S. He, and H. Huang. 2024.
+      Data." Remote Sensing 8(9): 717. https://doi.org/10.3390/               "Evaluating Different Crown Reconstruction Approaches from
+      rs8090717.                                                              Airborne LiDAR for Quantifying APAR Distribution Using a
+Zeller, L., A. Förster, C. Keye, P. Meyer, C. Roschak, and C.                 3D Radiative Transfer Model." Remote Sensing 17(1): 53.
+      Ammer. 2023. "What Does Literature Tell us about the                    https://doi.org/10.3390/rs17010053.
+      Relationship between Forest Structural Attributes and Species     Zhu, X., J. Liu, A. K. Skidmore, J. Premier, and M. Heurich. 2020.
+      Richness in Temperate Forests? ­ A Review." Ecological                  "A Voxel Matching Method for Effective Leaf Area Index
+      Indicators 153: 110383. https://doi.org/10.1016/j.ecolind.2023.         Estimation in Temperate Deciduous Forests from Leaf-on
+      110383.                                                                 and Leaf-off Airborne LiDAR Data." Remote Sensing of
+Zhang, B., F. J. Fischer, S. M. Prober, P. B. Yeoh, C. R. Gosper, K.          Environment 240: 111696. https://doi.org/10.1016/j.rse.
+      Zdunic, and T. Jucker. 2024. "Robust Retrieval of Forest                2020.111696.
+      Canopy Structural Attributes Using Multi-Platform Airborne        Zolkos, S. G., S. J. Goetz, and R. Dubayah. 2013. "A Meta-Analysis
+      LiDAR." Remote Sensing in Ecology and Conservation 10(6):               of Terrestrial Aboveground Biomass Estimation Using Lidar
+      725­742. https://doi.org/10.1002/rse2.398.                              Remote Sensing." Remote Sensing of Environment 128:
+Zhang, D., K. Kral, M. Kru° cek, K. C. Cushman, and J. R. Kellner.            289­298. https://doi.org/10.1016/j.rse.2012.10.017.
+      2024. "Near-Complete Sampling of Forest Structure from
+      High-Density Drone Lidar Demonstrated by Ray Tracing."            SUPPORTING INFORMATION
+      Remote Sensing 16(15): 2774. https://doi.org/10.3390/rs16152774.  Additional supporting information can be found online
+Zhang, Y., Y. Tan, C. Chiu, Y. Onda, and T. Gomi. 2025. "An             in the Supporting Information section at the end of this
+      Individual Tree Stemflow Model Integrating Branch-Leaf            article.
+      Cluster Structure and Drainage Processes from Multi-Platform
+      LiDAR Scanning." Journal of Hydrology 654: 132838. https://          How to cite this article: Cushman, K. C.,
+      doi.org/10.1016/j.jhydrol.2025.132838.                               Kamil Kral, Angelica M. Almeyda Zambrano, Eben
+Zhao, F., A. H. Strahler, C. L. Schaaf, T. Yao, X. Yang, Z. Wang,          N. Broadbent, Martin Kru° cek, Alice Rosen, and
+      M. A. Schull, et al. 2012. "Measuring Gap Fraction, Element          Sean M. McMahon. 2026. "A Primer on Forest
+      Clumping Index and LAI in Sierra Forest Stands Using a               Structure Measurement with Lidar for Ecologists."
+      Full-Waveform Ground-Based Lidar." Remote Sensing of                 Ecosphere 17(8): e70730. https://doi.org/10.1002/
+      Environment 125: 73­79. https://doi.org/10.1016/j.rse.2012.          ecs2.70730
+      07.007.
+Zhao, K., M. García, S. Liu, Q. Guo, G. Chen, X. Zhang, Y. Zhou,
+      and X. Meng. 2015. "Terrestrial Lidar Remote Sensing of
+

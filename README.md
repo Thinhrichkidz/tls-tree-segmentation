@@ -9,7 +9,8 @@ This repository holds the scripts, documentation and **small samples** of each s
 ## Repository layout
 
 ```text
-docs/             Reports, proposal, notes; reorganization_notes.md describes how the full data folder was reorganised
+docs/             Reports (latest: INFO6003_report_v11), proposal, notes; reorganization_notes.md describes how the full data folder was reorganised
+audit/            Independent audit: claim register, recomputed values, DBH re-fit and run-comparison scripts (see audit/AUDIT_REPORT.md)
 scripts/
   tree_extraction.py       Step 3: transfer tree labels onto a plot cloud (see below)
   reorganize-project.ps1   Helper that reorganised / can undo the full data folder layout

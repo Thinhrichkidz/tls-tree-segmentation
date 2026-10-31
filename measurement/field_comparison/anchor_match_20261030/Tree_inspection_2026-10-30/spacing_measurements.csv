@@ -1,0 +1,6 @@
+﻿from_tree,to_tree,to_stem,horizontal_distance_m,east_offset_m,north_offset_m,grid_bearing_deg,saved_foot_distance_m,basis,precision_note
+tree_074,tree_163,1,4.016,3.411,-2.12,121.86,3.703,fitted lower-stem centreline / terrain intersection; saved foot retained for 069,"Extra decimals aid reproducibility; practical uncertainty is several decimetres, not millimetres"
+tree_074,tree_103,1,15.613,15.396,-2.593,99.56,15.332,fitted lower-stem centreline / terrain intersection; saved foot retained for 069,"Extra decimals aid reproducibility; practical uncertainty is several decimetres, not millimetres"
+tree_074,tree_079,1,14.345,-0.135,14.344,359.46,14.264,fitted lower-stem centreline / terrain intersection; saved foot retained for 069,"Extra decimals aid reproducibility; practical uncertainty is several decimetres, not millimetres"
+tree_074,tree_079,2,16.823,-1.697,16.738,354.21,14.264,fitted lower-stem centreline / terrain intersection; saved foot retained for 069,"Extra decimals aid reproducibility; practical uncertainty is several decimetres, not millimetres"
+tree_074,tree_069,1,11.412,-0.594,11.396,357.02,11.305,fitted lower-stem centreline / terrain intersection; saved foot retained for 069,"Extra decimals aid reproducibility; practical uncertainty is several decimetres, not millimetres"

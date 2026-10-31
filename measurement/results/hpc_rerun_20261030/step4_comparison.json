@@ -1,0 +1,52 @@
+{
+ "tree_attributes": {
+  "columns": 36,
+  "same_header": true,
+  "diffs": {}
+ },
+ "per_tree/tree_065/result.json": {
+  "keys_compared": 78,
+  "n_diffs": 2,
+  "diffs": {
+   "r_peak_memory_mb": [
+    259,
+    195.1,
+    "numeric diff -63.9"
+   ],
+   "stamp.prep_sha256": [
+    "84591b1995f99a8b35679df11eaa66dd6786136050773f2edaf2e80255d28b74",
+    "ff850ba8f0a1b82bd92c617ab83ee3e89dfd3ea621bd23c4ba6b6a8fb83dab95",
+    "differs"
+   ]
+  }
+ },
+ "per_tree/tree_065/prep.json": {
+  "keys_compared": 52,
+  "n_diffs": 0,
+  "diffs": {}
+ },
+ "per_tree/tree_065/height_refine.json": {
+  "keys_compared": 16,
+  "n_diffs": 0,
+  "diffs": {}
+ },
+ "per_tree/tree_065/coordinate_transform.json": {
+  "keys_compared": 9,
+  "n_diffs": 0,
+  "diffs": {}
+ },
+ "manifests/roi.json": {
+  "keys_compared": 11,
+  "n_diffs": 0,
+  "diffs": {}
+ },
+ "per_tree/tree_065/tree_065_local_xyz.txt": {
+  "v6": "eae9c12f0c79ef79ef8983eff1e97339ede1456ff89d362f0950dbaa42599130",
+  "new": "eae9c12f0c79ef79ef8983eff1e97339ede1456ff89d362f0950dbaa42599130",
+  "identical": true
+ },
+ "validation_failed_checks": [
+  "163_ids_once",
+  "id_mapping_consistent"
+ ]
+}

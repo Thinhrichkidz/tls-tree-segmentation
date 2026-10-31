@@ -1,0 +1,48 @@
+quantity,location,value,note
+trees_automated,Abstract,162,
+trees_automated,Table 2,162,
+trees_automated,Table 4,162,
+trees_automated,Sect.6.1,162,
+trees_automated,Sect.8,162,
+trees_automated,trees/clouds file count,162,ground truth
+trees_refined,Abstract/Table2/Table4/6.1/8,163,
+trees_refined,CloudCompare_review_v2 file count,163,ground truth
+unassigned_pct,Abstract,36.8%,
+unassigned_pct,Sect.6.1,36.8%,
+unassigned_pct,Sect.7,"36.8% / ""more than a third""",
+unassigned_pct,recomputed,36.835%,"16,741,516/45,449,820"
+all_core_valid,Abstract,14,
+all_core_valid,Sect.6.2,14,
+all_core_valid,Sect.7,14,
+all_core_valid,Sect.8,14,
+all_core_valid,summary.json trees_all_core_valid,16,STALE
+all_core_valid,processing_summary.md l.45,16,STALE
+all_core_valid,recomputed,14,
+height_valid,Abstract/Fig2/Table5/6.2/7/8,53,
+height_valid,recomputed,53,
+dbh_available,Abstract/6.2/8,80,
+dbh_valid,Abstract/Fig2/Table5/7/8,43,
+dbh_valid,recomputed,43,
+dbh_no_axis,Abstract/6.2/7,28,
+dbh_no_fit,Abstract/6.2/7,55,recomputed 54 fit failures + 1 withheld
+crown_trees,Abstract/6.2/8,156,
+crown_trees,recomputed,156,
+spearman_valid,Abstract,0.91,
+spearman_valid,Sect.6.2,0.91 (n=23),
+spearman_valid,Sect.7,0.91,
+spearman_valid,recomputed,0.906,
+crop_extent,Abstract,65.7 x 67.8 m,
+crop_extent,Sect.3.1/Table 4,65.71 x 67.84 m,
+crop_area,Sect.3.1/7/8,0.45 ha,
+crop_extent,file names,55x55,label only
+full_crop_points,Sect.4.2/Table 4,"234,060,453",
+full_crop_points,Sect.7 H1,234 million,
+reverified_trees,Sect.4.7,24,
+reverified_trees,Sect.5,24,
+sensitivity_trees,Sect.5,8,
+labels_unchanged,Sect.6.1,25,
+labels_unchanged,Sect.7,25,misinterpreted as unchanged-from-automated
+script_corrections,Sect.4.4,4,
+script_corrections,Sect.7,4,
+fallback_foot,Sect.4.5,27,
+truncated_top,Sect.6.2,46,

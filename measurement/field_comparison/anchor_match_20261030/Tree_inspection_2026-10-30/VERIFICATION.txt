@@ -1,0 +1,6 @@
+All seven inspected source PLY SHA-256 hashes were rechecked after analysis and were unchanged.
+14 individual tree figures, a lean-detail figure, a full-tree contact sheet, and a spacing-map figure were created from the source data.
+Partial-arc ellipse estimates for 069 and 132 were rejected.
+No field-tag confirmation was made.
+All 27 image files decode; all 63 local gallery references exist.
+Four CloudCompare two-point picks on explicitly derived Z=0 centre markers agree with the coordinate-based horizontal distances to less than 0.00001 m. This checks arithmetic, not accuracy of base estimates.

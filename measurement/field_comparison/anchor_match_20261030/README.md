@@ -1,6 +1,6 @@
 # Tree-by-tree matching, placement A (30 Oct 2026)
 
-Inputs (read-only): site map digitisation (`../plot_overlay/map_digitised.csv`), TreeData.csv, v6 FINAL `tree_attributes.csv`, the full 3 cm crop, `CloudCompare_review_v2/`, and the trunk inspection in `C:\Users\hoang\Documents\Codex\2026-10-30\new-chat\outputs\Tree_inspection_2026-10-30` (AI-assisted; fitted base centres and widths for 074, 163, 103, 079 S/N).
+Inputs (read-only): site map digitisation (`../plot_overlay/map_digitised.csv`), TreeData.csv, v6 FINAL `tree_attributes.csv`, the full 3 cm crop, `CloudCompare_review_v2/`, and the trunk inspection in `Tree_inspection_2026-10-30/` in this folder (copied from the laptop path `C:\Users\hoang\Documents\Codex\2026-10-30\new-chat\outputs\`, hashes identical; AI-assisted; fitted base centres and widths for 074, 163, 103, 079 S/N).
 
 **Placement A:** map 1439 = tree_074 and 1435 = tree_103, chosen because their TLS spacing (15.6 m, bearing 100 deg) matches the map. Map scale 1.13, rotation -6 deg. Placements B (1437 = 163) and C (1439 = 163) were tested and rejected (big field trees land on small stems).
 

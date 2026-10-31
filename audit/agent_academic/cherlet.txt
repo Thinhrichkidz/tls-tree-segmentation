@@ -1,0 +1,1279 @@
+      Benchmarking tree instance segmentation of
+           terrestrial laser scanning point clouds
+
+    Wout Cherleta,*, Karun Dayala, Shilin Chena, Zane Coopera, Mathias Disneyb,c, Andreas
+ Hanzld, Shaun Levicke, Joanne Nightingalef, Niall Origof, Cornelius Senf d, Luna Soenensa,
+
+                     Louise Terryna, Wouter A. J. Van den Broecka, Kim Caldersa
+
+a Q-ForestLab, Department of Environment, Faculty of Bioscience Engineering, Ghent
+University, Belgium
+b Department of Geography, University College London (UCL), Gower Street, London WC1E
+6BT, UK
+c NERC National Centre for Earth Observation (NCEO), UCL, Gower Street, London WC1E
+6BT, UK
+d Technical University of Munich, School of Life Sciences, Earth Observation for Ecosystem
+Management, Freising, Germany
+e CSIRO, Locked Bag 2, Glen Osmond SA 5064, Australia
+f Climate and Earth Observation Group, National Physical Laboratory, Hampton Road,
+Teddington TW11 0LW, UK
+
+*Corresponding author ­ wout.cherlet@ugent.be
+
+Abstract
+
+Terrestrial laser scanning (TLS) has revolutionized forest measurement techniques by
+providing detailed three-dimensional (3D) point cloud data that captures the structure of
+forests and individual trees. Instance segmentation of point clouds, i.e. separating the forest
+into individual tree point clouds, remains a key challenge in automated processing due to
+complex, diverse tree structure and interactions. Furthermore, comparing segmentation
+performance is difficult, as new methods are often tested on new data with varying evaluation
+practices. Establishing a standardized benchmark and evaluation pipeline is key to consistent
+comparison and development of new algorithms and models. To this end, we manually
+segmented point clouds of four different forest types into almost 3000 individual trees spanning
+over 2.7 hectares. We then evaluated five open-source segmentation methods, three theory-
+driven and two deep learning-based, using an evaluation pipeline with both plot and tree-scale
+metrics, independent of downstream application. Our results showed that a graph-based
+approach currently outperforms data-driven models for metrics such as plot-level F1-score
+and tree-level mean F1 score. Segmentation performance varied greatly across forest types,
+underscoring that instance segmentation remains difficult to automate and highlighting the
+need for diverse training and evaluation data. The benchmark dataset and evaluation code
+are publicly available to facilitate development and evaluation of generalized automated
+segmentation methods.
+
+Keywords: Terrestrial laser scanning, forest point clouds, instance segmentation,
+benchmark, 3D deep learning
+   1. Introduction
+
+Laser scanning is an active remote sensing technique that is used to create highly detailed
+three-dimensional representations of forests. Unmanned aerial vehicle laser scanning (UAV-
+LS) provides rapid, large-scale mapping from above the canopy, while mobile laser scanning
+(MLS), particularly when integrated with advancements in robotics and simultaneous
+localization and mapping (SLAM) algorithms (Freißmuth et al. 2024), is used for efficient
+forest data acquisition from below the canopy. At plot scales (typically up to 1 hectare),
+terrestrial laser scanning (TLS) remains the standard for capturing high-resolution, ground-
+based point clouds, especially in dense understory and occluded regions, due to its high
+data precision and accuracy (Bienert et al. 2018). Its use in forests dates back to the early
+2000s for inventory tasks, such as tree height and diameter at breast height (DBH)
+estimation (Hopkinson et al., 2004; Lovell et al., 2003). In addition, TLS data may be used to
+derive tree attributes that are not directly measurable using conventional inventory
+techniques. Furthermore, forest aboveground biomass (AGB) estimation from TLS data
+shows better accuracy and reduced bias as compared to traditional methods (Demol et al.,
+2022) and enables new insights into the distribution of this biomass in forests (Calders et al.,
+2015). A crucial step in the processing pipeline of TLS forest point clouds for these
+applications and others is instance segmentation, i.e. separating individual trees within the
+forest. This enables both explicit 3D modeling of trees by way of so-called Quantitative
+Structure Models (QSMs) (Raumonen et al., 2013) and for more detailed traits (e.g. crown
+dimensions) to be extracted from the point cloud directly (Terryn et al., 2023). However,
+instance segmentation remains the most challenging part of automated processing pipelines
+(Martin-Ducup et al., 2021). Due to overlapping crowns, dense vegetation, and varying
+growth patterns, manual intervention is often needed to resegment parts of the crown
+material or separate interwoven instances (Calders et al., 2015).
+
+Automated instance segmentation has generally been performed by theory-driven algorithms
+based on the identification and reconstruction of geometric features. The first widely adopted
+methods identify tree trunks and use local geometry and distance-based metrics to build up
+trees from there (Burt et al., 2019; Trochta et al., 2017). Further developments employ more
+elaborate geometric and graph-based strategies (Wilkes et al., 2023; Xi and Hopkinson,
+2022) or use ecological theory, such as metabolic scaling, to guide tree segmentation
+(Wang, 2020). However, the diversity in forest and tree structure and complexity makes it
+challenging to define a fixed set of features and assumptions that consistently yield strong
+segmentation performance across different forest types. Even with careful hyperparameter
+adjustments, theory-driven methods often cannot account for the diversity in tree structure
+and interactions. Additionally, making these structural assumptions to guide segmentation is
+to be avoided if the resulting data is used to estimate or test these kinds of relationships, e.g.
+testing metabolic scaling theory (Yang et al., 2024). Therefore, recent work has been
+focused on applying data-driven deep learning in forestry settings, which obtains state-of-the
+art performance in many computer vision tasks. Deep learning models learn complex
+relations directly from labeled training data, without the need for user-defined
+hyperparameters, rules, or assumptions. Current models aimed at forest instance
+segmentation are based on grouping, where the offset of each point is predicted and
+instances are obtained by clustering (Henrich et al., 2024; Xiang et al., 2023). An additional
+advantage of these models is their potential for generalization to a single sensor and scale-
+agnostic model (Henrich and van Delden, 2024; Wielgosz et al., 2024).
+Outside forests, instance segmentation in point clouds has many applications, including
+autonomous driving and robot navigation (Nguyen and Le, 2013). Method development is
+driven by the comparison of segmentation results on large, standardized benchmarks, such
+as ScanNet (Dai et al., 2017), Stanford 3D Indoor Scene dataset (S3DIS) (Armeni et al., 2016),
+and Semantic Terrain Points Labeling - Synthetic 3D (STPLS3D) (Chen et al., 2022). Online
+leaderboards display new developments over time on a set of standardized metrics, offering
+a chronological overview of improvements. However, the problem of segmentation in built
+indoor or urban environments with more constrained geometry and scale is very different from
+that in forests, and how transferable methods are across these domains remains an open
+question. Method development and advancements in forest point cloud segmentation could
+benefit greatly from these benchmarking procedures and standardized evaluation. For forests,
+new segmentation methods are usually developed and tested on custom datasets and with
+custom evaluation practices. This individualized benchmarking complicates method
+intercomparison, as segmentation difficulty may differ substantially between forest plots and
+types, and performance may vary greatly depending on evaluation practices. A diverse,
+standardized benchmark is needed for a fair and objective comparison of method performance
+across forest types (Lines et al., 2022). Recently, such a multi-plot dataset alongside proposed
+evaluation practices and training-testing split was released for UAV-LS forest data (Puliti et
+al., 2023), covering eucalypt, coniferous and deciduous forests. While some labeled datasets
+exist for ground-based point clouds (Calders et al. 2022; Tockner et al. 2022), no similar
+machine learning ready benchmarking dataset that spans multiple forest types exists for TLS
+data, and no comparison between theory-driven methods and deep-learning models has been
+performed on such a dataset.
+
+To address this gap, we created a new benchmark dataset by manually segmenting four TLS
+plot point clouds ranging from 0.25 to 1.2 hectares. The plots were selected to represent a
+range of forest types: tropical savanna, temperate broadleaf, temperate conifer, and tropical
+rainforest. In total, 2.7 hectares were segmented, resulting in 2983 individual tree instances.
+Additionally, we used a standardized evaluation pipeline to compare the performance of
+instance segmentation methods on TLS data. This evaluation pipeline was applied to three
+open-source theory-driven and two deep learning methods, allowing for intercomparison of
+segmentation performance across forest types, independent of downstream application.
+2. Benchmark
+
+A schematic overview of the benchmark is shown on Fig. 1. The data and evaluation
+practices are described in the following subsections. The instance segmentation methods
+used in this benchmark are described in section 3.
+
+  Fig 1. Schematic diagram of the benchmark. Four TLS point clouds of diverse forests are
+      manually segmented, as well as segmented by five methods. The resulting instance
+
+ predictions are compared to the labelled trees, resulting in a number of plot- and tree-level
+                             metrics, independent of downstream application.
+
+2.1 Data
+
+The benchmark dataset introduced in this work consists of four manually segmented areas
+across various forest types. Initial manual segmentation across all the plots was divided
+between nine operators, all experienced with forest point cloud data collection and processing.
+Segmentation was performed by randomly selecting a tree, clipping it from the environment
+using a 3D selection tool, and moving it to a separate point cloud. After this initial
+segmentation, a single operator checked and corrected all trees to ensure consistent
+segmentation quality and level of detail throughout the plots. When segmentation is finished,
+all labeled trees are merged with ground, understory, and other unlabeled points. At no point
+in the segmentation are any points removed from the point cloud, to ensure a realistic testing
+environment. The study areas were chosen to represent diverse forest ecosystems (Fig. 2,
+Table 1). Height and DBH distributions were derived from the individual tree point clouds (Fig.
+3), using the R package ITSMe (Terryn et al. 2023).
+
+Each plot was divided into a training (60%) and validation area (20%) used by data-driven
+algorithms and a testing area (20%) used for evaluation of all algorithms, by dividing the
+segmented area into rectangular subplots (Fig. 4-7). Additionally, trees in the testing area were
+divided into evaluation and edge trees, based on their overlap with the testing subplot. A
+threshold of 90% was used to avoid exclusion of large trees with a small part of their crown
+outside of this area. Points belonging to edge trees were kept in the plot to simulate a realistic
+testing environment but were not used when calculating evaluation metrics. Plot stem density
+[stems/ha] was calculated using the number of trunks within the annotated area, with trunk
+position determined at breast height and total crown area [m2/ha] was calculated by fitting a
+concave hull around the projected point cloud of trees within the annotated area, with points
+clipped to this area (i.e. projected area outside of the annotated area was not counted). .
+Details on forest composition, data collection, and processing of each plot are described
+below.
+
+       Country Forest type              Annotated Number  Stem density Crown area
+
+                                        area    of trees  [stems/ha]  [m2/ha]
+
+Litchfield Australia Tropical           1 ha    703       699         4 607
+                               savanna
+
+Wytham UK  Temperate                    1.2 ha  876       595         17 535
+Woods      broadleaf
+           (leaf-off)
+
+Ofental Germany Temperate               0.25 ha 464       1 732       18 244
+                               conifer  0.25 ha 940       3 575       33 363
+
+Robson Australia Tropical
+
+Creek      rainforest
+
+       Table 1. Summary of key characteristics of the four benchmark plots
+
+Fig. 2. Pictures of the four plots in the benchmark dataset. A. Eucalypt savanna in Litchfield
+National Park (Australia), B. Deciduous forest named Wytham Woods (UK), C. Coniferous
+
+          forest in Ofental (Germany), D. Tropical forest in Robson Creek (Australia).
+   Fig 3. Scatterplot with DBH and height values as derived from the segmented tree point
+ clouds, for all four plots. Density curves are shown on the respective axes. Erroneous DBH
+ values were filtered out using a threshold on the R2 value of the circle fitting and functional
+  diameter based on convex hull fitting. For Robson Creek, the DBH was determined at the
+
+      lowest height above the buttresses where a sufficiently good circle fit was achieved.
+
+2.1.1 Litchfield
+
+A 1-hectare plot in the tropical savanna of Litchfield National Park in Northern Australia was
+scanned in August and September 2019, pre- and post-fire disturbance (Steffen, 2021). The
+plot is mostly populated by Eucalyptus trees, such as Eucalyptus miniata and Eucalyptus
+tetrodonta. Lidar data was collected using a RIEGL VZ-2000i with a pulse repetition rate of
+600 kHz and angular resolution of 0.03° on a regularly spaced 20 by 20 meter grid. The
+registered point cloud was downsampled to a resolution of 1cm. All trees taller than 5 meters
+were extracted manually from the pre-fire data using CloudCompare, corresponding to a
+minimal DBH of 3.5 cm. In total, 703 trees were labeled, of which 128 were used for evaluation
+(Fig. 4).
+  Fig. 4. Left: top-down view of the Litchfield plot point cloud, divided into testing, validation
+    and training areas. Right: a lateral view of a subsection of the point cloud. The red box
+
+  labeled A corresponds to the lateral view subsection. Points are colored by individual tree
+                                                       instance.
+
+2.1.2 Wytham Woods
+
+A 6-hectare area was scanned in Wytham Woods, Oxford, UK, from late November 2015 to
+January 2016 (Calders et al., 2022a). The forest is mostly populated by deciduous trees, such
+as Sycamore maple [Acer pseudoplatanus], European ash [Fraxinus excelsior], and Common
+hazel [Corylus avellana]. Data was collected using a RIEGL VZ-400 scanner with a pulse
+repetition rate of 300 kHz and angular resolution of 0.04°. A 20 by 20 meter grid was used,
+with an upright and tilted scan at each location. The data was further downsampled to 2.6 cm
+resolution, determined based on a nearest neighbor analysis and scanner properties.
+Individual trees were segmented in a 1.4 ha study area in the center of the plot, using the
+treeseg algorithm (Burt et al., 2019), followed by visual inspection and manual correction
+(Calders et al., 2018). All trees were segmented from the plot, resulting in a minimum tree
+height and DBH of 2.23 m and 2.4 cm respectively, as derived from the point clouds. Tree
+labels were propagated back to the plot points to obtain a fully annotated plot point cloud.
+Extensive quality control was performed to obtain consistent segmentation quality with the
+other plots. Finally, the study area was downsized to eliminate unannotated edge points,
+resulting in a final annotated area of 135 by 88 meters, or 1.2 ha. 876 trees were labeled, of
+which 181 were used for evaluation (Fig. 5).
+Fig. 5. Left: top-down view of the Wytham plot point cloud, divided into testing, validation and
+training areas. Right: a lateral view of a subsection of the point cloud. The red box labeled A
+
+  corresponds to the lateral view subsection. Points are colored by individual tree instance.
+
+2.1.3 Ofental
+
+A 1-hectare plot in Ofental, Germany, was scanned from June to July 2023. Forest census
+data from 2022 shows that the plot is mostly dominated by two coniferous species: Norway
+spruce [Picea abies] (93.8 %) and European larch [Larix decidua] (4.2 %), besides some
+individual broadleaved trees (mostly Sycamore maple [Acer pseudoplatanus] and beech
+[Fagus sylvatica]). The plot is located near the Bavarian Alps and features alpine terrain. The
+average slope of the terrain in the segmented area, as calculated from the point cloud, is 32
+degrees. Forest structure is mostly shaped by past land use, which resulted in even-aged
+trees with dense structure. A RIEGL VZ-400i scanner, using a pulse repetition rate of 600 kHz
+and angular resolution of 0.04°, was positioned on a regular 10 by 10 meter rectangular grid,
+with upright and tilted scans at each position for a total of 240 scans. The registered point
+cloud was downsampled to a resolution of 1 cm. A 50 by 50 meter area around the center of
+the plot was segmented manually. All trees were extracted from the plot, resulting in a minimal
+height and DBH in the dataset of 2.3 m and 4 cm. A total of 464 trees were labeled, of which
+89 were used for evaluation (Fig. 6).
+Fig. 6. Left: top-down view of the Ofental plot point cloud, divided into testing, validation and
+training areas. Right: a lateral view of a subsection of the point cloud. The red box labeled A
+
+  corresponds to the lateral view subsection. Points are colored by individual tree instance.
+
+2.1.4 Robson Creek
+
+One of 25 1-hectare plots that make up the Robson Creek supersite was scanned in 2018
+(Terryn et al., 2022). According to 2010 forest census data of all trees with a DBH over 10 cm
+(Bradford et al., 2024), 94 tree species are present in the plot, the most dominant being Litsea
+leefeana (8.2 %), Daphnandra repandula (7.4 %) and Toechima erythrocarpum (6.51 %).
+Scans were collected on a 10 by 10 meter grid, using a RIEGL VZ-400 with a pulse repetition
+rate of 300 kHz and angular resolution of 0.04°. A 50 by 50 meter area in the center of the plot
+was segmented manually. All trees with a height over 5 meters were extracted, resulting in a
+minimal DBH of 2.1 cm. A total of 940 trees were labeled, of which 150 were used for
+evaluation (Fig. 7).
+     Fig. 6. Left: top-down view of the Robson Creek plot point cloud, divided into testing,
+validation and training areas. Right: a lateral view of a subsection of the point cloud. The red
+
+  box labeled A corresponds to the lateral view subsection. Points are colored by individual
+                                                    tree instance.
+
+2.2 Evaluation
+
+In this section, the evaluation methodology and metrics for segmentation performance are
+described. A diagram of the evaluation workflow can be found in Fig. 8. Additionally, method
+execution was timed and compared. All method runs were executed on a Linux desktop with
+an Intel Xeon 36 3.00 GHz core CPU with 192 Gb RAM and an Nvidia A-4000 GPU with 48
+Gb VRAM.
+                         Fig. 8. Diagram of the evaluation pipeline and metrics.
+
+The first step in evaluating model performance is to establish optimal assignments between
+the set of manually segmented instances and the set of predictions, i.e., deciding which tree
+to compare to which prediction. As there is no specific order to these sets, this must be
+performed based on the individual point clouds of the evaluation trees and the predictions.
+While matching using application-specific geometric features, such as extracted trunk location,
+has previously been applied in forest segmentation work (Wilkes et al., 2023), we opted for a
+more general bipartite graph matching, commonly used in computer vision literature (Henrich
+et al., 2024; Yang et al., 2019). A cost matrix between the manually segmented and prediction
+sets was constructed by calculating the Intersection over Union (IoU) of each predicted tree 
+with each manually segmented tree t (Eq. 1). As there is no explicit order to the points within
+each cloud and to avoid floating-point precision issues, IoU calculation is performed using a
+distance-based point comparison.
+
+                                     |  |
+                   (, ) = |  | ,  : , :  (1)
+
+The optimal solution to this cost assignment problem, which maximizes the total IoU over the
+entire evaluation set, was found efficiently using the Hungarian algorithm (Kuhn, 2005). If there
+were insufficient predictions to match all trees, all the unmatched evaluation trees were
+automatically marked as undetected.
+A tree is successfully detected if the IoU with its matched prediction is higher than or equal to
+0.5, ensuring a unique assignment (Kirillov et al., 2019). This thresholding allows us to derive
+simple plot-level metrics. The first is plot-level recall (eq. 2), or the fraction of evaluation trees
+that were successfully detected. Plot-level precision (eq. 3) indicates the fraction of
+successfully matched predictions. These are calculated using True Positive (TP), False
+Positive (FP), and False Negative (FN) instances. At the plot scale, the TP set consists of tree
+instances with successful predictions, the FP set consists of predictions without matching
+evaluation instances, and the FN set consists of evaluation trees without matching predictions.
+These metrics indicate the performance of a method for detecting tree instances over a plot
+but do not indicate how well successful predictions are segmented in detail.
+
+                                                  
+                                 =  +  (2)
+
+                                
+           =  +  (3)
+
+     2                            2  
+1  =  +  = 2   +  +  (4)
+
+At the individual tree scale, we evaluated how well successfully matched trees were
+
+segmented at the point level. We used recall (Eq. 2), precision (Eq. 3), and F1 score (Eq. 4),
+
+with tree-level TP, FP, and FN sets. In contrast to the plot-level definitions, here TP, FP, and
+
+FN are sets of points: a TP point is present in both the ground truth and prediction point cloud,
+
+an FP point is present only in the prediction, and an FN point is only in the ground truth.
+
+Precision and recall can then be calculated for each successful match based on these point
+
+sets. Furthermore, the F1 score is the harmonic mean of these measures and serves as a
+
+useful metric to assess overall performance. These were then averaged over all successful
+
+matches to produce the mean recall (mRec) (Eq. 5), mean precision (mPrec) (Eq. 6), and
+
+mean F1 score (mF1) (Eq. 7) metrics. Furthermore, to obtain a more detailed view of tree-
+
+level performance, the mPrec, mRec, and mF1 metrics were binned by relative tree height
+
+and distance from the tree center (determined as the average of the trunk points at a height
+
+of 1 meter), similar to what is done in the evaluation of TreeLearn (Henrich et al. 2024).
+
+Segmentation typically becomes more difficult at the extremes of the tree, mainly due to noise
+
+and occlusion, leaves and smaller branches at the top, and understory, terrain, and buttresses
+
+at the bottom. Further from the tree center, segmentation performance will likely decrease due
+
+to interactions with neighboring vegetation and smaller branches.
+
+  =       × _  ,    =                                              | |     (5)
+
+                                                                   |    |
+
+      =0                             =0
+
+          
+
+      =   ×  (6)
+
+                          =0
+                           
+
+     1 =   × 1_ (7)
+
+          =0
+3. Algorithms
+
+Only open-source methods that work on entire TLS plot point clouds were considered for this
+work. This benchmark is not meant as an exhaustive review of instance segmentation
+methods, but serves as a starting point for the intercomparison of different segmentation
+strategies and a step towards standardization of method comparison. The methods for
+instance segmentation can be broadly divided into two categories: theory-driven and deep
+learning-based methods.
+
+3.1 Theory-driven methods
+
+Theory-driven methods segment tree instances based on domain-specific, handcrafted
+rulesets and geometric features. Usually, tree instances are detected by identifying tree trunks
+and building up the tree from there, using clustering or graph-based algorithms. These
+methods typically depend on a set of hyperparameters, which enable the user to adjust the
+algorithm to a particular dataset. For this benchmarking exercise, only limited hyperparameter
+adjustment was executed, details for each method are described in the sections below. An
+experienced operator with intricate knowledge of how the hyperparameters of different steps
+interact may be able to obtain better results.
+
+3.1.1 Rayextract
+
+RayCloudTools (Lowe and Stepanas, 2021) is a set of command line tools with an associated
+C++ library designed for efficient processing and analysis of point clouds and associated ray
+information. Rayextract is one of these commands, which provides functionality for extracting
+both terrain and trees from a forest ray cloud. Point clouds can easily be converted to ray
+clouds using the rayimport command. The tree segmentation algorithm behind the Rayextract
+command uses Dijkstra's algorithm to find the shortest paths between the vertices of the
+terrain mesh as root points and the points of the ray cloud. Edge weights used as scoring
+metrics for Dijkstra's algorithm are based on the distance between neighboring paths, where
+additionally paths with consistent direction or belonging to trees with a large estimated height
+are favored, whereas paths with strong lateral movement are penalized. Afterwards, paths are
+agglomerated into separate trees. Rayextract exposes a number of hyperparameters to
+customize performance. For the terrain extraction step, the default value of the gradient
+hyperparameter (1) gave adequate results. The height_min hyperparameter was set based on
+the minimum height of the trees in the training and validation set, and can be customized
+based on the user's application. The max_diameter hyperparameter was not extracted from
+the segmented trees but estimated from the raw plot point cloud, by visualizing a slice of the
+point cloud, identifying large trunks and estimating the maximum DBH using a measuring tool.
+The values can be found in Table A.1 in the appendix. Default values were used for the other
+hyperparameters gravity_factor (0.3) and distance_limit (1.0).
+
+3.1.2 Treeiso
+
+Treeiso (Xi and Hopkinson, 2022) is a three-step graph-based method. In the first step, the
+cut-pursuit algorithm is used to segment the point cloud, represented as a graph with points
+as nodes and the inverse distance of neighboring points as edge weights, into small clusters
+that represent coherent patches of branches and crowns. In the second step, this algorithm is
+repeated on a graph of 2D (XY) cluster centroids, with the minimum Euclidean distance in 3D
+space between clusters as edge weights. The final step attempts to combat oversegmentation
+of trees with significant horizontal crown spacing. Segments containing tree stems are
+detected by considering the ratio of elevation to length. The remaining segments are then
+assigned to the nearest stem segment. All three steps of the algorithm have several
+hyperparameters to be adjusted (Table A.2 in the Appendix).
+
+3.1.3 SSSC
+
+SSSC (Wang, 2020) is an unsupervised pipeline for joint instance and semantic segmentation.
+In the first shared step, an undirected superpoint graph is constructed by recursive
+segmentation of the point cloud into small, geometrically similar parts. Embeddings for each
+superpoint are described by a number of point cloud features, as well as an initial wood
+probability estimated based on local linearity. Edges in the superpoint graph are constructed
+based on a k-nearest neighbor graph of the original point cloud. The initial wood probability is
+refined by considering neighboring superpoints and used to identify tree roots. All superpoints
+are then assigned to root superpoints using Dijkstra's shortest path algorithm, and tree labels
+are propagated to points within superpoints accordingly. As SSSC only displays one
+hyperparameter, ft_threshold, without documentation, no adjustments were made and the
+default value of 0.125 was used for all plots.
+
+3.1.4 Terrain removal and normalization
+
+Both Treeiso and SSSC require removal of ground points before segmentation. To this end,
+we used the Simple Morphological (SMRF) filter implemented in PDAL (Butler et al., 2024),
+which performed well in a forest and steppe ground removal survey (Moudrý et al., 2020).
+Different hyperparameter combinations were tested, but visually had no significant effect on
+ground removal quality. Additionally, SSSC requires height normalization. For this, we used
+the PDAL Height Above Ground Nearest Neighbor filter. As point order is not maintained by
+the SSSC algorithm, predictions with the original point height were obtained by distance-based
+propagation of labels to the unedited, normalized point cloud and subsequent reversal of the
+normalization.
+
+3.2 Deep learning methods
+
+In contrast to theory-driven methods, deep learning methods do not use expert-designed
+features to infer tree instances, but learn these features directly from labeled data. These
+models depend on a large backbone for feature extraction, followed by a
+segmentation/clustering step based on per-voxel features. While early research focused on
+point-based feature networks for computational feasibility, advancements in sparse tensor
+network development have enabled the use of large 3D sparse convolutional U-networks. Both
+methods listed below use such a U-network as their feature extraction backbone, followed by
+a semantic head for tree classification and a clustering step to identify instances.
+
+3.2.1 TreeLearn
+
+The TreeLearn (Henrich et al. 2024) model consists of a sparse convolutional U-net, followed
+by a semantic and offset prediction head. The semantic segmentation head consists of a two-
+layer multi-layer perceptron (MLP) with shared weights, trained to predict whether a point
+belongs to a tree. Similarly, the offset prediction head consists of a three-layer MLP, trained
+to predict the vector of tree points to the tree base, defined as the center of the trunk at three
+meters high. If the offset and semantic networks were perfect, the output of this step would be
+sets of points representing individual trees at their base. In reality, clustering is performed to
+assign points to tree instances. This is done in two steps. First, trunk points are identified
+based on a local verticality and base offset metric calculated on the original input point cloud.
+These trunk points are then clustered based on the offset-projected coordinates in the XY
+plane. Secondly, the remaining tree points are assigned to tree clusters using k-nearest
+neighbors in the projected coordinate space.
+In this work, we performed multiple finetuning runs and compared to the original, pretrained
+models, for which weights are available online (Henrich, van Delden, Kneib, et al. 2023).
+These weights were obtained by pretraining on a set of 19 automatically labeled plots
+dominated by European beech (Fagus sylvatica L.), followed by finetuning on three public,
+manually labelled datasets: FOR-Instance (Puliti et al. 2023), LAUTx (Tockner et al. 2022) and
+Wytham Woods. As our test data is present in the training data of these weights, for the
+evaluation of the original weights on Wytham Woods and as a starting point for our finetuning
+runs, a different set of weights were used, also available online. The training procedure for
+these weights is described in the TreeLearn preprint (v2) (Henrich, van Delden, Seidel, et al.
+2023), consisting of the same 19 automatically labelled plots, and finetuning on a single
+manually labelled plot.
+For each plot, a separate finetuning run is done on the training and validation areas of that
+plot. Additionally, we finetuned a single model on the training and validation data of all four
+plots. We further differentiate between these models using finetuned (single plot) and
+finetuned (all plots). All finetuning experiments were done over 250 epochs, using the AdamW
+optimizer with batch size 2, initial learning rate 0.0015 and cosine learning rate scheduler. The
+checkpoint with minimal offset loss on the validation set was used for inference.
+
+3.2.2 ForAINet
+
+ForAINet (Xiang et al. 2024) is a deep learning framework for automated segmentation and
+retrieval of forest stand and tree parameters. The instance segmentation backbone was first
+introduced by Xiang et al. in 2023, where different bottom-up approaches to large-scale
+panoptic (instance + semantic) segmentation were investigated. The same deep learning
+backbone was used in the subsequent SegmentAnyTree model (Wielgosz et al. 2024).
+Similar to TreeLearn, a 3D neural network is used to obtain per-point tree features that serve
+as inputs to three segmentation branches. The first branch performs semantic segmentation
+using a small neural network with a single hidden layer. The center offset branch employs
+the same strategy as TreeLearn, aiming to predict the offset vector to its instance center for
+each point. A final instance embedding branch embeds each point in a 5D feature space
+optimized to separate instances spatially. Clustering is then applied to both branches, and
+results are combined using a final small scoring network. Their experiments showed that the
+combination of these clustering strategies increased instance segmentation performance
+compared to using only one strategy.
+Analogous to TreeLearn, we performed finetuning on the plots individually, as well as all four
+plots simultaneously. We further refer to the resulting models as finetuned (single plot) and
+finetuned (all plots) respectively. All runs use the hyperparameter settings and TreeMix
+augmentation which resulted in the highest F1-score on the FOR-Instance dataset.
+Finetuning was done over 40 epochs, using the Adam optimizer with batch size 4, initial
+learning rate 0.0005 and exponential learning rate scheduler. The checkpoint with minimal
+F1-score on the validation data was used for inference.
+
+4. Results
+
+Segmentation performance was evaluated at two scales. At the plot scale, recall indicates
+the fraction of manually segmented trees that were successfully detected. Precision
+indicates the fraction of predictions that were successful. F1 is the harmonic mean of these
+two metrics, and indicates overall plot-level performance. At the tree scale, mRecall and
+mPrecision indicate the point-level performance of each method, averaged over successful
+predictions. mF1 is the harmonic mean of these two metrics. These tree-level metrics were
+further binned by relative tree height and relative distance from the center to obtain a more
+fine-grained view of tree-level performance.
+In subsection 4.1, the performance of the original weights provided by the authors of
+TreeLearn and ForAINet are compared to that of the finetuned models, both those trained on
+each single plot and those trained on all four plots at once. In subsection 4.2, we compare
+the performance of the models finetuned on all four plots to that of the theory-driven
+methods. Finally, running times for all methods are compared in subsection 4.3.
+4.1 Comparison of original and finetuned models
+
+ Fig. 9. Segmentation performance of all deep learning models, the original weights and the
+ weights obtained using both finetuning strategies for both TreeLearn and ForAINet, on the
+
+   four test plots. Plot-level F1-score, recall, and precision are shown at the top. Tree-level
+  mF1, averaged over successful predictions, is binned by relative tree height in the middle
+
+                   and binned by relative distance to the tree center at the bottom.
+Both TreeLearn and ForAINet were finetuned on the training and validation areas of each
+plot. We tested two strategies: finetuning individual models on each single plot, and
+finetuning a single model on all four plots. Both strategies significantly improve upon the
+segmentation results obtained using the original weights (Fig. 9, Table A.3), for all four plots.
+The single plot models generally outperform the all plots models on plot-level F1 and most
+other metrics, except for on Wytham Woods, where the TreeLearn all plots model
+outperforms all others at an mF1 of 0.540. The TreeLearn models outperform their ForAINet
+counterparts on most metrics for Litchfield, Wytham Woods and Ofental, but the single plot
+ForAINet model obtains the highest score for all metrics on Robson Creek, at a plot-level F1
+of 0.288 and a tree-level mF1 of 0.814.
+Additionally, the performance evaluation metrics for the original TreeLearn and ForAINet
+models on the entire plot point clouds (training + validation + testing areas) are available in
+table A.4 for future reference.
+4.2 Performance comparison of all methods
+
+The five methods are compared on plot-level F1, recall and precision, as well as tree-level
+mF1-score, binned by height and relative distance to the tree center (Fig. 10). Additional tree-
+level mPrec and mRec values and graphs can be found in Table A.2 and Fig. A.1 and A.2 in
+the appendix. Finally, Fig. 11 compares manual segmentation labels with the segmentation
+results of Rayextract, TreeLearn and ForAINet on a 20 by 20 meter subsection of the testing
+areas of all four plots.
+
+Fig. 10. Segmentation performance of all five algorithms on the four test plots. Plot-level F1-
+score, recall, and precision are shown at the top. Tree-level mF1, averaged over successful
+ predictions, is binned by relative tree height in the middle and binned by relative distance to
+
+                                          the tree center at the bottom.
+Litchfield is a relatively sparse tropical savanna plot with low total projected crown area. The
+TreeLearn model trained on all plots obtained the highest plot-level F1 at 0.964, with
+TreeLearn, ForAINet and Rayextract all obtaining an F1-score, recall and precision over 0.88.
+SSSC scored the lowest with a plot-level F1 of 0.438. All methods obtained a high tree-level
+mF1, ranging from 0.981 by Rayextract to 0.835 by SSSC. Additionally, the mF1 metric
+generally remains constant over the height and width of the trees, except for the bottom and
+outer branches for TreeIso and SSSC.
+In Wytham Woods, a relatively sparse, diverse deciduous forest plot with high total projected
+crown area, Rayextract obtained the highest plot-level F1-score of 0.570 at a high recall value
+of 0.746. The TreeLearn model model obtains the highest precision of 0.563 at a near-best F1
+of 0.540. Other methods obtained F1 values in the range of 0.294-0.450. At the tree level,
+Rayextract outperforms the other methods with an mF1 of 0.910. Other methods obtain mF1-
+scores ranging from 0.807 to 0.878. There is significant drop-off of the mF1 metric further
+away from the center of the trees for all methods.
+
+In Ofental, a dense, sloped alpine plot dominated by conifers, Rayextract stood out for plot-
+level F1 at 0.744, at the highest recall of 0.753 and a plot-level precision of 0.736. Other
+methods obtain F1-scores ranging from 0.333 to 0.497. Rayextract also obtains the highest
+tree-level mF1, at 0.857. Other mF1 scores ranged from 0.768 to 0.857. The tree-level
+performance drop away from the center of the tree is most pronounced for this plot.
+
+Finally, all the methods performed relatively poorly in Robson Creek, a diverse tropical
+rainforest plot containing complex understory and epiphytes. Rayextract significantly
+outperforms all other methods for all level metrics, obtaining an F1-score of 0.486 at a recall
+of 0.520 and precision of 0.520, and a tree-level mF1 of 0.817. The other four algorithms
+obtained F1 values between 0.042 and 0.247, with Treeiso resulting in the lowest values
+across all plot-level metrics. Tree-level performance shows greater variance across the height
+and width of the trees for Robson Creek as compared to other plots.
+                                          Rayextract Treeiso  SSSC   TreeLearn ForAINet
+                                                                     finetuned finetuned
+                                                                     (all plots) (all plots)
+
+         F1                               0.919  0.473        0.438  0.930  0.905
+                                          0.891  0.555
+               Plot-level Recall          0.950  0.413        0.734  0.930  0.930
+Litchfield                                0.981  0.874
+                                          0.570  0.294        0.312  0.930  0.881
+                               Precision  0.746  0.221
+                                          0.461  0.440
+         Tree-level mF1                   0.910  0.807        0.835  0.973  0.972
+                                          0.744  0.333
+         F1                               0.753  0.360        0.450  0.540  0.363
+                                          0.736  0.311
+Wytham Plot-level Recall                  0.857  0.800        0.436  0.519  0.304
+                                          0.480  0.042
+Woods    Precision                        0.533  0.033        0.465  0.563  0.451
+                                          0.437  0.056
+         Tree-level mF1                   0.817  0.752        0.854  0.878  0.840
+
+         F1                                                   0.370  0.497  0.441
+
+         Plot-level Recall                                    0.360  0.517  0.337
+                         Precision
+Ofental
+
+                                                              0.381  0.479  0.638
+
+         Tree-level mF1                                       0.768  0.830  0.805
+
+         F1                                                   0.160  0.178  0.247
+
+Robson   Plot-level Recall                                    0.267  0.167  0.193
+Creek                    Precision
+                                                              0.114  0.191  0.341
+
+         Tree-level mF1                                       0.747  0.763  0.795
+
+ Table 2. Exact values across all five methods and four plots for plot-level F1, recall, and
+precision, as well as tree-level mF1 averaged over all successful predictions. Best results
+
+                                  per metric and plot are shown in bold.
+Fig. 11. Plot-level segmentation results of a 20 by 20 meter subsection of the testing area for
+  all four plots, colored by individual tree. Colors are generated at random as instances are
+ unordered. From top to bottom: manual segmentation, Rayextract, TreeLearn finetuned (all
+                                   plots) and ForAINet finetuned (all plots).
+4.3 Computation time
+
+Next to segmentation performance, running time is an important practical consideration of
+algorithms (Table 3). The finetuning time for deep learning models is not shown, with both
+models requiring several hours to more than a day to finetune. Running times shown are for
+a single run, i.e. with one hyperparameter set, and thus do not reflect time spent on
+hyperparameter adjustment of theory-driven models. Results show the shortest runtime for
+Rayextract on Litchfield, Wytham Woods and Robson Creek, closely followed by TreeLearn,
+which is the fastest on Ofental. The slowdown of Rayextract on this plot originated in the terrain
+extraction step.
+
+            Litchfield  Wytham Woods Ofental  Robson Creek
+            0h 02m                            0h 03m
+Rayextract  0h 25m      0h 03m  0h 18m        0h 37m
+Treeiso     1h 03m                            1h 00m
+SSSC        0h 04m      1h 19m  0h 57m        0h 05m
+TreeLearn   0h 36m                            0h 38m
+ForAINet                0h 35m  0h 54m
+
+                        0h 08m  0h 08m
+
+                        0h 41m  1h 25m
+
+Table 3. Method running/inference time in hours, minutes. Best values are in bold.
+5. Discussion
+
+5.1 Plot-level comparison
+
+Segmentation performance varied greatly across different forest types. In Litchfield, the most
+sparse plot in the benchmark with the lowest total projected crown area, Rayextract,
+TreeLearn and ForAINet obtained plot-level metrics and tree-level mF1 of around or over 0.9,
+as compared to manual segmentation. Rayextract achieved a precision of over 0.95, while
+Treeiso and SSSC had a higher number of false predictions, likely caused by remnants of
+terrain, shrubs and young, small trees. However, plot-level recall is arguably more important
+to evaluate forest segmentation than plot-level precision, as it is more difficult and time-
+consuming to segment additional missing instances than filtering out additional false positives
+(manually or automatically, e.g., filtering instances on a minimal height). There is a higher
+variability in method performance on the Wytham Woods plot. It has the lowest stem density
+of the four plots but a relatively large total projected crown area, indicating large, horizontally
+spread trees, which may cause lower performance as compared to Litchfield. While Ofental is
+a more dense plot than Wytham Woods regarding the number of stems, the total crown area
+is similar. This is likely due to the high number of conifers with a vertical growing patterns (Fig.
+6). Additionally, the sloped, alpine terrain may complicate segmentation in the lower regions
+of the trees. Performance on Ofental was quite similar to Wytham Woods across different
+methods. However, tree-level performance binned by relative tree height did not show a
+decrease in performance close to the ground, while performance binned by relative distance
+from the center decreased strongly away from the tree center (Fig. 10), which suggests that
+not the terrain but the interactions the dense neighborhood of trees limit performance. The plot
+stem density combined with the structural homogeneity of the trees likely complicated
+segmentation in the outer branches (Fig. 11). Finally, Robson Creek is densely populated by
+varying tree species and features a dense understory, lianas, and epiphytes. It has the highest
+stem density and total crown area of the four plots. All methods performed the worst on this
+complex plot by a significant margin, with the best-performing Rayextract detecting just over
+half of the trees at a precision of 0.46. The variation in method performance across forest
+types emphasizes the need for diverse datasets to develop and test generalized methods.
+
+5.2 Theory-driven methods
+
+Rayextract was among the best methods across all plots and metrics. Furthermore, the
+RayCloudTools toolset, of which the method is a part, provides its own tool for terrain
+extraction and requires no height normalization (Lowe and Stepanas, 2021). Combining a
+distance-based graph algorithm with forest-specific knowledge worked well, especially in
+structurally complex plots where the other clustering-based theory-driven methods fell short.
+
+Treeiso and SSSC obtained lower performance on this benchmark than on their custom
+datasets. Xi and Hopkinson (2022) report an average plot-level recall of 0.86 and an average
+average IoU of detected trees (closely related to mF1) of 0.92 for the Treeiso algorithm on a
+dataset of 16 plots mostly populated by coniferous or deciduous species. Wang (2020) reports
+that SSSC obtains an average plot-level recall of 0.762 and a precision of 0.763, on a dataset
+of 6 plots dominated by coniferous species and birch trees. The discrepancy in performance
+on our benchmark and the custom datasets is likely due to the requirement of terrain and
+understory removal inherent to Treeiso and SSSC. Automated ground removal algorithms are
+often designed for low-density aerial laser scanning point clouds and struggle with the level of
+detail and presence of understory points in point clouds acquired with TLS. In their work,
+Treeiso authors manually removed the ground and understory for evaluation. The authors of
+SSSC, on the other hand, mention that ground removal is out of the scope of their work (Wang,
+2020). However, we argue that differentiating between ground, understory vegetation, and
+tree points is one of the key challenges of instance segmentation in forest settings. In other
+theory-driven methods, this is solved by integrating a dedicated, deep-learning semantic
+segmentation step, separating ground, wood and leaf points (Wielgosz et al., 2023; Wilkes et
+al., 2023). The assumption of perfect ground and understory removal likely significantly
+reduced the performance of these methods in this benchmark.
+
+5.3 Deep learning methods
+
+On the deep learning side, we observed the TreeLearn model generally outperforming the
+ForAINet model, especially at the tree level. One explanation could be that the TreeLearn
+model is pretrained on an automatically labeled dataset. Even though all these plots are
+populated by European beech, a species not present in our dataset, this pretraining allows the
+model to learn general tree features from a larger set of labeled trees. This provides the model
+with rough initial weights that allow for more efficient finetuning on different forest types.
+Another possible explanation is the two-stage, forest-specific clustering used in the TreeLearn
+model. First, clusters are identified from points with a high likelihood of belonging to a tree
+trunk, and the remaining points are assigned to these candidate instances. In this way, the
+TreeLearn method incorporates some forest domain knowledge to improve the results of the
+data-driven model. An exception is the Robson Creek plot, where ForAINet detected
+significantly more trees than the TreeLearn model with similar tree-level performance. The 5D
+embedding branch, where 3D points are projected into a higher dimensional feature space
+offering more representation capacity, may thus be useful for discerning instances in dense,
+complex plots. On the other hand, the forest-specific assumptions employed in the TreeLearn
+clustering, which was developed and tested using mostly data from deciduous forests, may
+not hold up in this tropical forest. A combination of both models, employing the 5D embedding
+branch with a forest-specific clustering strategy, may improve results in some cases. Finally,
+a slight decrease in performance at the base of the trees was observed for all algorithms, i.e.
+where the tree was segmented from the terrain. The greater decrease for Robson Creek is
+likely due to the presence of buttresses, which can span across several meters horizontally.
+This effect is noticeably less pronounced for TreeLearn, showcasing the advantage of data-
+driven methods to learn more irregular patterns that may be hard to integrate into a theory-
+driven algorithm.
+
+Both models used in this benchmark have a semantic branch, allowing for classification of
+points into a semantic class. This allows the model to separate terrain, low vegetation and
+noise points and perform instance segmentation only on the tree points, without any pre-
+processing. As we only present a binary classification (non-tree and tree) in this work, we did
+not explicitly evaluate the semantic segmentation performance of these models. However, if
+training data with more extensive labels, such as the stem, woody branches, live branches,
+terrain and low vegetation classes presented in the FOR-instance UAV-LS dataset, these
+models have the potential for panoptic segmentation, the process of simultaneous semantic
+and instance segmentation.
+The advantage of deep learning models is their ability to learn patterns directly from data
+without the need for human-designed feature extraction and heuristics. As is standard practice
+in benchmarking exercises, the deep learning architectures presented have been fine-tuned
+and tested on in-domain data, in this case a training, validation and testing crop from the same
+plot. We show that finetuning these models significantly improves segmentation results,
+highlighting the need for a large number of diverse training data. However, an end-user usually
+does not have segmented data available to fine-tune deep learning models. As the testing
+data originates from the same plot as the training and validation data, these models might be
+slightly overfit to the exact characteristics of the specific forest. For example, the performance
+of the models on the Robson Creek area might not be entirely representative of these models
+on other tropical forest plots. An interesting future research direction would be to experiment
+with how much segmented data is needed to significantly improve performance on a specific
+plot. Furthermore, while adjusting the hyperparameters of theory-driven methods often
+depends on expert knowledge and can be a time-consuming, laborious process, these
+adjustments enable users to customize or adapt the method to different sensor and plot types
+and potentially improve segmentation performance on diverse data. On the other hand, after
+training, deep learning models are mostly black-box and offer limited customization. Recent
+work demonstrated the potential for developing generalized models capable of segmenting
+data from a range of sensors and forest types. (Henrich and van Delden, 2024; Wielgosz et
+al., 2024). However, more work and data is needed to test the adaptation and finetuning of
+these models to more diverse and complicated forest types.
+
+5.4 Benchmark considerations
+
+While the four plots were scanned with similar protocols and instruments, slight differences in
+the data may complicate performance comparison across plots. First, three different
+instruments were used in data collection (RIEGL VZ-2000i, RIEGL VZ-400, and RIEGL VZ-
+400i). However, scanner characteristics between these instruments are very similar and the
+data is processed using the same software and algorithms. Additionally, Litchfield and Wytham
+Woods are scanned on a 20 by 20 meter grid, while Ofental and Robson Creek are scanned
+on a 10 by 10 meter grid, resulting in reduced occlusion and a more uniform sampling pattern
+(Wilkes et al., 2017). The downsampling of each plot reduces the variance in point cloud
+density but does not eliminate the increased occlusion introduced by the more sparse
+sampling pattern. Furthermore, Wytham Woods was downsampled to 2.6 cm based on a
+nearest-neighbor analysis outside the context of this work (Calders et al., 2018), while all three
+of the other plots were downsampled to 1 cm. Despite these differences, all data acquisitions
+meet the minimum requirements for geometric modelling of AGB reference data of the CEOS
+WGCV Land Product Validation sub-group (Duncanson et al., 2021, pp. 63-65). Furthermore,
+the theory-driven methods are designed to be robust for varying inter-point distances, by e.g.,
+allowing for gaps in the point cloud using a max-gap hyperparameter of 2 meter for Treeiso
+and distance-limit hyperparameter of 1 meter for Rayextract, or using a distance-independent
+neighborhood size for clustering. Additionally, the deep-learning models voxelize the point
+clouds to a resolution of 10 cm prior to execution. As such, we believe this discrepancy does
+not have a large effect on plot intercomparison of segmentation performance. Finally, some
+differences between the segmentation protocols for different plots may introduce some bias in
+the comparison between plots. For both Litchfield and Robson Creek, a height threshold of 5
+meters was used. For both Wytham Woods and Ofental, all trees were segmented, until no
+more tree candidates could be identified in the plot point cloud, resulting in a minimal height
+of 2.23 m and 2.3 m respectively. However, we note that the finetuned deep learning models
+obtain well over 90% semantic accuracy (tree vs. non-tree) on all plots, which shows that the
+limiting factor in their instance segmentation performance is not the classification of trees from
+the ground and understory points, but the delineation of trees from each other. Furthermore,
+Rayextract offers the min_height hyperparameter to customize the model to each plot.
+Therefore, we believe these differences have a limited effect on the benchmark results.
+
+The rectangular plot shape introduces floating vegetation and cut-off branches at the edge of
+the plot. Due to these artifacts, segmentation performance likely decreases near the edge for
+all methods. In practice, these edge effects can be avoided by applying the algorithms on a
+region of interest (ROI) with a certain buffer and keeping only the predicted trees within the
+ROI, given that the plot point cloud is of sufficient quality outside this ROI. In our study, due to
+the partitioning of each plot into testing, validation, and training areas, and the already limited
+plot size, this type of buffering was not possible. These effects may be stronger for explicit 3D
+clustering-based methods such as Treeiso, TreeLearn, and ForAINet, as all tree points that
+are classified as belonging to a tree will be assigned to an instance. On the other hand, graph-
+based algorithms, such as Rayextract and SCCC, that explicitly build up individual trees from
+the ground up, may be able to handle these artifacts better. However, edge effects are present
+in both theory-driven and deep learning methods, and the overall performance on this
+benchmark is thus skewed lower for all methods than what would be possible on buffered
+data.
+
+Finally, manual segmentation is still regarded as the most accurate segmentation method, yet
+data quality may decrease due to the labor- and time-intensiveness of this task (Wilkes et al.,
+2023). We attempted to minimize these mistakes and inter-operator subjectivity by performing
+manual quality control in a second segmentation iteration. However, operator bias is still likely
+to occur in areas with complex tree-environment interactions, which is impossible to derive
+from quantitative evaluation metrics.
+
+Despite these limitations, the manually segmented dataset that is part of this study is a step
+forward in the direction toward a standardized development and evaluation workflow for TLS
+instance segmentation. To our knowledge, this is the largest and most diverse dataset of
+segmented TLS plots and trees (Henrich and van Delden, 2024), spanning over 2.7 hectares
+and almost 3000 trees. Additionally, fine-tuning data-driven methods is supported by the test,
+validation, and training split.
+
+5.5 Future work
+
+Standardized, quantitative metrics are essential for comparison and tracking development of
+segmentation methods. However, methods that achieve similar scores may display
+significantly different patterns in their errors, and lead to different results and performance
+dependent on the user's application. Therefore, qualitative assessment of segmentation
+quality likely will remain a key component of semi-automatic processing pipelines.
+Furthermore, common downstream applications, like automatic forest inventory and biomass
+estimation through tree modelling, require application-specific evaluation practices to study
+the effects of segmentation methods. Quantitative analysis of the effects of different instance
+segmentation methods as compared to manual segmentation is a promising research
+direction and a key factor of future method development and comparison.
+
+Additionally, the performance of these deep learning methods is likely limited by the amount
+of training data available. The size of the training data presented in this work remains small
+compared to indoor and urban datasets such as S3DIS (Armeni et al., 2016) and STPLS3D
+(Chen et al., 2022). As manual segmentation, especially in high-resolution TLS data from
+complex, dense forests like Ofental and Robson Creek, is incredibly time-consuming,
+exploiting unlabeled data through self-supervised pretraining may be a useful direction for
+increasing segmentation performance in these deep learning models (Zeng et al., 2024).
+
+Finally, this work does not include an extensive review and evaluation of all available
+segmentation methods. Therefore, an essential next step is establishing an online benchmark,
+with data from multiple sources, where developers of new models and methods can upload
+and compare results in real-time.
+6. Conclusion
+
+In this work, we proposed a standardized TLS benchmark consisting of four manually
+segmented forest plots of high data quality, along with a robust evaluation pipeline. The forest
+plots were chosen to represent varying forest complexity and ecosystems. The dataset, along
+with application-independent evaluation, allowed fair benchmarking of instance segmentation
+methods using five open-source algorithms for TLS forest point clouds. Performance greatly
+varied across the four forest plots, highlighting the need for diverse training and testing data
+for the development of generalized segmentation algorithms. Results showed that the graph-
+based Rayextract algorithm currently generally outperforms data-driven methods, which may
+be limited by the available training data. Comparison of two deep learning models revealed
+that integrating forest-specific knowledge into model design could improve segmentation
+results. Combining forest-specific algorithms with data-driven feature extraction may be the
+key to automating instance segmentation across forest types. The dataset and benchmark
+results of this study can be used to advance future method development and comparison.
+Data and code availability statement
+
+Data is publicly available at https://doi.org/10.5281/zenodo.14615492 (Cherlet et al., 2025).
+Evaluation code is publicly available at https://github.com/qforestlab/TreeInstSegEval.
+
+Credit authorship contribution statement
+
+Wout Cherlet: Conceptualization, Data curation, Formal Analysis, Investigation,
+Methodology, Project administration, Software, Validation, Visualization, Writing ­ original
+draft, Writing ­ review & editing; Karun Dayal: Conceptualization, Data curation, Investigation,
+Supervision, Writing ­ review & editing; Shilin Chen: Data curation, Writing ­ review & editing;
+Zane Cooper: Data curation, Investigation, Writing ­ review & editing; Mathias Disney:
+Investigation, Writing ­ review & editing; Andreas Hanzl: Investigation, Writing ­ review &
+editing; Shaun Levick: Investigation, Writing ­ review & editing; Joanne Nightingale:
+Investigation, Writing ­ review & editing; Niall Origo: Investigation, Writing ­ review & editing;
+Cornelius Senf: Investigation, Writing ­ review & editing; Luna Soenens: Data curation,
+Writing ­ review & editing; Louise Terryn: Data curation, Investigation, Writing ­ review &
+editing; Wouter A.J. Van den Broeck: Data curation, Investigation, Writing ­ review & editing;
+Kim Calders: Conceptualization, Funding acquisition, Investigation, Project administration,
+Resources, Software, Supervision, Writing ­ review & editing
+
+Declaration of Competing Interest
+
+The authors declare that they have no known competing financial interests or personal
+relationships that could have appeared to influence the work reported in this paper.
+
+Acknowledgements
+
+WC, ZC, WVDB and KC are funded by the European Union (ERC-2021-STG Grant
+agreement No. 101039795). Views and opinions expressed are however those of the
+author(s) only and do not necessarily reflect those of the European Union or the European
+Research Council. Neither the European Union nor the granting authority can be held
+responsible for them. KD is funded by the Fonds Wetenschappelijk Onderzoek (FWO) -
+Project number G096223N, and Deutsche Forschungsgemeinschaft (DFG) - Project number
+509915426. CS and AH received money from the Deutsche Forschungsgemeinschaft (DFG)
+- Project number 509915426. Shilin Chen is supported by the China Scholarship Council
+(CSC) [No.202209370016]. LT was funded by Ghent University (Ghent University Bijzonder
+Onderzoeksfonds Grant No. 01G01923). The Robson Creek and Litchfield TERN
+(http://www.tern.org.au) sites are supported by the Australian Government through the
+National Collaborative Research Infrastructure (NCRIS). TLS fieldwork in Australia was
+funded by BELSPO (Belgian Science Policy Office) in the frame of the STEREO III
+programme - project 3D-FOREST (SR/02/355). TLS fieldwork at Wytham Woods was
+funded through the Metrology for Earth Observation and Climate project (MetEOC-2), grant
+number ENV55 within the European Metrology Research Programme (EMRP). The EMRP is
+jointly funded by the EMRP participating countries within EURAMET and the European
+Union. MD acknowledges support from the UK National Centre for Earth Observation and
+NERC standard grant NE/P011780/1 "Understanding tree form and function in the tropics".
+We thank Mike Liddell and Matt Bradford for access to TERN infrastructure at Robson
+Creek.
+References
+
+Armeni, I., Sener, O., Zamir, A.R., Jiang, H., Brilakis, I., Fischer, M., Savarese, S., 2016. 3D
+      Semantic Parsing of Large-Scale Indoor Spaces, in: 2016 IEEE Conference on
+      Computer Vision and Pattern Recognition (CVPR). IEEE, pp. 1534­1543.
+
+Bienert, A., Georgi, L., Kunz, M., Maas, H.-G., & Von Oheimb, G. (2018). Comparison and
+      combination of mobile and terrestrial laser scanning for natural forest inventories.
+      Forests, 9(7), 395.
+
+Bradford, M., McKeown, A., Ford, A., Liddell, M., 2024. Robson Creek Rainforest Diameter,
+      Height and Aboveground Woody Biomass Data.
+
+Burt, A., Disney, M., Calders, K., 2019. Extracting individual trees from lidar point clouds
+      using treeseg. Methods Ecol. Evol. 10, 438­445.
+
+Butler, H., Bell, A., Gerlek, M.P., chambbj, Gadomski, P., Manning, C., Loskot, M.,
+      Couwenberg, B., Barker, N., Ramsey, P., Dark, J., Chaulet, N., Rouault, E., Mann, K.,
+      Foster, C., Villemin, G., Rosen, M., Grigory, Moore, O., Lewis, S., McKelvey, K.,
+      Brookes, D., Evers, K., Dobias, M., Coup, R., Vergara, V., xantares, Bram, Yonas, A.,
+      2024. PDAL/PDAL: 2.7.1. Zenodo. https://doi.org/10.5281/ZENODO.10884408
+
+Calders, K., Newnham, G., Burt, A., Murphy, S., Raumonen, P., Herold, M., Culvenor, D.,
+      Avitabile, V., Disney, M., Armston, J., Kaasalainen, M., 2015. Nondestructive estimates
+      of above-ground biomass using terrestrial laser scanning. Methods Ecol. Evol. 6, 198­
+      208.
+
+Calders, K., Origo, N., Burt, A., Disney, M., Nightingale, J., Raumonen, P., Åkerblom, M.,
+      Malhi, Y., Lewis, P., 2018. Realistic Forest Stand Reconstruction from Terrestrial LiDAR
+      for Radiative Transfer Modelling. Remote Sensing 10, 933.
+
+Calders, K., Verbeeck, H., Burt, A., Origo, N., Nightingale, J., Malhi, Y., Wilkes, P.,
+      Raumonen, P., Bunce, R.G.H., Disney, M., 2022. Laser scanning reveals potential
+      underestimation of biomass carbon in temperate forest. Ecol Sol and Evidence 3,
+      e12197.
+
+Calders, K., Verbeeck, H., Burt, A., Origo, N., Nightingale, J., Malhi, Y., Wilkes, P.,
+      Raumonen, P., Bunce, R., & Disney, M. (2022). Terrestrial laser scanning data Wytham
+      Woods: individual trees and quantitative structure models (QSMs) [Data set]. Zenodo.
+      https://doi.org/10.5281/ZENODO.7307956
+
+Chen, M., Hu, Q., Yu, Z., Thomas, H., Feng, A., Hou, Y., McCullough, K., Ren, F.,
+      Soibelman, L., 2022. STPLS3D: A Large-Scale Synthetic and Real Aerial
+      Photogrammetry 3D Point Cloud Dataset. arXiv [cs.CV].
+
+Cherlet, W., Dayal, K., Chen, S., Cooper, Z., Disney, M., Hanzl, A., Levick, S., Nightingale,
+      J., Origo, N., Senf, C., Soenens, L., Terryn, L., Van den Broeck, W. A. J., & Calders, K.,
+      2025. TLS forest instance segmentation benchmark: 2983 manually segmented trees
+      from four plots (1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.14615493
+
+Dai, A., Chang, A.X., Savva, M., Halber, M., Funkhouser, T., Nießner, M., 2017. ScanNet:
+      Richly-annotated 3D Reconstructions of Indoor Scenes. arXiv [cs.CV].
+
+Dai, W., Jiang, Y., Zeng, W., Chen, R., Xu, Y., Zhu, N., Xiao, W., Dong, Z., Guan, Q., 2023.
+      MDC-Net: a multi-directional constrained and prior assisted neural network for wood
+      and leaf separation from terrestrial laser scanning. Int. J. Digit. Earth 16, 1224­1245.
+
+Demol, M., Verbeeck, H., Gielen, B., Armston, J., Burt, A., Disney, M., Duncanson, L.,
+      Hackenberg, J., Kükenbrink, D., Lau, A., Ploton, P., Sewdien, A., Stovall, A., Takoudjou,
+      S.M., Volkova, L., Weston, C., Wortel, V., Calders, K., 2022. Estimating forest above-
+      ground biomass with terrestrial laser scanning: Current status and future directions.
+      Methods Ecol. Evol. 13, 1628­1639.
+
+Duncanson, L., Armston, J., Disney, M., Avitabile, V., Barbier, N.,Calders, K., Carter, S.,
+      Chave J., Herold M., MacBean, N., McRoberts R., Minor D., Paul K., Réjou-Méchain M.,
+      Roxburgh S., Williams M., Albinet C., Baker T., Bartholomeus H., Bastin J. F., Coomes
+      D., Crowther T., Davies S., de Bruin S., De Kauwe M., Domke G., Dubayah R.,
+      Falkowski M., Fatoyinbo L., Goetz S., Jantz P., Jonckheere I., Jucker T., Kay H., Kellner
+      J., Labriere N., Lucas R., Mitchard E., Morsdorf F., Næsset E., Park T., Phillips O. L.,
+      Ploton P., Puliti S., Quegan S., Saatchi S., Schaaf C., Schepaschenko D., Scipal K.,
+      Stovall A., Thiel C., Wulder M. A., Camacho F., Nickeson J., Román M., Margolis H,
+      2021. Aboveground Woody Biomass Product Validation: Good Practices Protocol.
+      Version 1.0. Land Product Validation Subgroup (WGCV/CEOS).
+      doi:10.5067/doc/ceoswgcv/lpv/agb.001.
+Freißmuth, L., Mattamala, M., Chebrolu, N., Schaefer, S., Leutenegger, S., & Fallon, M.
+      (2024). Online tree reconstruction and forest inventory on a mobile robotic system. 2024
+      IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 11765­
+      11772.
+Guo, Y., Wang, H., Hu, Q., Liu, H., Liu, L., Bennamoun, M., 2021. Deep learning for 3D point
+      clouds: A survey. IEEE Trans. Pattern Anal. Mach. Intell. 43, 4338­4364.
+Hartley, R.J.L., Jayathunga, S., Morgenroth, J., Pearse, G.D., 2024. Tree branch
+      characterisation from point clouds: A comprehensive review. Curr. For. Rep.
+      https://doi.org/10.1007/s40725-024-00225-5
+Henrich, J., van Delden, J., Kneib, T., Seidel, D., & Ecker, A. (2023). TreeLearn Dataset
+      [Data set]. GRO.data. https://doi.org/10.25625/VPMPID
+Henrich, J., van Delden, J., Seidel, D., Kneib, T., & Ecker, A. (2023). TreeLearn: A
+      comprehensive deep learning method for segmenting individual trees from ground-
+      based LiDAR forest point clouds. In arXiv [cs.CV]. arXiv. https://github.com/ecker-lab/
+Henrich, J., van Delden, J., 2024. Towards general deep-learning-based tree instance
+      segmentation models. arXiv [cs.CV].
+Henrich, J., van Delden, J., Seidel, D., Kneib, T., & Ecker, A. S. (2024). TreeLearn: A deep
+      learning method for segmenting individual trees from ground-based LiDAR forest point
+      clouds. Ecological Informatics, 84(102888), 102888.
+Hopkinson, C., Chasmer, L., Young-Pow, C., Treitz, P., 2004. Assessing forest metrics with
+      a ground-based scanning lidar. Can. J. For. Res. 34, 573­583.
+Kirillov, A., He, K., Girshick, R., Rother, C., Dollar, P., 2019. Panoptic Segmentation, in:
+      2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR).
+      Presented at the 2019 IEEE/CVF Conference on Computer Vision and Pattern
+      Recognition (CVPR), IEEE, pp. 9396­9405.
+Krisanski, S., Taskhiri, M.S., Gonzalez Aracil, S., Herries, D., Turner, P., 2021. Sensor
+      agnostic semantic segmentation of structurally diverse and complex forest point clouds
+      using deep learning. Remote Sens. (Basel) 13, 1413.
+Kuhn, H.W., 2005. The Hungarian method for the assignment problem. Nav. Res. Logist. 52,
+      7­21.
+Lines, E.R., Allen, M., Cabo, C., Calders, K., Debus, A., Grieve, S.W.D., Miltiadou, M.,
+      Noach, A., Owen, H.J.F., Puliti, S., 2022. AI applications in forest monitoring need
+      remote sensing benchmark datasets. arXiv [cs.AI].
+Lovell, J.L., Jupp, D.L.B., Culvenor, D.S., Coops, N.C., 2003. Using airborne and ground-
+      based ranging lidar to measure canopy structure in Australian forests. Can. J. Remote
+      Sens. https://doi.org/10.5589/m03-026
+Lowe, T.D., Stepanas, K., 2021. RayCloudTools: A Concise Interface for Analysis and
+      Manipulation of Ray Clouds. IEEE Access 9, 79712­79724.
+Martin-Ducup, O., Mofack, G., Wang, D., Raumonen, P., Ploton, P., Sonké, B., Barbier, N.,
+      Couteron, P., Pélissier, R., 2021. Evaluation of automated pipelines for tree and plot
+      metric estimation from TLS data in tropical forest areas. Ann. Bot. 128, 753­766.
+Moudrý, V., Klápst, P., Fogl, M., Gdulová, K., Barták, V., Urban, R., 2020. Assessment of
+      LiDAR ground filtering algorithms for determining ground surface of non-natural terrain
+      overgrown with forest and steppe vegetation. Measurement 150, 107047.
+Nguyen, A., Le, B., 2013. 3D point cloud segmentation: A survey, in: 2013 6th IEEE
+      Conference on Robotics, Automation and Mechatronics (RAM). pp. 225­230.
+Puliti, S., Pearse, G., Surový, P., Wallace, L., Hollaus, M., Wielgosz, M., Astrup, R., 2023.
+      FOR-instance: a UAV laser scanning benchmark dataset for semantic and instance
+      segmentation of individual trees. https://doi.org/10.5281/ZENODO.8287792
+Raumonen, P., Kaasalainen, M., Åkerblom, M., Kaasalainen, S., Kaartinen, H., Vastaranta,
+      M., Holopainen, M., Disney, M., Lewis, P., 2013. Fast Automatic Precision Tree Models
+      from Terrestrial Laser Scanner Data. Remote Sensing 5, 491­520.
+
+Steffen, E., 2021. Monitoring pre- and post-fire savanna structure using terrestrial laser
+      scanning. Submitted in 2021.
+
+Terryn, L., Calders, K., Åkerblom, M., Bartholomeus, H., Disney, M., Levick, S., Origo, N.,
+      Raumonen, P., Verbeeck, H., 2023. Analysing individual 3D tree structure using the R
+      package ITSMe. Methods Ecol. Evol. 14, 231­241.
+
+Terryn, L., Calders, K., Bartholomeus, H., Bartolo, R. E., Brede, B., D'hont, B., Disney, M.,
+      Herold, M., Lau, A., Shenkin, A., Whiteside, T. G., Wilkes, P., & Verbeeck, H. (2022).
+      Quantifying tropical forest structure through terrestrial and UAV laser scanning fusion in
+      Australian rainforests. Remote Sensing of Environment, 271(112912), 112912.
+
+Terryn, L., Calders, K., Åkerblom, M., Bartholomeus, H., Disney, M., Levick, S., Origo, N.,
+      Raumonen, P., & Verbeeck, H. (2023). Analysing individual 3D tree structure using the
+      R package ITSMe. Methods in Ecology and Evolution, 14(1), 231­241.
+
+Tockner, A., Gollob, C., Kraßnitzer, R., Ritter, T., & Nothdurft, A. (2022). Automatic tree
+      crown segmentation using dense forest point clouds from Personal Laser Scanning
+      (PLS). International Journal of Applied Earth Observation and Geoinformation: ITC
+      Journal, 114(103025), 103025.
+
+Tockner A., Burmeister J.-M., Gollob C., Ritter T., Nothdurft A., 2022. "LAUTx - Individual
+      Tree Point Clouds from Austrian forest Inventory plots". Zenodo. doi:
+      10.5281/zenodo.6560112.
+
+Trochta, J., Krcek, M., Vrska, T., Král, K., 2017. 3D Forest: An application for descriptions
+      of three-dimensional forest structures using terrestrial LiDAR. PLoS One 12, e0176871.
+
+Voulodimos, A., Doulamis, N., Doulamis, A., Protopapadakis, E., 2018. Deep learning for
+      computer vision: A brief review. Comput. Intell. Neurosci. 2018, 7068349.
+
+Wang, D., 2020. Unsupervised semantic and instance segmentation of forest point clouds.
+      ISPRS J. Photogramm. Remote Sens. 165, 86­97.
+
+Wielgosz, M., Puliti, S., Wilkes, P., Astrup, R., 2023. Point2Tree(P2T)--framework for
+      parameter tuning of semantic and instance segmentation used with mobile laser
+      scanning data in coniferous forest. Remote Sens. (Basel) 15, 3737.
+
+Wielgosz, M., Puliti, S., Xiang, B., Schindler, K., Astrup, R., 2024. SegmentAnyTree: A
+      sensor and platform agnostic deep learning model for tree segmentation using laser
+      scanning data. Remote Sens. Environ. 313, 114367.
+
+Wilkes, P., Disney, M., Armston, J., Bartholomeus, H., Bentley, L., Brede, B., Burt, A.,
+      Calders, K., Chavana-Bryant, C., Clewley, D., Duncanson, L., Forbes, B., Krisanski, S.,
+      Malhi, Y., Moffat, D., Origo, N., Shenkin, A., Yang, W., 2023. TLS2trees: A scalable tree
+      segmentation pipeline for TLS data. Methods Ecol. Evol. 14, 3083­3099.
+
+Wilkes, P., Lau, A., Disney, M., Calders, K., Burt, A., Gonzalez de Tanago, J., Bartholomeus,
+      H., Brede, B., Herold, M., 2017. Data acquisition considerations for Terrestrial Laser
+      Scanning of forest plots. Remote Sens. Environ. 196, 140­153.
+
+Xiang, B., Peters, T., Kontogianni, T., Vetterli, F., Puliti, S., Astrup, R., Schindler, K., 2023.
+      Towards accurate instance segmentation in large-scale LiDAR point clouds. arXiv
+      [cs.CV].
+
+Xiang, B., Wielgosz, M., Kontogianni, T., Peters, T., Puliti, S., Astrup, R., & Schindler, K.
+      (2024). Automated forest inventory: Analysis of high-density airborne LiDAR point
+      clouds with 3D deep learning. Remote Sensing of Environment, 305(114078), 114078.
+
+Xi, Z., Hopkinson, C., 2022. 3D Graph-Based Individual-Tree Isolation (Treeiso) from
+      Terrestrial Laser Scanning Point Clouds. Remote Sensing 14, 6116.
+
+Yang, B., Wang, J., Clark, R., Hu, Q., Wang, S., Markham, A., Trigoni, N., 2019. Learning
+      object bounding boxes for 3D instance segmentation on point clouds. arXiv [cs.CV].
+
+Yang, W., Wilkes, P., Vicari, M.B., Hand, K., Calders, K., Disney, M., 2024. Treegraph: tree
+      architecture from terrestrial laser scanning point clouds. Remote Sens. Ecol. Conserv.
+      https://doi.org/10.1002/rse2.399
+
+Zeng, C., Wang, W., Nguyen, A., Xiao, J., Yue, Y., 2024. Self-supervised learning for point
+cloud data: A survey. Expert Syst. Appl. 237, 121354.
+Appendix
+
+                    Default        Height_min  Max_diameter
+                   Litchfield            2            0.9
+               Wytham Woods             4.8           0.5
+                    Ofental             2.2           2.3
+               Robson Creek                           0.6
+                                       2.25           1.2
+                                        4.8
+
+            Table A.1. Parameter values used for the Rayextract algorithm.
+
+            K_1 lambda_1 K_2 lambda_2 Max gap Vertical                                    Relative
+                                                                               weight  height length
+
+ Default    5   1              20  20          2  0.50                                      ratio
+
+Litchfield  5   1              40  10          2  0.4                                       0.50
+
+Wytham      10  2              60  20          2  0.2                                        0.9
+ Woods
+                                                                                             0.9
+ Ofental
+            10  1              20  5           2  0.9                                  0.9
+Robson
+ Creek      10  1              40  10          2  0.9                                  0.1
+
+            Table A.2. Parameter values used for the Treeiso algorithm.
+                                  TreeLearn   ForAINet   TreeLearn  ForAINet   TreeLearn    ForAINet
+                                    original   original  finetuned  finetuned  finetuned    finetuned
+                                                                               (all plots)  (all plots)
+                                                           (single   (single
+                                                             plot)     plot)
+
+               Plot-  F1          0.708       0.775      0.922      0.883      0.930                     0.905
+               level  Recall      0.719       0.914      0.930      0.945      0.930                     0.930
+                      Precision   0.697       0.672      0.915      0.829      0.930                     0.881
+Litchfield            mF1         0.943       0.964      0.982      0.970      0.973                     0.973
+                      mRecall     0.946       0.973      0.988      0.967      0.984                     0.973
+               Tree-  mPrecision  0.952       0.961      0.979      0.978      0.969                     0.974
+               level
+
+Wytham   Plot-        F1          0.369       0.299      0.526      0.334      0.540                     0.363
+Woods    level        Recall      0.359       0.243      0.453      0.276      0.519                     0.304
+                      Precision   0.380       0.389      0.626      0.424      0.563                     0.451
+         Tree-        mF1         0.845       0.835      0.854      0.828      0.878                     0.840
+         level        mRecall     0.865       0.882      0.898      0.887      0.902                     0.884
+                      mPrecision  0.847       0.819      0.834      0.810      0.873                     0.827
+
+         Plot-        F1          0.215       0.235      0.678      0.601      0.497                     0.441
+         level        Recall      0.213       0.157      0.663      0.483      0.517                     0.337
+                      Precision   0.216       0.467      0.694      0.796      0.479                     0.638
+                                  0.791       0.772      0.889      0.843      0.830                     0.805
+Ofental                           0.894       0.846      0.917      0.928      0.883                     0.890
+                                  0.728       0.722      0.873      0.786      0.800                     0.757
+         Tree-        mF1
+         level        mRecall
+                      mPrecision
+
+Robson   Plot-        F1          0.089       0.088      0.204      0.288      0.178                     0.247
+Creek    level        Recall      0.093       0.053      0.193      0.233      0.167                     0.193
+                      Precision   0.084       0.258      0.215      0.376      0.191                     0.341
+         Tree-        mF1         0.732       0.743      0.774      0.814      0.763                     0.795
+         level        mRecall     0.813       0.856      0.847      0.858      0.852                     0.849
+                      mPrecision  0.688       0.671      0.730      0.787      0.711                     0.770
+
+         Table A.3. Performance of original, single plot finetuned and all plot finetuned TreeLearn and
+           ForAINet models on plot-level F1, recall and precision, as well as tree-level mF1, mRecall
+                                                 and mPrecision on all four plots.
+as                                  TreeLearn original ForAINet original
+Litchfield
+                                    (full plot)  (full plot)
+Wytham
+Woods                   F1          0.744        0.780
+                        Recall
+Ofental     Plot-level  Precision   0.788        0.865
+            Tree-level  mF1
+Robson      Plot-level  mRecall     0.705        0.710
+Creek       Tree-level  mPrecision
+            Plot-level  F1          0.953        0.956
+            Tree-level  Recall
+            Plot-level  Precision   0.951        0.964
+            Tree-level  mF1
+                        mRecall     0.967        0.959
+                        mPrecision
+                        F1          0.533        0.461
+                        Recall
+                        Precision   0.485        0.418
+                        mF1         0.592        0.513
+                        mRecall     0.897        0.874
+                        mPrecision  0.920        0.916
+                        F1          0.892        0.858
+                        Recall      0.454        0.338
+                        Precision   0.452        0.235
+                        mF1         0.456        0.599
+                        mRecall     0.832        0.802
+                        mPrecision  0.879        0.883
+                                    0.809        0.756
+
+                                    0.269        0.120
+
+                                    0.280        0.074
+                                    0.260        0.311
+                                    0.794        0.764
+                                    0.843        0.829
+                                    0.772        0.736
+
+Table A.4. Performance of original TreeLearn and ForAINet models on plot-level F1, recall
+and precision, as well as tree-level mF1, mRecall and mPrecision on the entire segmented
+
+                         plots (merged training, validation and testing areas).
+ Fig. A.1. Segmentation performance of all five algorithms on the four test plots. Tree-level
+  mRecall, averaged over successful predictions, is binned by relative tree height at the top
+
+                   and binned by relative distance to the tree center at the bottom.
+
+ Fig. A.2. Segmentation performance of all five algorithms on the four test plots. Tree-level
+mPrecision, averaged over successful predictions, is binned by relative tree height at the top
+
+                   and binned by relative distance to the tree center at the bottom.
+                               Rayextract Treeiso SSSC TreeLearn                      ForAINet
+                                                                         finetuned    finetuned
+                                                                         (all plots)  (all plots)
+
+Litchfield  Tree-  mRecall     0.991  0.961  0.927  0.984                                0.973
+            level  mPrecision  0.977  0.824  0.771  0.969                                0.974
+
+Wytham Tree- mRecall           0.917  0.918  0.886  0.902                                0.884
+Woods level mPrecision         0.920  0.746  0.835  0.873                                0.827
+
+Ofental     Tree- mRecall      0.900  0.877  0.781  0.883                                0.890
+            level mPrecision   0.838  0.755  0.781  0.800                                0.757
+Robson                         0.866  0.782  0.819  0.852                                0.849
+Creek       Tree- mRecall      0.799  0.751  0.701  0.711                                0.770
+            level mPrecision
+
+Table A.5. Exact values across all five methods and four plots for tree-level mRecall and
+mPrecision averaged over all successful predictions. Best results per metric and plot are
+
+                                                 shown in bold.
+
