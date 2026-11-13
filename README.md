@@ -20,7 +20,8 @@ samples/          Small crops and subsets of every stage (each folder has a SAMP
   automated_segmentation/  8 per-tree clouds + metadata, small seg_vNN.ply files, leftover crop
   manual_segmentation/     Manually corrected versions of the same 8 trees
 logs/             reorganization-2026-10-02.json (original to current path mapping of the full data)
-environment/      requirements.txt
+environment/      requirements.txt (Step 3 script), plus Python and R version lock files for the measurement stage
+field_data/       Field inventory (TreeData.csv) and plot data (Ecology_Hub_Plot_Data.xlsx) used in the field comparison
 ```
 
 ## Samples
@@ -55,6 +56,12 @@ python scripts/tree_extraction.py plot_file trees_folder opath_folder opath_plot
 Packages: `open3d`, `numpy`, `laspy`, plus `lazrs` or `laszip` for `.laz` input. Install with `pip install -r environment/requirements.txt`.
 
 The script resumes interrupted runs through `mask_plot.npy` and `processed_trees.json` in the **current working directory**; delete both before starting a new run from a different folder.
+
+## Notes on the field data and environment
+
+- `field_data/TreeData.csv` and `field_data/Ecology_Hub_Plot_Data.xlsx` are the field inventory and plot records used for the field comparison in `measurement/field_comparison/` and `audit/`. They were not collected by the author. In `TreeData.csv` the plot is recorded as site `WSF_ML2A`; the scan folders in the full data are named `WSL_ML2A`.
+- Several scripts read these files from `D:/22083142/TreeData.csv` and `D:/22083142/Ecology_Hub_Plot_Data.xlsx`. To re-run them elsewhere, change those paths to `field_data/`.
+- The measurement stage was run with R 4.5.2 (ITSMe 2.0.0) and Python 3.13.14. Exact package versions are in `environment/R_package_versions.csv`, `environment/R_dependency_specification.json` and `environment/python-requirements-lock.txt`.
 
 ## Where the full data is
 

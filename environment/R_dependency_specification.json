@@ -1,0 +1,524 @@
+{
+  "R_version": "4.5.2",
+  "platform": "Windows x64 UCRT",
+  "ITSMe_version": "2.0.0",
+  "ITSMe_commit": "6cfb11c18efb3b12a4e12d38ea1cbf426b777e7b",
+  "packages": [
+    {
+      "Package": "BH",
+      "Version": "1.90.0-1",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "DBI",
+      "Version": "1.3.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "IRdisplay",
+      "Version": "1.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "IRkernel",
+      "Version": "1.3.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "ITSMe",
+      "Version": "2.0.0",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "R.matlab",
+      "Version": "3.8.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "R.methodsS3",
+      "Version": "1.8.2",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "R.oo",
+      "Version": "1.27.1",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "R.utils",
+      "Version": "2.13.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "R6",
+      "Version": "2.6.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "RANN",
+      "Version": "2.6.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "RColorBrewer",
+      "Version": "1.1-3",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "Rcpp",
+      "Version": "1.1.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "RcppArmadillo",
+      "Version": "15.6.2-1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "RcppEigen",
+      "Version": "0.3.4.0.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "RcppProgress",
+      "Version": "0.4.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "Rvcg",
+      "Version": "0.25",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "S7",
+      "Version": "0.2.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "V8",
+      "Version": "8.2.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "abind",
+      "Version": "1.4-8",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "alphashape3d",
+      "Version": "1.3.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "base64enc",
+      "Version": "0.1-6",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "bslib",
+      "Version": "0.12.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "cachem",
+      "Version": "1.1.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "classInt",
+      "Version": "0.4-11",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "cli",
+      "Version": "3.6.6",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "commonmark",
+      "Version": "2.0.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "concaveman",
+      "Version": "1.2.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "cpp11",
+      "Version": "0.5.5",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "crayon",
+      "Version": "1.5.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "curl",
+      "Version": "8.1.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "data.table",
+      "Version": "1.18.6.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "digest",
+      "Version": "0.6.39",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "e1071",
+      "Version": "1.7-17",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "evaluate",
+      "Version": "1.0.5",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "farver",
+      "Version": "2.1.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "fastmap",
+      "Version": "1.2.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "fontawesome",
+      "Version": "0.5.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "fs",
+      "Version": "2.1.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "geometry",
+      "Version": "0.5.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "ggforce",
+      "Version": "0.5.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "ggplot2",
+      "Version": "4.0.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "ggtext",
+      "Version": "0.2.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "glue",
+      "Version": "1.8.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "gridtext",
+      "Version": "0.1.6",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "gtable",
+      "Version": "0.3.6",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "highr",
+      "Version": "0.12",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "htmltools",
+      "Version": "0.5.9",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "htmlwidgets",
+      "Version": "1.6.4",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "isoband",
+      "Version": "0.3.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "jpeg",
+      "Version": "0.1-11",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "jquerylib",
+      "Version": "0.1.4",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "jsonlite",
+      "Version": "2.0.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "knitr",
+      "Version": "1.52",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "labeling",
+      "Version": "0.4.3",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "lazyeval",
+      "Version": "0.2.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "lidR",
+      "Version": "4.3.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "lifecycle",
+      "Version": "1.0.5",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "linprog",
+      "Version": "0.9-6",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "litedown",
+      "Version": "0.11",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "lpSolve",
+      "Version": "5.6.23",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "magic",
+      "Version": "1.6-1-1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "magrittr",
+      "Version": "2.0.5",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "markdown",
+      "Version": "2.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "memoise",
+      "Version": "2.0.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "mime",
+      "Version": "0.13",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "nabor",
+      "Version": "0.5.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "parallelly",
+      "Version": "1.48.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "patchwork",
+      "Version": "1.3.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "pbdZMQ",
+      "Version": "0.3-14",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "pillar",
+      "Version": "1.11.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "png",
+      "Version": "0.1-9",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "polyclip",
+      "Version": "1.10-7",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "proxy",
+      "Version": "0.4-29",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "rappdirs",
+      "Version": "0.3.4",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "remotes",
+      "Version": "2.5.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "repr",
+      "Version": "1.1.7",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "rgl",
+      "Version": "1.3.36",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "rlang",
+      "Version": "1.3.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "rlas",
+      "Version": "1.9.5",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "rmarkdown",
+      "Version": "2.32",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "s2",
+      "Version": "1.1.13",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "sass",
+      "Version": "0.4.10",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "scales",
+      "Version": "1.4.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "sf",
+      "Version": "1.1-3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "stars",
+      "Version": "0.7-3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "stringi",
+      "Version": "1.8.9",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "stringr",
+      "Version": "1.6.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "systemfonts",
+      "Version": "1.3.2",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "terra",
+      "Version": "1.9-50",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "tidyselect",
+      "Version": "1.2.1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "tinytex",
+      "Version": "0.61",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "tweenr",
+      "Version": "2.0.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "units",
+      "Version": "1.0-1",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "utf8",
+      "Version": "1.2.6",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "uuid",
+      "Version": "1.2-2",
+      "Built": "4.5.2"
+    },
+    {
+      "Package": "vctrs",
+      "Version": "0.7.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "viridisLite",
+      "Version": "0.4.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "withr",
+      "Version": "3.0.3",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "wk",
+      "Version": "0.9.5",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "xfun",
+      "Version": "0.62",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "xml2",
+      "Version": "1.6.0",
+      "Built": "4.5.3"
+    },
+    {
+      "Package": "yaml",
+      "Version": "2.3.12",
+      "Built": "4.5.3"
+    }
+  ],
+  "restore_policy": "ITSMe commit pinned; compatible CRAN binary dependencies compared against these recorded versions, not guaranteed identical archive restoration"
+}
