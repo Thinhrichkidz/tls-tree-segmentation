@@ -4,7 +4,7 @@ Tree segmentation of terrestrial laser scanning (TLS) point clouds of plot **WSL
 
 This repository holds the scripts, documentation and **small samples** of each stage. The full data (about 82 GiB) is not in the repo, see [Where the full data is](#where-the-full-data-is).
 
-> TODO: one-paragraph project context (site, forest type, purpose, supervisor/course, authors).
+**Project context.** INFO6003 Postgraduate Research Project (School of Computer, Data and Mathematical Sciences, Western Sydney University, Spring 2026) by Hoang Truong Thinh Nguyen (22083142). Supervisors: Prof. Brendan Choat (principal) and Dr. Chng Wei Lau (co-supervisor), in collaboration with Erick Calderon-Morales. The scan is of a Blue Mountains eucalypt plot, provided by the Hawkesbury Institute for the Environment (I did not collect it). The project tests a semi-automated workflow: automatic individual-tree segmentation, manual correction, and height, DBH and crown measurements under predefined quality criteria. The final report is INFO6003 Final Report v13 (submitted separately).
 
 ## Repository layout
 
@@ -32,8 +32,8 @@ All samples are from plot WSL_ML2A, 55x55 crop, 3 cm. Raw and downsampled sample
 ## Workflow
 
 1. Raw scan (1 cm) cropped to 35x35 and 55x55 areas, in full resolution and downsampled to 2 cm and 3 cm.
-2. Automatic segmentation (RayCloudTools): raycloud, terrain mesh, segmented cloud, individual trees, branch-skeleton metadata. TODO: tool versions and parameters used.
-3. Manual correction in CloudCompare of the 55x55 / 3 cm trees (`trees/cloud_correct`). TODO: number of trees corrected, time spent.
+2. Automatic segmentation (RayCloudTools): raycloud, terrain mesh, segmented cloud, individual trees, branch-skeleton metadata. The tool was run from a container image; the version and parameters used for this plot were not recorded.
+3. Manual correction in CloudCompare of the 55x55 / 3 cm trees (`trees/cloud_correct`). The 162 automatic trees became 163 corrected trees; 86 are unchanged. Time spent was about 106 hours (my own per-tree estimate).
 4. **Step 3: label transfer** with `scripts/tree_extraction.py`. TODO: which cloud was used as `plot_file` and the parameters used.
 
 ### scripts/tree_extraction.py
@@ -77,4 +77,4 @@ Not in the repo (sizes are approximate, GiB):
 
 Total outside the repo: about 82 GiB (`data/` 36.5 GiB, `outputs/` 45.2 GiB). The 67.3 GB in docs/reorganization_notes.md predates the manual corrections (files added after 2026-10-02).
 
-TODO: link to where the full data is hosted.
+The full data is not hosted publicly. The scan belongs to the Hawkesbury Institute for the Environment, and public release needs the custodian's permission, which has not been confirmed. Contact the author or supervisors for access.
